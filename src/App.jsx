@@ -134,7 +134,7 @@ const Navbar = ({ onOpenTest }) => {
             {/* CENTRO: Enlaces */}
             <div className={`w-2/4 hidden md:flex justify-center gap-6 lg:gap-8 text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
               <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
-              <a href="#sala-ego" className="hover:opacity-70 transition-opacity">Sala del Ego</a>
+              <a href="#eneatipos" className="hover:opacity-70 transition-opacity">Eneatipos</a>
               <a href="#archivo" className="hover:opacity-70 transition-opacity">Archivo</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
@@ -151,7 +151,7 @@ const Navbar = ({ onOpenTest }) => {
                 onClick={onOpenTest}
                 className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${scrolled ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
-                Test del Ego (Gratis)
+                Descubrir mi eneatipo
               </button>
               <button className="lg:hidden mt-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <X className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} />}
@@ -165,7 +165,7 @@ const Navbar = ({ onOpenTest }) => {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-6 p-6">
           <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Método</a>
-          <a href="#sala-ego" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Sala del Ego</a>
+          <a href="#eneatipos" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Eneatipos</a>
           <a href="#archivo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Archivo</a>
           <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> Sesión Coach</a>
           <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Planes</a>
@@ -173,7 +173,7 @@ const Navbar = ({ onOpenTest }) => {
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
             className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
-            Test del Ego (Gratis)
+            Descubrir mi eneatipo
           </button>
         </div>
       )}
@@ -223,7 +223,7 @@ const Hero = ({ onOpenTest }) => {
           </h1>
 
           <p className="hero-elem text-[#F2F0E9]/90 text-lg md:text-xl font-light max-w-2xl mb-8 leading-relaxed">
-            GEMB es un Gimnasio Emocional: entras a fortalecer tu carácter, desintoxicar el Ego y recablear tus patrones con práctica guiada.
+            GEMB es un Gimnasio Emocional: entras a fortalecer tu carácter, descubrir tu patrón dominante y trazar tu ruta de crecimiento con práctica guiada.
           </p>
 
           <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-10">
@@ -231,7 +231,7 @@ const Hero = ({ onOpenTest }) => {
               onClick={onOpenTest}
               className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
             >
-              Hacer el Test del Ego
+              Descubrir mi eneatipo
               <ArrowRight size={18} />
             </button>
             <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
@@ -240,7 +240,7 @@ const Hero = ({ onOpenTest }) => {
           </div>
 
           <p className="hero-elem font-mono text-xs text-[#F2F0E9]/60 tracking-wider uppercase">
-            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Sala de Reducción del Ego
+            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Autoconocimiento
           </p>
         </div>
       </div>
@@ -253,9 +253,15 @@ const Hero = ({ onOpenTest }) => {
 const FeatureDeck = () => {
   const [active, setActive] = useState(0);
   const cards = [
-    { title: "Ego Víctima", insight: "Cuando el dolor se vuelve identidad." },
-    { title: "Ego Salvador", insight: "Cuando amar significa cargarse a todos." },
-    { title: "Ego Tirano", insight: "Cuando el control se disfraza de fuerza." }
+    { title: "Eneatipo 1", insight: "El Perfeccionista / Reformador." },
+    { title: "Eneatipo 2", insight: "El Ayudador." },
+    { title: "Eneatipo 3", insight: "El Triunfador / Realizador." },
+    { title: "Eneatipo 4", insight: "El Individualista." },
+    { title: "Eneatipo 5", insight: "El Investigador." },
+    { title: "Eneatipo 6", insight: "El Leal." },
+    { title: "Eneatipo 7", insight: "El Entusiasta." },
+    { title: "Eneatipo 8", insight: "El Líder / Desafiador." },
+    { title: "Eneatipo 9", insight: "El Conciliador." }
   ];
 
   useEffect(() => {
@@ -292,7 +298,7 @@ const FeatureDeck = () => {
               className="absolute inset-0 bg-white rounded-2xl p-6 shadow-xl border border-gray-100 transition-all duration-700 ease-in-out flex flex-col justify-center"
               style={{ transform, opacity, zIndex, transformOrigin: 'bottom center' }}
             >
-              <span className="font-mono text-xs text-[#CC5833] font-bold tracking-widest mb-2 block">ARQUETIPO</span>
+              <span className="font-mono text-xs text-[#CC5833] font-bold tracking-widest mb-2 block">ENEATIPO</span>
               <h4 className="font-heading text-2xl font-bold text-[#1A1A1A] mb-2">{card.title}</h4>
               <p className="text-gray-500 text-sm italic font-serif">"{card.insight}"</p>
             </div>
@@ -310,11 +316,11 @@ const FeatureDeck = () => {
 
 const FeatureTelemetry = () => {
   const messages = [
-    "Leyendo patrones repetidos...",
-    "Detectando 'exceso de futuro' (ruido mental)...",
-    "Iniciando desintoxicación del Ego...",
-    "Cargando protocolo: límites + amor propio...",
-    "Compilando paz interior (sin atajos)..."
+    "Analizando patrón motivacional...",
+    "Detectando miedo central activado...",
+    "Identificando eneatipo dominante...",
+    "Cargando mapa de crecimiento...",
+    "Compilando protocolo de autoconocimiento..."
   ];
   const [msgIdx, setMsgIdx] = useState(0);
   const [text, setText] = useState("");
@@ -485,7 +491,7 @@ const FeaturesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24">
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] max-w-2xl leading-tight">
-            Herramientas diseñadas para <span className="text-[#2E4036]">desactivar</span> tu piloto automático.
+            Herramientas diseñadas para <span className="text-[#2E4036]">descifrar</span> tu patrón y entrenar desde la raíz.
           </h2>
         </div>
 
@@ -493,7 +499,7 @@ const FeaturesSection = () => {
           {/* Panel 1 */}
           <div className="bg-white radius-huge p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col h-[420px]">
             <div className="mb-6 flex items-center justify-between">
-              <h3 className="font-heading font-bold text-xl">Baraja Diagnóstica</h3>
+              <h3 className="font-heading font-bold text-xl">Mapa de Eneatipos</h3>
               <ScanLine className="text-[#CC5833]" size={24} />
             </div>
             <FeatureDeck />
@@ -544,7 +550,7 @@ const Manifesto = () => {
   }, []);
 
   return (
-    <section id="sala-ego" className="relative py-32 md:py-48 bg-[#1A1A1A] overflow-hidden flex items-center min-h-[80vh]">
+    <section id="eneatipos" className="relative py-32 md:py-48 bg-[#1A1A1A] overflow-hidden flex items-center min-h-[80vh]">
       <div
         className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none"
         style={{
@@ -681,7 +687,7 @@ const StackedCards = () => {
 // --- NUEVA SECCIÓN: COACH SESSION (VERSIÓN PREMIUM & PERSUASIVA) ---
 
 const painPoints = [
-  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'El Ego Salvador te está agotando. Desactivaremos esa necesidad de rescatar para que recuperes tu energía vital.' },
+  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'El patrón del Ayudador te está agotando. Desactivaremos esa necesidad de rescatar para que recuperes tu energía vital.' },
   { id: 'limites', label: 'Me cuesta poner límites', response: 'El miedo al rechazo te domina hoy. Trazaremos una línea clara y te daré el guion exacto para decir NO sin culpa.' },
   { id: 'mente', label: 'Mi mente no se apaga', response: 'Exceso de futuro y control. Implementaremos un protocolo guiado para bajar el ruido mental y volver a tu centro.' }
 ];
@@ -813,7 +819,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
 
             <ul className="space-y-6">
               {[
-                "Diagnóstico claro del patrón (Ego) que hoy te bloquea o agota.",
+                "Diagnóstico claro del patrón (Eneatipo) que hoy te bloquea o agota.",
                 "Protocolo de entrenamiento 7 días (límites, calma y acción).",
                 "Ruta recomendada exacta para no perder el tiempo buscando qué hacer.",
                 "Acceso directo a las herramientas del Gimnasio Emocional (12 Pasos, Meditación, etc)."
@@ -868,7 +874,7 @@ const Pricing = ({ onOpenTest }) => {
             <p className="text-gray-500 mb-8 text-sm">Tu punto de partida.</p>
 
             <ul className="space-y-4 mb-10 flex-1">
-              {["Test del Ego (Gratis)", "Resultado + insight claro", "Ruta recomendada (próximo paso)"].map((item, i) => (
+              {["Test del Eneagrama (Gratis)", "Resultado + insight claro", "Ruta recomendada (próximo paso)"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
                   <CheckCircle2 size={18} className="text-[#2E4036] shrink-0 mt-0.5" />
                   <span>{item}</span>
@@ -975,15 +981,48 @@ const Footer = () => {
 
 // --- MODALES ---
 
-const TestEgoModal = ({ isOpen, onClose }) => {
+const ENEATYPES = {
+  1: { type: "Eneatipo 1 — El Perfeccionista", subtitle: "Busca hacer lo correcto y mejorar el mundo.", desc: "Tu miedo central es ser corrupto o defectuoso. Tienes altos estándares éticos, pero puedes caer en la crítica constante a ti mismo.", strengths: ["Ética de trabajo", "Deseo de mejorar", "Responsabilidad"], blindSpot: "Rigidez y resentimiento por sentir que el mundo no se esfuerza igual.", growth: "Soltar el control y aceptar la imperfección." },
+  2: { type: "Eneatipo 2 — El Ayudador", subtitle: "Busca ser amado y necesitado.", desc: "Tu miedo central es no ser querido. Te vuelcas hacia los demás, a veces olvidando tus propias necesidades para asegurar su afecto.", strengths: ["Empatía", "Generosidad", "Orientación al servicio"], blindSpot: "Dar para recibir y desconectarse de sus propias necesidades.", growth: "Reconocer tu valor sin necesidad de ser útil." },
+  3: { type: "Eneatipo 3 — El Triunfador", subtitle: "Busca el éxito y la admiración.", desc: "Tu miedo central es ser inútil o fracasar. Eres altamente adaptable y enfocado en metas, pero puedes confundir tu valor con tus logros.", strengths: ["Eficiencia", "Adaptabilidad", "Inspiración"], blindSpot: "Cuidar más la imagen que lo que realmente sientes íntimamente.", growth: "Reconocer tu valor más allá de lo que produces o logras." },
+  4: { type: "Eneatipo 4 — El Individualista", subtitle: "Busca identidad y ser único.", desc: "Tu miedo central es ser común. Eres profundo y creativo, pero tiendes a la melancolía y a sentir que siempre te falta algo.", strengths: ["Sensibilidad", "Autenticidad", "Introspección"], blindSpot: "Envidiar lo que otros tienen y atascarse en la tormenta emocional.", growth: "Soltar la melancolía y pasar a la disciplina constructiva." },
+  5: { type: "Eneatipo 5 — El Investigador", subtitle: "Busca conocimiento y ser competente.", desc: "Tu miedo central es ser incapaz o que invadan tu energía. Proteges tu espacio aislándote y acumulando información antes de actuar.", strengths: ["Objetividad", "Análisis profundo", "Independencia"], blindSpot: "Desconectar de las emociones y aislarse demasiado tiempo.", growth: "Pasar del pensamiento a la acción y vincularte." },
+  6: { type: "Eneatipo 6 — El Leal", subtitle: "Busca seguridad y apoyo constante.", desc: "Tu miedo central es carecer de orientación ante el peligro. Eres comprometido, pero el exceso de preocupación te genera muchísima ansiedad.", strengths: ["Lealtad", "Anticipación de riesgos", "Compromiso colectivo"], blindSpot: "Dudar en exceso de ti mismo y de los demás buscando certezas.", growth: "Confiar en tu propia autoridad interna." },
+  7: { type: "Eneatipo 7 — El Entusiasta", subtitle: "Busca la felicidad y evitar el dolor.", desc: "Tu miedo central es sufrir o perderte de algo. Tienes una mente rápida, pero huyes del dolor dispersándote con cientos de planes.", strengths: ["Optimismo", "Espontaneidad", "Versatilidad"], blindSpot: "Llenar la agenda para huir del malestar y evitar profundizar.", growth: "Aprender a estar presente incluso en el dolor y enfocarse." },
+  8: { type: "Eneatipo 8 — El Líder", subtitle: "Busca tener el control y evitar la debilidad.", desc: "Tu miedo central es ser lastimado o controlado. Eres fuerte y directo, pero a veces intimidante y usas la confrontación como escudo.", strengths: ["Fuerza", "Decisión", "Protección a los suyos"], blindSpot: "Negar tu vulnerabilidad y no medir el impacto de tu intensidad.", growth: "Permitirte ser vulnerable sin sentirlo como debilidad." },
+  9: { type: "Eneatipo 9 — El Conciliador", subtitle: "Busca la paz y evitar el conflicto.", desc: "Tu miedo central es la fragmentación o pérdida de conexión. Eres mediador nato, pero ignoras tus necesidades para mantener armonía.", strengths: ["Receptividad", "Tranquilidad", "Mediación objetiva"], blindSpot: "Pasividad, terquedad pasiva y resistirse al esfuerzo propio.", growth: "Hacerte valer, poner límites y pasar a la acción consciente." }
+};
+
+const testQuestions = [
+  { text: "¿Qué impulsa tus decisiones más instintivas?", options: [{ id: 'A', text: "Hacer lo correcto y evitar el error a toda costa.", scores: [{t:1, p:3}] }, { id: 'B', text: "Ayudar a quienes me necesitan y sentirme valioso/a.", scores: [{t:2, p:3}] }, { id: 'C', text: "Alcanzar el éxito y destacar por mis logros.", scores: [{t:3, p:3}] }] },
+  { text: "Cuando te sientes incomprendido/a, tiendes a:", options: [{ id: 'A', text: "Sentir melancolía y aislarme en mis propios sentimientos.", scores: [{t:4, p:3}] }, { id: 'B', text: "Retirarme a mi mente para analizar todo con lógica.", scores: [{t:5, p:3}] }, { id: 'C', text: "Buscar seguridad o aliados en los que pueda confiar.", scores: [{t:6, p:3}] }] },
+  { text: "Ante un conflicto inminente, tu reacción natural es:", options: [{ id: 'A', text: "Evadirlo planificando cosas o cambiando de tema rápidamente.", scores: [{t:7, p:3}] }, { id: 'B', text: "Enfrentarlo de frente, tomar el control y no ceder poder.", scores: [{t:8, p:3}] }, { id: 'C', text: "Bajar la tensión, ceder un poco y buscar la paz a toda costa.", scores: [{t:9, p:3}] }] },
+  { text: "La voz crítica en tu cabeza suele decir:", options: [{ id: 'A', text: "'Podrías haberlo hecho mucho mejor, te falta disciplina'.", scores: [{t:1, p:3}] }, { id: 'B', text: "'Nadie agradece realmente todo lo que haces por ellos'.", scores: [{t:2, p:3}] }, { id: 'C', text: "'Si fallas, la gente dejará de valorarte y admirarte'.", scores: [{t:3, p:3}] }] },
+  { text: "En situaciones sociales, generalmente te percibes como:", options: [{ id: 'A', text: "Diferente a los demás, con una profundidad que pocos entienden.", scores: [{t:4, p:3}] }, { id: 'B', text: "Un observador distante que protege su energía y espacio.", scores: [{t:5, p:3}] }, { id: 'C', text: "Alerta, midiendo quién es confiable y visualizando riesgos.", scores: [{t:6, p:3}] }] },
+  { text: "Tu peor miedo es:", options: [{ id: 'A', text: "Quedar atrapado/a en el dolor o perderme de experiencias.", scores: [{t:7, p:3}] }, { id: 'B', text: "Ser controlado/a, manipulado/a o traicionado por alguien.", scores: [{t:8, p:3}] }, { id: 'C', text: "Perder la conexión con mi entorno o fragmentarme del grupo.", scores: [{t:9, p:3}] }] },
+  { text: "¿Cómo manejas tus necesidades personales?", options: [{ id: 'A', text: "Las reprimo porque el deber y la responsabilidad van primero.", scores: [{t:1, p:3}] }, { id: 'B', text: "Las ignoro para atender las necesidades de mis seres queridos.", scores: [{t:2, p:3}] }, { id: 'C', text: "Las adapto estratégicamente para no entorpecer mis metas.", scores: [{t:3, p:3}] }] },
+  { text: "Al expresar tus emociones:", options: [{ id: 'A', text: "Suelen ser intensas, llenas de matices y yo me sumerjo en ellas.", scores: [{t:4, p:3}] }, { id: 'B', text: "Siento desconexión temporal; prefiero analizarlas en privado.", scores: [{t:5, p:3}] }, { id: 'C', text: "Tengo mucha ansiedad anticipatoria que los demás no siempre notan.", scores: [{t:6, p:3}] }] },
+  { text: "Tu ritmo de vida es:", options: [{ id: 'A', text: "Acelerado, haciendo mil planes y saltando de un estímulo a otro.", scores: [{t:7, p:3}] }, { id: 'B', text: "Intenso, marcando el terreno, directo y liderando con fuerza.", scores: [{t:8, p:3}] }, { id: 'C', text: "Tranquilo y pausado, evitando gastar energía en peleas.", scores: [{t:9, p:3}] }] },
+  { text: "Si las cosas no salen como planeaste:", options: [{ id: 'A', text: "Me frustro mucho internamente porque las cosas 'deben' ser correctas.", scores: [{t:1, p:3}] }, { id: 'B', text: "Busco cómo ser indispensable en el nuevo plan para ayudar.", scores: [{t:2, p:3}] }, { id: 'C', text: "Me adapto rápidamente a las expectativas para seguir teniendo éxito.", scores: [{t:3, p:3}] }] },
+  { text: "Sobre tu espacio y tiempo personal:", options: [{ id: 'A', text: "Deseo intimidad pero al tiempo siento que siempre me falta alguien.", scores: [{t:4, p:3}] }, { id: 'B', text: "Es sagrado e innegociable; me agota la intromisión social continua.", scores: [{t:5, p:3}] }, { id: 'C', text: "Me gusta compartirlo si me da seguridad, pero desconfío al inicio.", scores: [{t:6, p:3}] }] },
+  { text: "Frente al compromiso formal o rutinas:", options: [{ id: 'A', text: "Me asusta sentirme encerrado/a, prefiero las opciones abiertas.", scores: [{t:7, p:3}] }, { id: 'B', text: "Los asumo con seriedad si soy yo quien mantiene el control.", scores: [{t:8, p:3}] }, { id: 'C', text: "Los acepto pacíficamente, a veces me fusiono con planes de otros.", scores: [{t:9, p:3}] }] },
+  { text: "Sientes que la gente genuinamente valora de ti:", options: [{ id: 'A', text: "Mi integridad incorruptible, mi ética y mi exigencia.", scores: [{t:1, p:3}] }, { id: 'B', text: "Mi calidez natural, mi servicio y mi bondad al dar apoyo.", scores: [{t:2, p:3}] }, { id: 'C', text: "Mi brillantez, mi eficiencia impecable y mis excelentes resultados.", scores: [{t:3, p:3}] }] },
+  { text: "En tu tiempo libre prefieres:", options: [{ id: 'A', text: "Explorar la estética o reflexionar sobre mis sentires profundos.", scores: [{t:4, p:3}] }, { id: 'B', text: "Investigar temas complejos, leer o explorar mi pasatiempo privado.", scores: [{t:5, p:3}] }, { id: 'C', text: "Estar con mi pequeño círculo seguro que sé que no me fallará.", scores: [{t:6, p:3}] }] },
+  { text: "Lo que más te molesta y desestabiliza de los demás es:", options: [{ id: 'A', text: "Que me pongan límites, me aburran o intenten quitarme libertad.", scores: [{t:7, p:3}] }, { id: 'B', text: "Que intenten controlarme con órdenes o me muestren debilidad.", scores: [{t:8, p:3}] }, { id: 'C', text: "Que armen dramas emocionales innecesarios que roban mi paz.", scores: [{t:9, p:3}] }] },
+  { text: "En el fondo, tu mayor deseo en las relaciones es:", options: [{ id: 'A', text: "Que haya madurez, perfección y que entiendan mi corrección.", scores: [{t:1, p:3}, {t:4, p:1}] }, { id: 'B', text: "Sentirme amado/a y confirmar que verdaderamente me necesitan.", scores: [{t:2, p:3}, {t:3, p:1}] }, { id: 'C', text: "Ser admirado/a por mis logros y que me apoyen para ser mejor.", scores: [{t:3, p:3}, {t:8, p:1}] }] },
+  { text: "Si te enfrentas al rechazo o humillación, tú...", options: [{ id: 'A', text: "Me hundo en mi sentimiento de que estoy dañado o incompleto.", scores: [{t:4, p:3}, {t:1, p:1}] }, { id: 'B', text: "Me aíslo rápidamente convenciéndome de que no los necesito.", scores: [{t:5, p:3}, {t:8, p:1}] }, { id: 'C', text: "Aumento mis defensas y dudo mucho sobre en quién confiar.", scores: [{t:6, p:3}, {t:1, p:1}] }] },
+  { text: "Cuando tienes mucha energía o poder, tiendes a:", options: [{ id: 'A', text: "Multiplicar mis experiencias y vivir intensamente cada hora.", scores: [{t:7, p:3}] }, { id: 'B', text: "Liderar, empujar decisiones difíciles y proteger a los vulnerables.", scores: [{t:8, p:3}] }, { id: 'C', text: "Conectar con quien quiero, pacificar entornos y unificar.", scores: [{t:9, p:3}] }] }
+];
+
+const TestEnneagramModal = ({ isOpen, onClose }) => {
   const [step, setStep] = useState('intro');
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
 
   if (!isOpen) return null;
 
-  const handleAnswer = (optionId) => {
-    const newAnswers = [...answers, optionId];
+  const handleAnswer = (scores) => {
+    const newAnswers = [...answers, scores];
     if (qIndex < testQuestions.length - 1) {
       setAnswers(newAnswers);
       setQIndex(qIndex + 1);
@@ -994,19 +1033,28 @@ const TestEgoModal = ({ isOpen, onClose }) => {
   };
 
   const calculateResult = () => {
-    const counts = { A: 0, B: 0, C: 0 };
-    answers.forEach(a => counts[a]++);
+    const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    answers.forEach(arr => {
+      arr.forEach(s => { scores[s.t] += s.p; });
+    });
 
-    const max = Math.max(counts.A, counts.B, counts.C);
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const top1Id = sorted[0][0];
+    const top2Id = sorted[1][0];
+    
+    const top1 = ENEATYPES[top1Id];
+    // Show top2 if diff <= 3 points
+    const showTop2 = (sorted[0][1] - sorted[1][1] <= 3);
 
-    if (counts.A === max) return { type: "Ego Víctima", desc: "El dolor se ha vuelto tu identidad. Sientes que el mundo te sucede a ti y te cuesta asumir el liderazgo de tu vida. Necesitas límites firmes y dejar de esperar salvadores." };
-    if (counts.B === max) return { type: "Ego Salvador", desc: "Crees que amar es cargarte los problemas de todos. Tu valor personal depende de qué tan necesario eres para otros. Necesitas entrenar el amor propio y soltar el control disfrazado de ayuda." };
-    return { type: "Ego Tirano", desc: "El control y la razón son tus armaduras. La vulnerabilidad te aterra, por eso impones tu visión y exiges perfección. Necesitas entrenar la empatía y desactivar tu reactividad defensiva." };
+    return {
+      top1,
+      top2: showTop2 ? ENEATYPES[top2Id] : null
+    };
   };
 
   const handleSendWA = () => {
-    const result = calculateResult();
-    const text = encodeURIComponent(`Hola, acabo de hacer el Test del Ego y mi arquetipo principal es: *${result.type}*.\n\nMe di cuenta que estoy listo/a para entrenar. ¿Cuál es el siguiente paso en GEMB?`);
+    const { top1 } = calculateResult();
+    const text = encodeURIComponent(`Hola, hice el test del eneagrama en GEMB y mi resultado dominante fue *${top1.type}*.\n\nQuiero saber cuál es el siguiente paso y protocolo de entrenamiento para mí.`);
     window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
     onClose();
   };
@@ -1019,7 +1067,7 @@ const TestEgoModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-md" onClick={onClose}></div>
+      <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={onClose}></div>
 
       <div className="relative bg-[#F2F0E9] w-full max-w-2xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
@@ -1031,15 +1079,15 @@ const TestEgoModal = ({ isOpen, onClose }) => {
             <div className="flex justify-center mb-6">
               <ScanLine size={48} className="text-[#CC5833]" />
             </div>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-4">Test del Ego</h2>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-4">Test del Eneagrama</h2>
             <p className="font-serif italic text-xl text-gray-500 mb-8 max-w-md mx-auto">
-              Descubre qué máscara está dirigiendo tu vida en piloto automático. Sé brutalmente honesto/a.
+              Descubre el patrón dominante de tu personalidad y reconoce tu ruta de crecimiento real.
             </p>
             <div className="bg-white p-6 rounded-2xl mb-8 border border-gray-200 text-sm text-[#2E4036] max-w-lg mx-auto shadow-sm">
               <ul className="text-left space-y-3">
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> 10 preguntas de opción múltiple.</li>
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> Responde lo que <b>haces</b>, no lo que <i>deberías</i> hacer.</li>
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> Al finalizar recibirás tu diagnóstico y el protocolo a seguir.</li>
+                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> 18 preguntas de opción múltiple (~3 minutos).</li>
+                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> Responde lo que <b>haces y sientes realmente</b>, no lo que <i>deberías</i>.</li>
+                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> <i>Nota:</i> Esta herramienta de autoconocimiento inicial no reemplaza guía profesional ni clínica.</li>
               </ul>
             </div>
             <button
@@ -1054,10 +1102,10 @@ const TestEgoModal = ({ isOpen, onClose }) => {
         {step === 'quiz' && (
           <div className="animate-[fadeIn_0.3s_ease-out] flex-1 flex flex-col">
             <div className="flex justify-between items-center mb-8">
-              <span className="font-mono text-xs font-bold text-[#CC5833]">PREGUNTA {qIndex + 1} DE 10</span>
+              <span className="font-mono text-xs font-bold text-[#CC5833]">PREGUNTA {qIndex + 1} DE {testQuestions.length}</span>
               <div className="flex gap-1">
                 {testQuestions.map((_, i) => (
-                  <div key={i} className={`w-2 h-2 rounded-full ${i <= qIndex ? 'bg-[#2E4036]' : 'bg-gray-300'}`}></div>
+                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= qIndex ? 'bg-[#2E4036]' : 'bg-gray-300'}`}></div>
                 ))}
               </div>
             </div>
@@ -1070,7 +1118,7 @@ const TestEgoModal = ({ isOpen, onClose }) => {
               {testQuestions[qIndex].options.map((opt) => (
                 <button
                   key={opt.id}
-                  onClick={() => handleAnswer(opt.id)}
+                  onClick={() => handleAnswer(opt.scores)}
                   className="w-full text-left p-5 rounded-2xl bg-white border border-gray-200 hover:border-[#2E4036] hover:shadow-md transition-all text-[#1A1A1A] group"
                 >
                   <span className="font-bold text-[#CC5833] mr-3 group-hover:text-[#2E4036] transition-colors">{opt.id}.</span>
@@ -1082,31 +1130,59 @@ const TestEgoModal = ({ isOpen, onClose }) => {
         )}
 
         {step === 'result' && (
-          <div className="text-center animate-[fadeIn_0.5s_ease-out] flex flex-col items-center">
-            <div className="w-16 h-16 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mb-6">
-              <AlertCircle className="text-[#00FF66]" size={32} />
+          <div className="animate-[fadeIn_0.5s_ease-out] flex flex-col">
+            <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mb-4 mx-auto">
+              <Activity className="text-[#00FF66]" size={24} />
             </div>
-            <span className="font-mono text-xs font-bold text-[#CC5833] tracking-widest mb-2">DIAGNÓSTICO COMPLETADO</span>
-            <h2 className="font-heading font-bold text-4xl text-[#1A1A1A] mb-2">{calculateResult().type}</h2>
+            <div className="text-center">
+              <span className="font-mono text-[10px] font-bold text-[#CC5833] tracking-widest block mb-1">PATRÓN PREDOMINANTE</span>
+              <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-2">{calculateResult().top1.type}</h2>
+              <p className="text-lg text-[#CC5833] font-serif italic mb-6">{calculateResult().top1.subtitle}</p>
+            </div>
 
-            <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm mt-6 mb-8 w-full">
-              <p className="text-[#1A1A1A] text-lg font-serif italic mb-0">
-                "{calculateResult().desc}"
+            <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm mb-6 space-y-5 text-sm w-full text-left">
+              <p className="text-[#1A1A1A] leading-relaxed">
+                {calculateResult().top1.desc}
               </p>
+              
+              <div>
+                <strong className="block text-[#2E4036] mb-2 text-xs uppercase tracking-wider font-mono">Tus Fortalezas:</strong>
+                <ul className="space-y-1">
+                  {calculateResult().top1.strengths.map((s, idx) => (
+                     <li key={idx} className="flex items-start gap-2"><CheckCircle2 size={16} className="text-[#00FF66] mt-0.5"/> {s}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-[#F2F0E9] p-4 rounded-xl border border-gray-200">
+                <strong className="block text-[#CC5833] mb-1 text-xs uppercase tracking-wider font-mono"><AlertCircle size={14} className="inline mr-1" /> Riesgo / Punto Ciego:</strong>
+                <span className="text-gray-700">{calculateResult().top1.blindSpot}</span>
+              </div>
+              
+              <div className="bg-[#2E4036] text-white p-4 rounded-xl shadow-md">
+                <strong className="block text-[#00FF66] mb-1 text-xs uppercase tracking-wider font-mono"><Target size={14} className="inline mr-1" /> Ruta de Crecimiento:</strong>
+                <span className="text-gray-200">{calculateResult().top1.growth}</span>
+              </div>
             </div>
 
-            <p className="text-sm text-gray-500 mb-6">Envía tu resultado al equipo para recibir indicaciones sobre tu protocolo.</p>
+            {calculateResult().top2 && (
+              <div className="text-center bg-gray-100/50 rounded-xl p-3 mb-6 text-xs text-gray-500 border border-gray-200">
+                Tu resultado sugiere esta afinidad principal, pero también aparece muy marcada influencia de: <strong>{calculateResult().top2.type}</strong>.
+              </div>
+            )}
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md mx-auto">
+            <p className="text-xs text-center text-gray-500 mb-6 px-4">Esta evaluación es un punto de partida para tu autoconocimiento, guiado más fondo en nuestros programas.</p>
+
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
               <button
                 onClick={handleSendWA}
-                className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)] flex justify-center items-center gap-2"
+                className="flex-[2] bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)] flex justify-center items-center gap-2"
               >
-                <MessageCircle size={20} /> Hablar por WhatsApp
+                <MessageCircle size={20} /> Compartir Resultado y Ver Siguiente Paso
               </button>
               <button
                 onClick={resetTest}
-                className="px-6 py-4 rounded-full border border-gray-300 text-gray-500 font-bold hover:bg-gray-100 transition-colors"
+                className="flex-1 px-4 py-4 rounded-full border border-gray-300 text-gray-500 font-bold hover:bg-gray-100 transition-colors text-sm text-center"
               >
                 Reintentar
               </button>
@@ -1117,19 +1193,6 @@ const TestEgoModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
-
-const testQuestions = [
-  { text: "¿Cómo reaccionas habitualmente ante una crítica o retroalimentación fuerte?", options: [{ id: 'A', text: "Siento que me atacan y me deprimo." }, { id: 'B', text: "Me justifico excesivamente intentando explicar mi buena intención." }, { id: 'C', text: "Contraataco o descalifico a quien me critica." }] },
-  { text: "En tus relaciones (pareja, amigos, familia) sientes que a menudo:", options: [{ id: 'A', text: "Doy mucho más de lo que recibo y termino agotado/a." }, { id: 'B', text: "Tengo que resolverles la vida porque sin mí se pierden." }, { id: 'C', text: "Las cosas solo funcionan si se hacen a mi manera." }] },
-  { text: "¿Cuál crees que es tu mayor miedo inconsciente?", options: [{ id: 'A', text: "Ser abandonado/a o que dejen de quererme." }, { id: 'B', text: "Dejar de ser útil o necesario/a para los demás." }, { id: 'C', text: "Perder el control de la situación o mostrar vulnerabilidad." }] },
-  { text: "Cuando te equivocas y cometes un error grave:", options: [{ id: 'A', text: "Me torturo mentalmente y me digo que no sirvo para nada." }, { id: 'B', text: "Intento arreglarlo desesperadamente para que nadie sufra." }, { id: 'C', text: "Busco rápidamente excusas o factores externos a quién culpar." }] },
-  { text: "En situaciones de silencio o calma prolongada:", options: [{ id: 'A', text: "Me angustio pensando si alguien está molesto conmigo." }, { id: 'B', text: "Busco a quién escribirle o en qué ayudar para no estar quieto/a." }, { id: 'C', text: "Me impaciento porque siento que se está perdiendo el tiempo." }] },
-  { text: "¿Cómo es tu relación con los límites (decir 'NO')?", options: [{ id: 'A', text: "Casi no sé ponerlos, me da terror que se enojen." }, { id: 'B', text: "Los pongo pero luego me siento muy culpable y cedo." }, { id: 'C', text: "Los pongo de forma rígida y a veces agresiva." }] },
-  { text: "Tu voz interna (diálogo mental) suele sonar como:", options: [{ id: 'A', text: "'Pobre de mí, siempre me pasa lo mismo'." }, { id: 'B', text: "'Tienes que ser fuerte por ellos, tú puedes cargar con todo'." }, { id: 'C', text: "'La gente es incompetente, si no lo hago yo, sale mal'." }] },
-  { text: "Si alguien te hace un favor que no pediste:", options: [{ id: 'A', text: "Me siento profundamente en deuda y con culpa." }, { id: 'B', text: "Intento devolverlo inmediatamente el doble." }, { id: 'C', text: "Lo tomo como algo que merezco o evalúo qué quiere a cambio." }] },
-  { text: "¿Qué significa el éxito para ti en este momento de tu vida?", options: [{ id: 'A', text: "Algo que veo lejos porque la suerte nunca me acompaña." }, { id: 'B', text: "Ver triunfar a las personas que he ayudado y apoyado." }, { id: 'C', text: "Tener el poder, la razón y dominar mi entorno." }] },
-  { text: "En el fondo, sientes que la vida es:", options: [{ id: 'A', text: "Injusta y difícil para ti." }, { id: 'B', text: "Una misión de rescate donde debes salvar a otros." }, { id: 'C', text: "Un campo de batalla donde solo los fuertes ganan." }] }
-];
 
 const guaranteeItems = [
   "El proceso se define en la primera sesión con Alexandra según tu caso. No vendemos 'una sesión': definimos un plan.",
@@ -1259,7 +1322,7 @@ export default function App() {
       <Footer />
 
       {/* Modales Inyectados */}
-      <TestEgoModal isOpen={isTestOpen} onClose={() => setTestOpen(false)} />
+      <TestEnneagramModal isOpen={isTestOpen} onClose={() => setTestOpen(false)} />
       <GuaranteeModal isOpen={isGuaranteeOpen} onClose={() => setGuaranteeOpen(false)} />
     </>
   );
