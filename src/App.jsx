@@ -96,71 +96,14 @@ const GoldenLogoLockup = ({ scrolled, inFooter = false }) => {
   const isCompact = scrolled && !inFooter;
 
   return (
-    <div className={`flex transition-all duration-700 origin-top-left ${isCompact ? 'flex-row items-center gap-3 scale-90' : 'flex-col items-center scale-100'}`}>
-
-      {/* Icono Dorado Fiel al Original (Árbol, Cerebro, Balanza con Pesas) */}
-      <svg viewBox="0 0 200 150" className={`transition-all duration-700 ${isCompact ? 'w-12 h-10' : 'w-32 h-24 drop-shadow-2xl'}`} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#C59341" />
-            <stop offset="20%" stopColor="#E2C17D" />
-            <stop offset="50%" stopColor="#FFF2CD" />
-            <stop offset="80%" stopColor="#E2C17D" />
-            <stop offset="100%" stopColor="#9B732B" />
-          </linearGradient>
-        </defs>
-        <g fill="url(#gold-grad)">
-          {/* Copa del árbol frondosa */}
-          <path d="M100 15 C85 15 75 25 75 35 C60 35 55 50 65 60 C60 70 70 80 85 80 C90 85 110 85 115 80 C130 80 140 70 135 60 C145 50 140 35 125 35 C125 25 115 15 100 15 Z" />
-
-          {/* Tronco y raíces */}
-          <path d="M96 85 C96 75 90 65 85 60 C95 65 98 75 99 85 L101 85 C102 75 105 65 115 60 C110 65 104 75 104 85 Z" />
-          <rect x="98" y="50" width="4" height="35" />
-
-          {/* Barra de la balanza */}
-          <rect x="35" y="90" width="130" height="4" rx="2" />
-
-          {/* Pesas (Discos) */}
-          <rect x="50" y="80" width="4" height="24" rx="1" />
-          <rect x="56" y="83" width="3" height="18" rx="1" />
-          <rect x="146" y="80" width="4" height="24" rx="1" />
-          <rect x="141" y="83" width="3" height="18" rx="1" />
-
-          {/* Balanza colgada izquierda */}
-          <path d="M 35 94 L 20 120 M 35 94 L 50 120" stroke="url(#gold-grad)" strokeWidth="1.5" />
-          <path d="M 15 120 Q 35 125 55 120 Z" />
-
-          {/* Balanza colgada derecha */}
-          <path d="M 165 94 L 150 120 M 165 94 L 180 120" stroke="url(#gold-grad)" strokeWidth="1.5" />
-          <path d="M 145 120 Q 165 125 185 120 Z" />
-
-          {/* Cerebro Izquierdo */}
-          <path d="M98 80 C65 80 50 100 65 125 C75 140 95 135 98 130 C98 130 96 110 98 80 Z" opacity="0.95" />
-          <path d="M 75 95 Q 85 90 90 100 M 68 110 Q 80 105 85 115 M 82 125 Q 90 120 95 125" fill="none" stroke="#1A1A1A" strokeWidth="1.5" opacity="0.5" />
-
-          {/* Cerebro Derecho */}
-          <path d="M102 80 C135 80 150 100 135 125 C125 140 105 135 102 130 C102 130 104 110 102 80 Z" />
-          <path d="M 125 95 Q 115 90 110 100 M 132 110 Q 120 105 115 115 M 118 125 Q 110 120 105 125" fill="none" stroke="#1A1A1A" strokeWidth="1.5" opacity="0.5" />
-        </g>
-      </svg>
-
-      {/* Textos apilados y dorados */}
-      {isCompact ? (
-        <div className="flex flex-col">
-          <span className="text-2xl leading-none text-[#F8E5A1] drop-shadow-md" style={{ fontFamily: "'Great Vibes', cursive" }}>
-            Mentes Brillantes
-          </span>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center mt-3 w-max">
-          <span className="text-[0.6rem] tracking-[0.4em] font-sans font-semibold text-[#E2C17D] uppercase drop-shadow-sm ml-1">
-            Gimnasio Emocional
-          </span>
-          <span className="text-[2.5rem] leading-none text-[#F8E5A1] mt-1 drop-shadow-lg" style={{ fontFamily: "'Great Vibes', cursive" }}>
-            Mentes Brillantes
-          </span>
-        </div>
-      )}
+    <div className={`flex transition-all duration-700 origin-top-left ${isCompact ? 'scale-90' : 'scale-100'}`}>
+      <img 
+        src="/logo-gemb.png" 
+        alt="Gimnasio Emocional Mentes Brillantes" 
+        className={`transition-all duration-700 object-contain ${
+          isCompact ? 'h-12 md:h-14' : 'h-24 md:h-32 drop-shadow-2xl'
+        }`}
+      />
     </div>
   );
 };
