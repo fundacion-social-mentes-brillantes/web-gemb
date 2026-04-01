@@ -240,7 +240,7 @@ const Hero = ({ onOpenTest }) => {
           </div>
 
           <p className="hero-elem font-mono text-xs text-[#F2F0E9]/60 tracking-wider uppercase">
-            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Autoconocimiento
+            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Reducción del Ego
           </p>
         </div>
       </div>
@@ -1181,7 +1181,7 @@ const QUICK_MATRIX = {
   "CX": {
     "typeId": 2,
     "label": "Ayudador",
-    "note": "Entrega, cuidado y bºsqueda de conexión."
+    "note": "Entrega, cuidado y búsqueda de conexión."
   },
   "CY": {
     "typeId": 6,
@@ -1225,7 +1225,7 @@ const LIKERT_OPTIONS = [
   { id: 'F16', text: 'Bajo estrés me retiro a sentir y nombrar lo que pasa.', targets: [{ t: 4, w: 1 }, { t: 9, w: 1 }] },
 
   { id: 'F17', text: 'Necesito tiempo a solas para recargar mente y energía.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F18', text: 'Observar y entender antes de actuar me hace sentir seguro.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F18', text: 'Observar y entender antes de actuar me hace sentir seguro.', targets: [{ t: 5, w: 1 }, { t: 6, w: 1 }] },
   { id: 'F19', text: 'Evito depender porque temo quedarme sin recursos.', targets: [{ t: 5, w: 1 }] },
   { id: 'F20', text: 'Cuando hay demasiada demanda me refugio en mi espacio mental.', targets: [{ t: 5, w: 1 }, { t: 9, w: 1 }] },
 
@@ -1311,22 +1311,27 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
 
   const fullResult = () => {
     const totals = computeFullScores();
-    const ranking = Object.entries(totals).sort((a, b) => b[1] - a[1]);
-    const [topId, topScore] = ranking[0];
-    const [secondId, secondScore] = ranking[1];
-    const margin = topScore - secondScore;
-    const coverage = topScore / (FULL_POTENTIAL[topId] || 1);
+    const normalized = Object.entries(totals).map(([id, rawScore]) => {
+      const maxPossible = FULL_POTENTIAL[id] || 1;
+      const normalizedScore = maxPossible ? rawScore / maxPossible : 0;
+      return { id, rawScore, maxPossible, normalizedScore };
+    });
+
+    const ranking = normalized.sort((a, b) => b.normalizedScore - a.normalizedScore);
+    const [top, second] = ranking;
+    const marginNormalized = top.normalizedScore - second.normalizedScore;
+    const coverageNormalized = top.normalizedScore;
 
     let confidence = 'baja';
-    if (coverage >= 0.65 && margin >= 8) confidence = 'alta';
-    else if (coverage >= 0.5 && margin >= 4) confidence = 'media';
+    if (coverageNormalized >= 0.7 && marginNormalized >= 0.1) confidence = 'alta';
+    else if (coverageNormalized >= 0.55 && marginNormalized >= 0.06) confidence = 'media';
 
     return {
       ranking,
-      top: ENEATYPES[topId],
-      second: ENEATYPES[secondId],
-      margin,
-      coverage,
+      top: { ...ENEATYPES[top.id], rawScore: top.rawScore, maxPossible: top.maxPossible, normalizedScore: top.normalizedScore },
+      second: { ...ENEATYPES[second.id], rawScore: second.rawScore, maxPossible: second.maxPossible, normalizedScore: second.normalizedScore },
+      marginNormalized,
+      coverageNormalized,
       confidence
     };
   };
