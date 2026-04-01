@@ -993,200 +993,488 @@ const ENEATYPES = {
   9: { type: "Eneatipo 9 â€” El Conciliador", subtitle: "Busca la paz y evitar el conflicto.", desc: "Tu miedo central es la fragmentaciÃ³n o pÃ©rdida de conexiÃ³n. Eres mediador nato, pero ignoras tus necesidades para mantener armonÃ­a.", strengths: ["Receptividad", "Tranquilidad", "MediaciÃ³n objetiva"], blindSpot: "Pasividad, terquedad pasiva y resistirse al esfuerzo propio.", growth: "Hacerte valer, poner lÃ­mites y pasar a la acciÃ³n consciente." }
 };
 
-const testQuestions = [
-  { text: "Â¿QuÃ© impulsa tus decisiones mÃ¡s instintivas?", options: [{ id: 'A', text: "Hacer lo correcto y evitar el error a toda costa.", scores: [{t:1, p:3}] }, { id: 'B', text: "Ayudar a quienes me necesitan y sentirme valioso/a.", scores: [{t:2, p:3}] }, { id: 'C', text: "Alcanzar el Ã©xito y destacar por mis logros.", scores: [{t:3, p:3}] }] },
-  { text: "Cuando te sientes incomprendido/a, tiendes a:", options: [{ id: 'A', text: "Sentir melancolÃ­a y aislarme en mis propios sentimientos.", scores: [{t:4, p:3}] }, { id: 'B', text: "Retirarme a mi mente para analizar todo con lÃ³gica.", scores: [{t:5, p:3}] }, { id: 'C', text: "Buscar seguridad o aliados en los que pueda confiar.", scores: [{t:6, p:3}] }] },
-  { text: "Ante un conflicto inminente, tu reacciÃ³n natural es:", options: [{ id: 'A', text: "Evadirlo planificando cosas o cambiando de tema rÃ¡pidamente.", scores: [{t:7, p:3}] }, { id: 'B', text: "Enfrentarlo de frente, tomar el control y no ceder poder.", scores: [{t:8, p:3}] }, { id: 'C', text: "Bajar la tensiÃ³n, ceder un poco y buscar la paz a toda costa.", scores: [{t:9, p:3}] }] },
-  { text: "La voz crÃ­tica en tu cabeza suele decir:", options: [{ id: 'A', text: "'PodrÃ­as haberlo hecho mucho mejor, te falta disciplina'.", scores: [{t:1, p:3}] }, { id: 'B', text: "'Nadie agradece realmente todo lo que haces por ellos'.", scores: [{t:2, p:3}] }, { id: 'C', text: "'Si fallas, la gente dejarÃ¡ de valorarte y admirarte'.", scores: [{t:3, p:3}] }] },
-  { text: "En situaciones sociales, generalmente te percibes como:", options: [{ id: 'A', text: "Diferente a los demÃ¡s, con una profundidad que pocos entienden.", scores: [{t:4, p:3}] }, { id: 'B', text: "Un observador distante que protege su energÃ­a y espacio.", scores: [{t:5, p:3}] }, { id: 'C', text: "Alerta, midiendo quiÃ©n es confiable y visualizando riesgos.", scores: [{t:6, p:3}] }] },
-  { text: "Tu peor miedo es:", options: [{ id: 'A', text: "Quedar atrapado/a en el dolor o perderme de experiencias.", scores: [{t:7, p:3}] }, { id: 'B', text: "Ser controlado/a, manipulado/a o traicionado por alguien.", scores: [{t:8, p:3}] }, { id: 'C', text: "Perder la conexiÃ³n con mi entorno o fragmentarme del grupo.", scores: [{t:9, p:3}] }] },
-  { text: "Â¿CÃ³mo manejas tus necesidades personales?", options: [{ id: 'A', text: "Las reprimo porque el deber y la responsabilidad van primero.", scores: [{t:1, p:3}] }, { id: 'B', text: "Las ignoro para atender las necesidades de mis seres queridos.", scores: [{t:2, p:3}] }, { id: 'C', text: "Las adapto estratÃ©gicamente para no entorpecer mis metas.", scores: [{t:3, p:3}] }] },
-  { text: "Al expresar tus emociones:", options: [{ id: 'A', text: "Suelen ser intensas, llenas de matices y yo me sumerjo en ellas.", scores: [{t:4, p:3}] }, { id: 'B', text: "Siento desconexiÃ³n temporal; prefiero analizarlas en privado.", scores: [{t:5, p:3}] }, { id: 'C', text: "Tengo mucha ansiedad anticipatoria que los demÃ¡s no siempre notan.", scores: [{t:6, p:3}] }] },
-  { text: "Tu ritmo de vida es:", options: [{ id: 'A', text: "Acelerado, haciendo mil planes y saltando de un estÃ­mulo a otro.", scores: [{t:7, p:3}] }, { id: 'B', text: "Intenso, marcando el terreno, directo y liderando con fuerza.", scores: [{t:8, p:3}] }, { id: 'C', text: "Tranquilo y pausado, evitando gastar energÃ­a en peleas.", scores: [{t:9, p:3}] }] },
-  { text: "Si las cosas no salen como planeaste:", options: [{ id: 'A', text: "Me frustro mucho internamente porque las cosas 'deben' ser correctas.", scores: [{t:1, p:3}] }, { id: 'B', text: "Busco cÃ³mo ser indispensable en el nuevo plan para ayudar.", scores: [{t:2, p:3}] }, { id: 'C', text: "Me adapto rÃ¡pidamente a las expectativas para seguir teniendo Ã©xito.", scores: [{t:3, p:3}] }] },
-  { text: "Sobre tu espacio y tiempo personal:", options: [{ id: 'A', text: "Deseo intimidad pero al tiempo siento que siempre me falta alguien.", scores: [{t:4, p:3}] }, { id: 'B', text: "Es sagrado e innegociable; me agota la intromisiÃ³n social continua.", scores: [{t:5, p:3}] }, { id: 'C', text: "Me gusta compartirlo si me da seguridad, pero desconfÃ­o al inicio.", scores: [{t:6, p:3}] }] },
-  { text: "Frente al compromiso formal o rutinas:", options: [{ id: 'A', text: "Me asusta sentirme encerrado/a, prefiero las opciones abiertas.", scores: [{t:7, p:3}] }, { id: 'B', text: "Los asumo con seriedad si soy yo quien mantiene el control.", scores: [{t:8, p:3}] }, { id: 'C', text: "Los acepto pacÃ­ficamente, a veces me fusiono con planes de otros.", scores: [{t:9, p:3}] }] },
-  { text: "Sientes que la gente genuinamente valora de ti:", options: [{ id: 'A', text: "Mi integridad incorruptible, mi Ã©tica y mi exigencia.", scores: [{t:1, p:3}] }, { id: 'B', text: "Mi calidez natural, mi servicio y mi bondad al dar apoyo.", scores: [{t:2, p:3}] }, { id: 'C', text: "Mi brillantez, mi eficiencia impecable y mis excelentes resultados.", scores: [{t:3, p:3}] }] },
-  { text: "En tu tiempo libre prefieres:", options: [{ id: 'A', text: "Explorar la estÃ©tica o reflexionar sobre mis sentires profundos.", scores: [{t:4, p:3}] }, { id: 'B', text: "Investigar temas complejos, leer o explorar mi pasatiempo privado.", scores: [{t:5, p:3}] }, { id: 'C', text: "Estar con mi pequeÃ±o cÃ­rculo seguro que sÃ© que no me fallarÃ¡.", scores: [{t:6, p:3}] }] },
-  { text: "Lo que mÃ¡s te molesta y desestabiliza de los demÃ¡s es:", options: [{ id: 'A', text: "Que me pongan lÃ­mites, me aburran o intenten quitarme libertad.", scores: [{t:7, p:3}] }, { id: 'B', text: "Que intenten controlarme con Ã³rdenes o me muestren debilidad.", scores: [{t:8, p:3}] }, { id: 'C', text: "Que armen dramas emocionales innecesarios que roban mi paz.", scores: [{t:9, p:3}] }] },
-  { text: "En el fondo, tu mayor deseo en las relaciones es:", options: [{ id: 'A', text: "Que haya madurez, perfecciÃ³n y que entiendan mi correcciÃ³n.", scores: [{t:1, p:3}, {t:4, p:1}] }, { id: 'B', text: "Sentirme amado/a y confirmar que verdaderamente me necesitan.", scores: [{t:2, p:3}, {t:3, p:1}] }, { id: 'C', text: "Ser admirado/a por mis logros y que me apoyen para ser mejor.", scores: [{t:3, p:3}, {t:8, p:1}] }] },
-  { text: "Si te enfrentas al rechazo o humillaciÃ³n, tÃº...", options: [{ id: 'A', text: "Me hundo en mi sentimiento de que estoy daÃ±ado o incompleto.", scores: [{t:4, p:3}, {t:1, p:1}] }, { id: 'B', text: "Me aÃ­slo rÃ¡pidamente convenciÃ©ndome de que no los necesito.", scores: [{t:5, p:3}, {t:8, p:1}] }, { id: 'C', text: "Aumento mis defensas y dudo mucho sobre en quiÃ©n confiar.", scores: [{t:6, p:3}, {t:1, p:1}] }] },
-  { text: "Cuando tienes mucha energÃ­a o poder, tiendes a:", options: [{ id: 'A', text: "Multiplicar mis experiencias y vivir intensamente cada hora.", scores: [{t:7, p:3}] }, { id: 'B', text: "Liderar, empujar decisiones difÃ­ciles y proteger a los vulnerables.", scores: [{t:8, p:3}] }, { id: 'C', text: "Conectar con quien quiero, pacificar entornos y unificar.", scores: [{t:9, p:3}] }] }
+const QUICK_GROUPS = {
+  first: [
+    { code: 'A', title: 'Impulso y autonomía', desc: 'Independencia, empuje, objetivos claros, deseo de impacto y baja tolerancia a que otros marquen tu paso.' },
+    { code: 'B', title: 'Reserva y quietud', desc: 'Preferencia por la soledad elegida, imaginación, poca competitividad y gusto por la calma.' },
+    { code: 'C', title: 'Deber y entrega', desc: 'Sentido fuerte de responsabilidad, compromiso con otros y tendencia a postergarte para cumplir.' }
+  ],
+  second: [
+    { code: 'X', title: 'Optimismo y evitar dolor', desc: 'Actitud positiva, búsqueda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso.' },
+    { code: 'Y', title: 'Intensidad y reactividad', desc: 'Sensibilidad alta, lealtades claras, necesidad de decidir por ti mismo y respuestas emocionales fuertes.' },
+    { code: 'Z', title: 'Control y distancia', desc: 'Lógica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contención emocional.' }
+  ]
+};
+
+const QUICK_MATRIX = {
+  AX: { typeId: 7, label: 'Entusiasta', note: 'Energía alta, optimismo y búsqueda de opciones.' },
+  AY: { typeId: 8, label: 'Líder', note: 'Autoafirmación, fuerza y control del terreno.' },
+  AZ: { typeId: 3, label: 'Triunfador', note: 'Orientación a logro, eficiencia e imagen eficaz.' },
+  BX: { typeId: 9, label: 'Conciliador', note: 'Calma, receptividad y preferencia por la armonía.' },
+  BY: { typeId: 4, label: 'Individualista', note: 'Sensibilidad, identidad propia y expresión emocional.' },
+  BZ: { typeId: 5, label: 'Investigador', note: 'Observación, objetividad y protección de energía.' },
+  CX: { typeId: 2, label: 'Ayudador', note: 'Entrega, cuidado y búsqueda de conexión.' },
+  CY: { typeId: 6, label: 'Leal', note: 'Compromiso, cautela y necesidad de seguridad.' },
+  CZ: { typeId: 1, label: 'Perfeccionista', note: 'Principios, racionalidad y autoexigencia.' }
+};
+
+const LIKERT_OPTIONS = [
+  { value: 0, label: 'Nada' },
+  { value: 1, label: 'Poco' },
+  { value: 2, label: 'Medio' },
+  { value: 3, label: 'Bastante' },
+  { value: 4, label: 'Mucho' }
 ];
 
+const FULL_STATEMENTS = [
+  { id: 'F1', text: 'Mantengo un ideal interno tan fuerte que me tenso cuando algo queda imperfecto.', targets: [{ t: 1, w: 1 }] },
+  { id: 'F2', text: 'El orden y la coherencia moral me calman más que el placer inmediato.', targets: [{ t: 1, w: 1 }] },
+  { id: 'F3', text: 'Bajo presión me vuelvo crítico conmigo y con otros porque temo que algo falle.', targets: [{ t: 1, w: 1 }] },
+  { id: 'F4', text: 'Puedo sacrificar mi descanso si eso mantiene las cosas correctas.', targets: [{ t: 1, w: 1 }] },
+
+  { id: 'F5', text: 'Siento que merezco amor cuando soy útil o cuido a alguien.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F6', text: 'Me anticipo a las necesidades ajenas incluso si descuido las mías.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F7', text: 'Me cuesta pedir ayuda porque temo dejar de ser necesario.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F8', text: 'Cuando alguien se distancia busco reconectar ofreciendo apoyo.', targets: [{ t: 2, w: 1 }] },
+
+  { id: 'F9', text: 'Adapto mi imagen para lograr metas aunque oculte mi vulnerabilidad.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F10', text: 'El fracaso amenaza mi sentido de valor personal.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F11', text: 'Bajo presión acelero y produzco más para no sentirme insuficiente.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F12', text: 'Mido el día en resultados concretos más que en emociones procesadas.', targets: [{ t: 3, w: 1 }] },
+
+  { id: 'F13', text: 'La autenticidad y la profundidad emocional son irrenunciables para mí.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F14', text: 'Temo ser común o trivial y busco lo singular.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F15', text: 'Cuando me duele algo me sumerjo en ese sentimiento para entenderlo.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F16', text: 'Comparo lo que tengo con lo que imagino que me falta.', targets: [{ t: 4, w: 1 }] },
+
+  { id: 'F17', text: 'Necesito espacio y tiempo solo para recargar energía mental.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F18', text: 'Acumulo conocimiento antes de involucrarme afectivamente.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F19', text: 'El exceso de demandas externas me hace retirarme.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F20', text: 'Prefiero observar y entender antes que mostrar emociones.', targets: [{ t: 5, w: 1 }] },
+
+  { id: 'F21', text: 'Escaneo riesgos y busco certezas antes de decidir.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F22', text: 'La lealtad y las alianzas confiables me sostienen.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F23', text: 'Dudo de mis decisiones y pido segundas opiniones.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F24', text: 'Bajo presión imagino escenarios negativos para prepararme.', targets: [{ t: 6, w: 1 }] },
+
+  { id: 'F25', text: 'Busco opciones y planes para evitar sentirme atrapado en el dolor.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F26', text: 'La idea de perder libertad me inquieta más que el esfuerzo.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F27', text: 'Cuando algo me duele lo compenso llenando la agenda de actividades.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F28', text: 'Prefiero experiencias estimulantes a quedarme con emociones densas.', targets: [{ t: 7, w: 1 }] },
+
+  { id: 'F29', text: 'Protejo mi autonomía y la de los míos con fuerza y decisión.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F30', text: 'Mostrar vulnerabilidad se siente peligroso para mí.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F31', text: 'Cuando siento injusticia incremento mi intensidad y tomo control.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F32', text: 'Prefiero confrontar directamente antes que quedarme callado.', targets: [{ t: 8, w: 1 }] },
+
+  { id: 'F33', text: 'La paz y la estabilidad valen más que imponer mi punto de vista.', targets: [{ t: 9, w: 1 }] },
+  { id: 'F34', text: 'Postergarme y decir "todo bien" evita conflictos aunque me pierda.', targets: [{ t: 9, w: 1 }] },
+  { id: 'F35', text: 'Me cuesta priorizarme si eso puede alterar la armonía.', targets: [{ t: 9, w: 1 }] },
+  { id: 'F36', text: 'Bajo presión me desconecto o adormezco para no sentir la tensión.', targets: [{ t: 9, w: 1 }] }
+];
+
+const FULL_POTENTIAL = FULL_STATEMENTS.reduce((acc, q) => {
+  q.targets.forEach(({ t, w }) => {
+    acc[t] = (acc[t] || 0) + w * 4;
+  });
+  return acc;
+}, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 });
+
 const TestEnneagramModal = ({ isOpen, onClose }) => {
-  const [step, setStep] = useState('intro');
-  const [qIndex, setQIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [step, setStep] = useState('choice');
+  const [quickChoice, setQuickChoice] = useState({ first: null, second: null });
+  const [fullIndex, setFullIndex] = useState(0);
+  const [fullAnswers, setFullAnswers] = useState([]);
 
-  if (!isOpen) return null;
-
-  const handleAnswer = (scores) => {
-    const newAnswers = [...answers, scores];
-    if (qIndex < testQuestions.length - 1) {
-      setAnswers(newAnswers);
-      setQIndex(qIndex + 1);
-    } else {
-      setAnswers(newAnswers);
-      setStep('result');
-    }
-  };
-
-  const calculateResult = () => {
-    const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-    answers.forEach(arr => {
-      arr.forEach(s => { scores[s.t] += s.p; });
-    });
-
-    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    const top1Id = sorted[0][0];
-    const top2Id = sorted[1][0];
-    
-    const top1 = ENEATYPES[top1Id];
-    // Show top2 if diff <= 3 points
-    const showTop2 = (sorted[0][1] - sorted[1][1] <= 3);
-
-    return {
-      top1,
-      top2: showTop2 ? ENEATYPES[top2Id] : null
-    };
-  };
-
-  const handleSendWA = () => {
-    const { top1 } = calculateResult();
-    const text = encodeURIComponent(`Hola, hice el test del eneagrama en GEMB y mi resultado dominante fue *${top1.type}*.\n\nQuiero saber cuÃ¡l es el siguiente paso y protocolo de entrenamiento para mÃ­.`);
-    window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+  const handleClose = () => {
+    setStep('choice');
+    setQuickChoice({ first: null, second: null });
+    setFullIndex(0);
+    setFullAnswers([]);
     onClose();
   };
 
-  const resetTest = () => {
-    setStep('intro');
-    setQIndex(0);
-    setAnswers([]);
+  if (!isOpen) return null;
+
+  const quickResult = () => {
+    if (!quickChoice.first || !quickChoice.second) return null;
+    const code = `${quickChoice.first}${quickChoice.second}`;
+    const combo = QUICK_MATRIX[code];
+    if (!combo) return null;
+    return {
+      code,
+      label: combo.label,
+      note: combo.note,
+      type: ENEATYPES[combo.typeId]
+    };
   };
+
+  const handleFullAnswer = (value) => {
+    const updated = [...fullAnswers];
+    updated[fullIndex] = value;
+    setFullAnswers(updated);
+    if (fullIndex < FULL_STATEMENTS.length - 1) {
+      setFullIndex(fullIndex + 1);
+    } else {
+      setStep('full-result');
+    }
+  };
+
+  const computeFullScores = () => {
+    const totals = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    fullAnswers.forEach((ans, idx) => {
+      if (ans === undefined || ans === null) return;
+      FULL_STATEMENTS[idx].targets.forEach(({ t, w }) => {
+        totals[t] += ans * w;
+      });
+    });
+    return totals;
+  };
+
+  const fullResult = () => {
+    const totals = computeFullScores();
+    const ranking = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    const [topId, topScore] = ranking[0];
+    const [secondId, secondScore] = ranking[1];
+    const margin = topScore - secondScore;
+    const coverage = topScore / (FULL_POTENTIAL[topId] || 1);
+
+    let confidence = 'baja';
+    if (coverage >= 0.65 && margin >= 8) confidence = 'alta';
+    else if (coverage >= 0.5 && margin >= 4) confidence = 'media';
+
+    return {
+      ranking,
+      top: ENEATYPES[topId],
+      second: ENEATYPES[secondId],
+      margin,
+      coverage,
+      confidence
+    };
+  };
+
+  const progression = Math.round((fullIndex / FULL_STATEMENTS.length) * 100);
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={onClose}></div>
+      <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={handleClose}></div>
 
-      <div className="relative bg-[#F2F0E9] w-full max-w-2xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
+      <div className="relative bg-[#F2F0E9] w-full max-w-3xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
+        <button onClick={handleClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
 
-        {step === 'intro' && (
-          <div className="text-center animate-[fadeIn_0.5s_ease-out]">
-            <div className="flex justify-center mb-6">
-              <ScanLine size={48} className="text-[#CC5833]" />
+        {step === 'choice' && (
+          <div className="space-y-8 animate-[fadeIn_0.4s_ease-out]">
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <ScanLine size={48} className="text-[#CC5833]" />
+              </div>
+              <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-3">Mapa de Eneatipo</h2>
+              <p className="font-serif italic text-lg text-gray-600 max-w-2xl mx-auto">
+                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 36 afirmaciones. Ambos muestran motivación, miedo central y defensas.
+              </p>
             </div>
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-4">Test del Eneagrama</h2>
-            <p className="font-serif italic text-xl text-gray-500 mb-8 max-w-md mx-auto">
-              Descubre el patrÃ³n dominante de tu personalidad y reconoce tu ruta de crecimiento real.
-            </p>
-            <div className="bg-white p-6 rounded-2xl mb-8 border border-gray-200 text-sm text-[#2E4036] max-w-lg mx-auto shadow-sm">
-              <ul className="text-left space-y-3">
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> 18 preguntas de opciÃ³n mÃºltiple (~3 minutos).</li>
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> Responde lo que <b>haces y sientes realmente</b>, no lo que <i>deberÃ­as</i>.</li>
-                <li className="flex items-start gap-2"><CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#CC5833]" /> <i>Nota:</i> Esta herramienta de autoconocimiento inicial no reemplaza guÃ­a profesional ni clÃ­nica.</li>
-              </ul>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-[#CC5833]/10 flex items-center justify-center text-[#CC5833] font-bold">1</div>
+                  <div>
+                    <p className="font-heading text-xl text-[#1A1A1A]">Primera orientación</p>
+                    <p className="text-sm text-gray-500">Test rápido · 2–3 minutos</p>
+                  </div>
+                </div>
+                <ul className="text-sm text-[#2E4036] space-y-2">
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Grupo 1 (A/B/C) + Grupo 2 (X/Y/Z).</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Resultado = hipótesis inicial (no diagnóstico).</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Invita a pasar al test completo.</li>
+                </ul>
+                <button
+                onClick={() => setStep('quick-first')}
+                  className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic"
+                >
+                  Hacer test rápido
+                </button>
+              </div>
+
+              <div className="bg-[#1A1A1A] text-[#F2F0E9] rounded-3xl p-6 shadow-lg flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-bold">2</div>
+                  <div>
+                    <p className="font-heading text-xl">Lectura profunda</p>
+                    <p className="text-sm text-gray-300">Test completo · 8–12 minutos</p>
+                  </div>
+                </div>
+                <ul className="text-sm text-gray-200 space-y-2">
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones · escala Likert 0–4.</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Puntúa 9 eneatipos y muestra ranking real.</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Incluye motivación, miedo, deseo y defensa.</li>
+                </ul>
+                <button
+                onClick={() => setStep('full-intro')}
+                  className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic"
+                >
+                  Hacer test completo
+                </button>
+              </div>
             </div>
-            <button
-              onClick={() => setStep('quiz')}
-              className="bg-[#2E4036] text-white px-10 py-4 rounded-full font-bold btn-magnetic shadow-lg"
-            >
-              Comenzar DiagnÃ³stico
-            </button>
           </div>
         )}
 
-        {step === 'quiz' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] flex-1 flex flex-col">
-            <div className="flex justify-between items-center mb-8">
-              <span className="font-mono text-xs font-bold text-[#CC5833]">PREGUNTA {qIndex + 1} DE {testQuestions.length}</span>
-              <div className="flex gap-1">
-                {testQuestions.map((_, i) => (
-                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= qIndex ? 'bg-[#2E4036]' : 'bg-gray-300'}`}></div>
-                ))}
-              </div>
-            </div>
-
-            <h3 className="font-heading font-bold text-2xl md:text-3xl text-[#1A1A1A] mb-8 leading-tight">
-              {testQuestions[qIndex].text}
-            </h3>
-
-            <div className="space-y-4 mt-auto">
-              {testQuestions[qIndex].options.map((opt) => (
+        {step === 'quick-first' && (
+          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
+            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rápido · Paso 1 de 2</p>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el párrafo que mejor describe tu estilo de base</h3>
+            <div className="space-y-3">
+              {QUICK_GROUPS.first.map(opt => (
                 <button
-                  key={opt.id}
-                  onClick={() => handleAnswer(opt.scores)}
-                  className="w-full text-left p-5 rounded-2xl bg-white border border-gray-200 hover:border-[#2E4036] hover:shadow-md transition-all text-[#1A1A1A] group"
+                  key={opt.code}
+                  onClick={() => { setQuickChoice({ ...quickChoice, first: opt.code }); setStep('quick-second'); }}
+                  className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all"
                 >
-                  <span className="font-bold text-[#CC5833] mr-3 group-hover:text-[#2E4036] transition-colors">{opt.id}.</span>
-                  {opt.text}
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-9 h-9 rounded-xl bg-[#CC5833]/10 text-[#CC5833] font-bold flex items-center justify-center">{opt.code}</span>
+                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {step === 'result' && (
-          <div className="animate-[fadeIn_0.5s_ease-out] flex flex-col">
-            <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mb-4 mx-auto">
-              <Activity className="text-[#00FF66]" size={24} />
+        {step === 'quick-second' && (
+          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
+              <span className="font-mono text-xs text-[#CC5833]">Test rápido · Paso 2 de 2</span>
+              <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold text-xs">Elegiste {quickChoice.first}</span>
             </div>
-            <div className="text-center">
-              <span className="font-mono text-[10px] font-bold text-[#CC5833] tracking-widest block mb-1">PATRÃ“N PREDOMINANTE</span>
-              <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-2">{calculateResult().top1.type}</h2>
-              <p className="text-lg text-[#CC5833] font-serif italic mb-6">{calculateResult().top1.subtitle}</p>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
+            <div className="space-y-3">
+              {QUICK_GROUPS.second.map(opt => (
+                <button
+                  key={opt.code}
+                  onClick={() => { setQuickChoice({ ...quickChoice, second: opt.code }); setStep('quick-result'); }}
+                  className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-9 h-9 rounded-xl bg-[#2E4036]/10 text-[#2E4036] font-bold flex items-center justify-center">{opt.code}</span>
+                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step === 'quick-result' && quickResult() && (
+          <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
+            <div className="flex flex-col items-center text-center gap-2">
+              <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
+                <Activity className="text-[#00FF66]" size={22} />
+              </div>
+              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {quickResult().code}</h3>
+              <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
             </div>
 
-            <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm mb-6 space-y-5 text-sm w-full text-left">
-              <p className="text-[#1A1A1A] leading-relaxed">
-                {calculateResult().top1.desc}
-              </p>
-              
-              <div>
-                <strong className="block text-[#2E4036] mb-2 text-xs uppercase tracking-wider font-mono">Tus Fortalezas:</strong>
-                <ul className="space-y-1">
-                  {calculateResult().top1.strengths.map((s, idx) => (
-                     <li key={idx} className="flex items-start gap-2"><CheckCircle2 size={16} className="text-[#00FF66] mt-0.5"/> {s}</li>
-                  ))}
-                </ul>
+            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
+              <p className="text-sm text-gray-500">Esta lectura es orientativa. Úsala como punto de partida y valida con el test completo para mayor precisión.</p>
+              <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
+                <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
+                <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickResult().type.type}</h4>
+                <p className="text-[#CC5833] text-sm font-serif italic">{quickResult().type.subtitle}</p>
               </div>
-
-              <div className="bg-[#F2F0E9] p-4 rounded-xl border border-gray-200">
-                <strong className="block text-[#CC5833] mb-1 text-xs uppercase tracking-wider font-mono"><AlertCircle size={14} className="inline mr-1" /> Riesgo / Punto Ciego:</strong>
-                <span className="text-gray-700">{calculateResult().top1.blindSpot}</span>
-              </div>
-              
-              <div className="bg-[#2E4036] text-white p-4 rounded-xl shadow-md">
-                <strong className="block text-[#00FF66] mb-1 text-xs uppercase tracking-wider font-mono"><Target size={14} className="inline mr-1" /> Ruta de Crecimiento:</strong>
-                <span className="text-gray-200">{calculateResult().top1.growth}</span>
+              <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
+                <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivación</p>
+                  <p>{quickResult().type.motivation}</p>
+                </div>
+                <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Miedo central</p>
+                  <p>{quickResult().type.fear}</p>
+                </div>
               </div>
             </div>
 
-            {calculateResult().top2 && (
-              <div className="text-center bg-gray-100/50 rounded-xl p-3 mb-6 text-xs text-gray-500 border border-gray-200">
-                Tu resultado sugiere esta afinidad principal, pero tambiÃ©n aparece muy marcada influencia de: <strong>{calculateResult().top2.type}</strong>.
-              </div>
-            )}
-
-            <p className="text-xs text-center text-gray-500 mb-6 px-4">Esta evaluaciÃ³n es un punto de partida para tu autoconocimiento, guiado mÃ¡s fondo en nuestros programas.</p>
-
-            <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={handleSendWA}
-                className="flex-[2] bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)] flex justify-center items-center gap-2"
+                onClick={() => setStep('full-intro')}
+                className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic"
               >
-                <MessageCircle size={20} /> Compartir Resultado y Ver Siguiente Paso
+                Pasar a lectura profunda
               </button>
               <button
-                onClick={resetTest}
-                className="flex-1 px-4 py-4 rounded-full border border-gray-300 text-gray-500 font-bold hover:bg-gray-100 transition-colors text-sm text-center"
+                onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }}
+                className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors"
               >
-                Reintentar
+                Repetir test rápido
               </button>
             </div>
+          </div>
+        )}
+
+        {step === 'full-intro' && (
+          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
+            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test completo</p>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones · escala 0 a 4</h3>
+            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#2E4036]">
+              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual. El resultado mostrará ranking de eneatipos, segundo candidato (si aplica) y nivel de confianza.</p>
+              <ul className="space-y-2">
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada · 4 = Mucho.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivación, miedo, deseo, defensa y reacción bajo presión.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Puedes volver una pregunta atrás si necesitas ajustar.</li>
+              </ul>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep('full-quiz')}
+                className="bg-[#2E4036] text-white px-8 py-4 rounded-full font-bold btn-magnetic"
+              >
+                Iniciar lectura profunda
+              </button>
+              <button
+                onClick={() => { setStep('choice'); }}
+                className="px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100"
+              >
+                Volver
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 'full-quiz' && (
+          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6 flex-1 flex flex-col">
+            <div className="flex justify-between items-center text-sm text-gray-600">
+              <span className="font-mono text-xs text-[#CC5833]">Afirmación {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
+              <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{progression}%</span>
+            </div>
+
+            <h3 className="font-heading text-2xl text-[#1A1A1A] leading-snug">{FULL_STATEMENTS[fullIndex].text}</h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 mt-auto">
+              {LIKERT_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => handleFullAnswer(opt.value)}
+                  className={`rounded-2xl border px-3 py-4 text-center font-bold text-sm transition-all ${fullAnswers[fullIndex] === opt.value ? 'bg-[#2E4036] text-white border-[#2E4036]' : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#2E4036]'}`}
+                >
+                  <div className="text-lg">{opt.label}</div>
+                  <div className="text-[11px] opacity-70">{opt.value}</div>
+                </button>
+              ))}
+            </div>
+
+            <div className="flex justify-between items-center pt-2 text-sm text-gray-600">
+              <button
+                disabled={fullIndex === 0}
+                onClick={() => setFullIndex((prev) => Math.max(0, prev - 1))}
+                className={`px-3 py-2 rounded-full border ${fullIndex === 0 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-600 hover:bg-gray-100'}`}
+              >
+                Volver
+              </button>
+              <p className="text-xs">Lee cada frase desde tu motivación habitual, no desde la imagen ideal.</p>
+            </div>
+          </div>
+        )}
+
+        {step === 'full-result' && (
+          <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
+            {(() => {
+              const res = fullResult();
+              return (
+                <>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
+                      <Activity className="text-[#00FF66]" size={22} />
+                    </div>
+                    <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Lectura profunda</p>
+                    <h3 className="font-heading text-3xl text-[#1A1A1A]">{res.top.type}</h3>
+                    <p className="text-[#CC5833] font-serif italic">{res.top.subtitle}</p>
+                    <div className="flex gap-2 text-xs text-gray-600 mt-1">
+                      <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">Confianza {res.confidence}</span>
+                      <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Margen {res.margin} pts</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
+                    <div className="grid md:grid-cols-3 gap-3">
+                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Motivación</p>
+                        <p>{res.top.motivation}</p>
+                      </div>
+                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Miedo central</p>
+                        <p>{res.top.fear}</p>
+                      </div>
+                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Deseo central</p>
+                        <p>{res.top.desire}</p>
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="p-3 bg-white rounded-2xl border border-gray-100">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Defensa habitual</p>
+                        <p>{res.top.defense}</p>
+                      </div>
+                      <div className="p-3 bg-white rounded-2xl border border-gray-100">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Patrón relacional</p>
+                        <p>{res.top.relation}</p>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-[#2E4036] text-white rounded-2xl">
+                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#00FF66] mb-1">Reacción bajo presión</p>
+                      <p className="text-sm leading-relaxed">{res.top.pressure}</p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Fortalezas</p>
+                        <ul className="space-y-1">
+                          {res.top.strengths.map((s, idx) => (
+                            <li key={idx} className="flex gap-2"><CheckCircle2 size={14} className="text-[#00FF66] mt-0.5" /> {s}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Riesgo / punto ciego</p>
+                        <p>{res.top.blindSpot}</p>
+                        <p className="mt-2 text-[#2E4036] font-semibold">Ruta de crecimiento:</p>
+                        <p>{res.top.growth}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-100/70 border border-gray-200 rounded-3xl p-5 space-y-2 text-sm text-gray-700">
+                    <p className="font-semibold text-[#1A1A1A]">Segundo eneatipo probable: {res.second.type}</p>
+                    <p>El resultado sugiere afinidad secundaria si la diferencia es baja. Úsalo como contraste, no como etiqueta.</p>
+                    {res.confidence === 'baja' && (
+                      <p className="text-[#CC5833] font-semibold">Lectura ambigua: responde de nuevo o agenda una sesión para profundizar.</p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => {
+                        const text = encodeURIComponent(`Hice el test completo. Resultado principal: ${res.top.type} (confianza ${res.confidence}). Segundo: ${res.second.type}. Quiero orientación y Sala de Reducción del Ego.`);
+                        window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+                        handleClose();
+                      }}
+                      className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]"
+                    >
+                      Compartir y ver siguiente paso
+                    </button>
+                    <button
+                      onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); setFullIndex(0); setFullAnswers([]); }}
+                      className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100"
+                    >
+                      Repetir lectura
+                    </button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         )}
       </div>
@@ -1327,3 +1615,6 @@ export default function App() {
     </>
   );
 }
+
+
+
