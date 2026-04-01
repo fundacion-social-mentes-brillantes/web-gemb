@@ -982,40 +982,217 @@ const Footer = () => {
 // --- MODALES ---
 
 const ENEATYPES = {
-  1: { type: "Eneatipo 1 — El Perfeccionista", subtitle: "Busca hacer lo correcto y mejorar el mundo.", desc: "Tu miedo central es ser corrupto o defectuoso. Tienes altos estándares éticos, pero puedes caer en la crítica constante a ti mismo.", strengths: ["Ética de trabajo", "Deseo de mejorar", "Responsabilidad"], blindSpot: "Rigidez y resentimiento por sentir que el mundo no se esfuerza igual.", growth: "Soltar el control y aceptar la imperfección." },
-  2: { type: "Eneatipo 2 — El Ayudador", subtitle: "Busca ser amado y necesitado.", desc: "Tu miedo central es no ser querido. Te vuelcas hacia los demás, a veces olvidando tus propias necesidades para asegurar su afecto.", strengths: ["Empatía", "Generosidad", "Orientación al servicio"], blindSpot: "Dar para recibir y desconectarse de sus propias necesidades.", growth: "Reconocer tu valor sin necesidad de ser útil." },
-  3: { type: "Eneatipo 3 — El Triunfador", subtitle: "Busca el éxito y la admiración.", desc: "Tu miedo central es ser inútil o fracasar. Eres altamente adaptable y enfocado en metas, pero puedes confundir tu valor con tus logros.", strengths: ["Eficiencia", "Adaptabilidad", "Inspiración"], blindSpot: "Cuidar más la imagen que lo que realmente sientes íntimamente.", growth: "Reconocer tu valor más allá de lo que produces o logras." },
-  4: { type: "Eneatipo 4 — El Individualista", subtitle: "Busca identidad y ser único.", desc: "Tu miedo central es ser común. Eres profundo y creativo, pero tiendes a la melancolía y a sentir que siempre te falta algo.", strengths: ["Sensibilidad", "Autenticidad", "Introspección"], blindSpot: "Envidiar lo que otros tienen y atascarse en la tormenta emocional.", growth: "Soltar la melancolía y pasar a la disciplina constructiva." },
-  5: { type: "Eneatipo 5 — El Investigador", subtitle: "Busca conocimiento y ser competente.", desc: "Tu miedo central es ser incapaz o que invadan tu energía. Proteges tu espacio aislándote y acumulando información antes de actuar.", strengths: ["Objetividad", "Análisis profundo", "Independencia"], blindSpot: "Desconectar de las emociones y aislarse demasiado tiempo.", growth: "Pasar del pensamiento a la acción y vincularte." },
-  6: { type: "Eneatipo 6 — El Leal", subtitle: "Busca seguridad y apoyo constante.", desc: "Tu miedo central es carecer de orientación ante el peligro. Eres comprometido, pero el exceso de preocupación te genera muchísima ansiedad.", strengths: ["Lealtad", "Anticipación de riesgos", "Compromiso colectivo"], blindSpot: "Dudar en exceso de ti mismo y de los demás buscando certezas.", growth: "Confiar en tu propia autoridad interna." },
-  7: { type: "Eneatipo 7 — El Entusiasta", subtitle: "Busca la felicidad y evitar el dolor.", desc: "Tu miedo central es sufrir o perderte de algo. Tienes una mente rápida, pero huyes del dolor dispersándote con cientos de planes.", strengths: ["Optimismo", "Espontaneidad", "Versatilidad"], blindSpot: "Llenar la agenda para huir del malestar y evitar profundizar.", growth: "Aprender a estar presente incluso en el dolor y enfocarse." },
-  8: { type: "Eneatipo 8 — El Líder", subtitle: "Busca tener el control y evitar la debilidad.", desc: "Tu miedo central es ser lastimado o controlado. Eres fuerte y directo, pero a veces intimidante y usas la confrontación como escudo.", strengths: ["Fuerza", "Decisión", "Protección a los suyos"], blindSpot: "Negar tu vulnerabilidad y no medir el impacto de tu intensidad.", growth: "Permitirte ser vulnerable sin sentirlo como debilidad." },
-  9: { type: "Eneatipo 9 — El Conciliador", subtitle: "Busca la paz y evitar el conflicto.", desc: "Tu miedo central es la fragmentación o pérdida de conexión. Eres mediador nato, pero ignoras tus necesidades para mantener armonía.", strengths: ["Receptividad", "Tranquilidad", "Mediación objetiva"], blindSpot: "Pasividad, terquedad pasiva y resistirse al esfuerzo propio.", growth: "Hacerte valer, poner límites y pasar a la acción consciente." }
+  1: {
+    type: "Eneatipo 1 — El Perfeccionista",
+    subtitle: "Integridad, estándares altos y sentido del deber",
+    desc: "Buscas vivir con coherencia y justicia. El miedo a equivocarte o corromperte te lleva a exigirte y tensar el entorno cuando algo no cumple el estándar.",
+    motivation: "Ser correcto y mantener un estándar moral alto",
+    fear: "Ser defectuoso o corromperse",
+    desire: "Integridad, rectitud y orden",
+    defense: "Control, crítica y perfeccionismo",
+    relation: "Se vincula desde el deber y la coherencia",
+    pressure: "Aumenta la rigidez, corrige y juzga",
+    strengths: ["Ética y responsabilidad", "Capacidad de mejora continua", "Claridad de estándares"],
+    blindSpot: "Confundir perfección con valor personal y endurecerse con los demás.",
+    growth: "Aceptar la imperfección, practicar compasión y descanso intencional."
+  },
+  2: {
+    type: "Eneatipo 2 — El Ayudador",
+    subtitle: "Vínculo, servicio y sentirse necesario",
+    desc: "Sientes que tu valor crece cuando eres útil. Temes no ser amado, por eso te adelantas a cuidar y puedes olvidar tus propios límites.",
+    motivation: "Conseguir amor a través de la entrega",
+    fear: "No ser querido o volverse prescindible",
+    desire: "Amor, cercanía y reciprocidad",
+    defense: "Generosidad estratégica y seducción por servicio",
+    relation: "Ofrece apoyo para asegurar vínculo",
+    pressure: "Se sobreinvolucra y espera gratitud implícita",
+    strengths: ["Empatía aguda", "Calidez y apoyo práctico", "Lectura emocional del otro"],
+    blindSpot: "Dar para sentirse necesario y descuidar lo propio.",
+    growth: "Pedir de forma directa, poner límites y reconocer su valor sin sobreentrega."
+  },
+  3: {
+    type: "Eneatipo 3 — El Triunfador",
+    subtitle: "Éxito, eficiencia y reconocimiento",
+    desc: "Orientas tu energía a lograr y lucir resultados. El fracaso amenaza tu sentido de valor y puedes confundir quién eres con lo que logras.",
+    motivation: "Demostrar valor a través de metas alcanzadas",
+    fear: "Fracasar o parecer inútil",
+    desire: "Éxito visible y admiración",
+    defense: "Gestión de imagen, ritmo alto y foco en objetivos",
+    relation: "Se muestra competente y resuelve rápido",
+    pressure: "Acelera, compite y desconecta emociones",
+    strengths: ["Orientación a resultados", "Adaptabilidad", "Energía motivadora"],
+    blindSpot: "Confundir la imagen con la identidad y relegar emociones.",
+    growth: "Bajar el ritmo, validar lo que siente y medir el éxito también en autenticidad."
+  },
+  4: {
+    type: "Eneatipo 4 — El Individualista",
+    subtitle: "Identidad, profundidad y autenticidad",
+    desc: "Buscas significado y expresarte de forma única. Temes ser común y puedes intensificar tus emociones o compararte con lo que falta.",
+    motivation: "Ser auténtico y reconocido en su singularidad",
+    fear: "Ser trivial o no tener identidad",
+    desire: "Expresión genuina y profundidad emocional",
+    defense: "Retiro, dramatización y comparación",
+    relation: "Se vincula desde la intimidad y la sensibilidad estética",
+    pressure: "Se sumerge en la melancolía o dramatiza",
+    strengths: ["Sensibilidad estética", "Introspección", "Creatividad expresiva"],
+    blindSpot: "Idealizar lo que falta y quedarse en el anhelo.",
+    growth: "Aterrizar en acciones concretas, valorar lo presente y regular la intensidad."
+  },
+  5: {
+    type: "Eneatipo 5 — El Investigador",
+    subtitle: "Conocimiento, claridad y autonomía",
+    desc: "Observas para entender y conservar energía. Temes ser invadido o incapaz, por eso acumulas recursos y te refugias en tu mente.",
+    motivation: "Conservar recursos y entender antes de actuar",
+    fear: "Incompetencia o invasión",
+    desire: "Competencia y autosuficiencia",
+    defense: "Retiro, observación y acumulación de información",
+    relation: "Vincula desde la objetividad y el espacio personal",
+    pressure: "Se distancia, intelectualiza y minimiza necesidades",
+    strengths: ["Análisis profundo", "Objetividad", "Independencia"],
+    blindSpot: "Aislarse y postergar la acción; desconexión afectiva.",
+    growth: "Bajar al cuerpo, pedir ayuda y compartir saberes en acción."
+  },
+  6: {
+    type: "Eneatipo 6 — El Leal",
+    subtitle: "Seguridad, previsión y compromiso",
+    desc: "Escaneas riesgos para mantenerte a salvo. La duda y la búsqueda de certezas pueden frenarte o llevarte a desafiar para probar la solidez del entorno.",
+    motivation: "Anticipar riesgos y asegurar apoyo",
+    fear: "Quedarse sin guía o protección",
+    desire: "Certeza y apoyo mutuo",
+    defense: "Duda, cuestionamiento y lealtad intensa",
+    relation: "Busca acuerdos claros y pertenencia",
+    pressure: "Se vuelve hipervigilante o desafía más",
+    strengths: ["Lealtad", "Pensamiento de escenarios", "Trabajo en equipo"],
+    blindSpot: "Sostener la duda como protección y proyectar sospecha.",
+    growth: "Confiar en su criterio, modular la alarma y decidir desde la calma."
+  },
+  7: {
+    type: "Eneatipo 7 — El Entusiasta",
+    subtitle: "Libertad, opciones y entusiasmo",
+    desc: "Te mueves rápido hacia lo estimulante. Temes quedar atrapado en dolor o aburrimiento y llenas tu agenda para no sentirte limitado.",
+    motivation: "Mantener libertad y evitar dolor prolongado",
+    fear: "Quedar atrapado en sufrimiento o restricción",
+    desire: "Disfrute, variedad y plenitud",
+    defense: "Reencuadre positivo, distracción y múltiples planes",
+    relation: "Conecta desde la energía y la aventura compartida",
+    pressure: "Se dispersa y evita profundizar; salta a lo siguiente",
+    strengths: ["Creatividad para opciones", "Energía contagiosa", "Agilidad mental"],
+    blindSpot: "Usar la actividad para no tocar el malestar.",
+    growth: "Elegir foco, tolerar emociones densas y permanecer presente."
+  },
+  8: {
+    type: "Eneatipo 8 — El Líder",
+    subtitle: "Fuerza, control y protección",
+    desc: "Buscas mantener el control para no ser vulnerado. Eres directo y protector, pero tu intensidad puede imponerse sobre otros.",
+    motivation: "Autonomía y protección de los suyos",
+    fear: "Ser controlado, débil o traicionado",
+    desire: "Sentir poder personal y justicia",
+    defense: "Confrontación, dominio y exceso de fuerza",
+    relation: "Se vincula con franqueza y toma espacios con rapidez",
+    pressure: "Sube la intensidad, decide por otros y minimiza sensibilidad",
+    strengths: ["Decisión y valentía", "Claridad frente a la injusticia", "Capacidad de acción inmediata"],
+    blindSpot: "Desconocer el impacto de su fuerza y negar la vulnerabilidad.",
+    growth: "Practicar contención, escuchar y mostrar vulnerabilidad con seguridad."
+  },
+  9: {
+    type: "Eneatipo 9 — El Conciliador",
+    subtitle: "Paz, armonía y estabilidad",
+    desc: "Anhelas tranquilidad y evitas el conflicto. Puedes diluir tus prioridades para mantener la paz y postergar decisiones.",
+    motivation: "Evitar el conflicto y conservar la conexión",
+    fear: "Ruptura, separación o perderse a sí mismo",
+    desire: "Estabilidad y paz interior",
+    defense: "Disociación, postergación y fusión con otros",
+    relation: "Media y cede para mantener armonía",
+    pressure: "Se adormece, procrastina o se bloquea",
+    strengths: ["Ecuanimidad", "Capacidad de mediación", "Escucha paciente"],
+    blindSpot: "Olvidar su propia agenda y caer en inercia.",
+    growth: "Priorizarse, decidir con firmeza y tolerar el desacuerdo."
+  }
 };
 
 const QUICK_GROUPS = {
-  first: [
-    { code: 'A', title: 'Impulso y autonom�a', desc: 'Independencia, empuje, objetivos claros, deseo de impacto y baja tolerancia a que otros marquen tu paso.' },
-    { code: 'B', title: 'Reserva y quietud', desc: 'Preferencia por la soledad elegida, imaginaci�n, poca competitividad y gusto por la calma.' },
-    { code: 'C', title: 'Deber y entrega', desc: 'Sentido fuerte de responsabilidad, compromiso con otros y tendencia a postergarte para cumplir.' }
+  "first": [
+    {
+      "code": "A",
+      "title": "Impulso y autonomía",
+      "desc": "Independencia, empuje, objetivos claros, deseo de impacto y baja tolerancia a que otros marquen tu paso."
+    },
+    {
+      "code": "B",
+      "title": "Reserva y quietud",
+      "desc": "Preferencia por la soledad elegida, imaginación, poca competitividad y gusto por la calma."
+    },
+    {
+      "code": "C",
+      "title": "Deber y entrega",
+      "desc": "Sentido fuerte de responsabilidad, compromiso con otros y tendencia a postergarte para cumplir."
+    }
   ],
-  second: [
-    { code: 'X', title: 'Optimismo y evitar dolor', desc: 'Actitud positiva, b�squeda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso.' },
-    { code: 'Y', title: 'Intensidad y reactividad', desc: 'Sensibilidad alta, lealtades claras, necesidad de decidir por ti mismo y respuestas emocionales fuertes.' },
-    { code: 'Z', title: 'Control y distancia', desc: 'L�gica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contenci�n emocional.' }
+  "second": [
+    {
+      "code": "X",
+      "title": "Optimismo y evitar dolor",
+      "desc": "Actitud positiva, búsqueda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso."
+    },
+    {
+      "code": "Y",
+      "title": "Intensidad y reactividad",
+      "desc": "Sensibilidad alta, lealtades claras, necesidad de decidir por ti mismo y respuestas emocionales fuertes."
+    },
+    {
+      "code": "Z",
+      "title": "Control y distancia",
+      "desc": "Lógica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contención emocional."
+    }
   ]
 };
 
 const QUICK_MATRIX = {
-  AX: { typeId: 7, label: 'Entusiasta', note: 'Energ�a alta, optimismo y b�squeda de opciones.' },
-  AY: { typeId: 8, label: 'L�der', note: 'Autoafirmaci�n, fuerza y control del terreno.' },
-  AZ: { typeId: 3, label: 'Triunfador', note: 'Orientaci�n a logro, eficiencia e imagen eficaz.' },
-  BX: { typeId: 9, label: 'Conciliador', note: 'Calma, receptividad y preferencia por la armon�a.' },
-  BY: { typeId: 4, label: 'Individualista', note: 'Sensibilidad, identidad propia y expresi�n emocional.' },
-  BZ: { typeId: 5, label: 'Investigador', note: 'Observaci�n, objetividad y protecci�n de energ�a.' },
-  CX: { typeId: 2, label: 'Ayudador', note: 'Entrega, cuidado y b�squeda de conexi�n.' },
-  CY: { typeId: 6, label: 'Leal', note: 'Compromiso, cautela y necesidad de seguridad.' },
-  CZ: { typeId: 1, label: 'Perfeccionista', note: 'Principios, racionalidad y autoexigencia.' }
+  "AX": {
+    "typeId": 7,
+    "label": "Entusiasta",
+    "note": "Energía alta, optimismo y búsqueda de opciones."
+  },
+  "AY": {
+    "typeId": 8,
+    "label": "Líder",
+    "note": "Autoafirmación, fuerza y control del terreno."
+  },
+  "AZ": {
+    "typeId": 3,
+    "label": "Triunfador",
+    "note": "Orientación a logro, eficiencia e imagen eficaz."
+  },
+  "BX": {
+    "typeId": 9,
+    "label": "Conciliador",
+    "note": "Calma, receptividad y preferencia por la armonía."
+  },
+  "BY": {
+    "typeId": 4,
+    "label": "Individualista",
+    "note": "Sensibilidad, identidad propia y expresión emocional."
+  },
+  "BZ": {
+    "typeId": 5,
+    "label": "Investigador",
+    "note": "Observación, objetividad y protección de energía."
+  },
+  "CX": {
+    "typeId": 2,
+    "label": "Ayudador",
+    "note": "Entrega, cuidado y bºsqueda de conexión."
+  },
+  "CY": {
+    "typeId": 6,
+    "label": "Leal",
+    "note": "Compromiso, cautela y necesidad de seguridad."
+  },
+  "CZ": {
+    "typeId": 1,
+    "label": "Perfeccionista",
+    "note": "Principios, racionalidad y autoexigencia."
+  }
 };
 
 const LIKERT_OPTIONS = [
@@ -1026,51 +1203,51 @@ const LIKERT_OPTIONS = [
   { value: 4, label: 'Mucho' }
 ];
 
-const FULL_STATEMENTS = [
-  { id: 'F1', text: 'Mantengo un ideal interno tan fuerte que me tenso cuando algo queda imperfecto.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F2', text: 'El orden y la coherencia moral me calman m�s que el placer inmediato.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F3', text: 'Bajo presi�n me vuelvo cr�tico conmigo y con otros porque temo que algo falle.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F4', text: 'Puedo sacrificar mi descanso si eso mantiene las cosas correctas.', targets: [{ t: 1, w: 1 }] },
+﻿const FULL_STATEMENTS = [
+  { id: 'F1', text: 'Me tenso y corrijo cuando algo está fuera de lugar.', targets: [{ t: 1, w: 1 }] },
+  { id: 'F2', text: 'La culpa aparece si no cumplo mi propio estándar.', targets: [{ t: 1, w: 1 }] },
+  { id: 'F3', text: 'Bajo presión sigo el deber aunque me desgaste.', targets: [{ t: 1, w: 1 }, { t: 6, w: 1 }] },
+  { id: 'F4', text: 'Me cuesta delegar porque temo que el resultado no sea correcto.', targets: [{ t: 1, w: 1 }] },
 
-  { id: 'F5', text: 'Siento que merezco amor cuando soy �til o cuido a alguien.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F6', text: 'Me anticipo a las necesidades ajenas incluso si descuido las m�as.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F7', text: 'Me cuesta pedir ayuda porque temo dejar de ser necesario.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F8', text: 'Cuando alguien se distancia busco reconectar ofreciendo apoyo.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F5', text: 'Me siento valioso cuando anticipo y cuido los detalles de otros.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F6', text: 'Pregunto qué necesitas antes de hablar de lo mío.', targets: [{ t: 2, w: 1 }, { t: 9, w: 1 }] },
+  { id: 'F7', text: 'Me duele que no reconozcan mi apoyo.', targets: [{ t: 2, w: 1 }] },
+  { id: 'F8', text: 'Cuando pongo límites siento que puedo ser egoísta.', targets: [{ t: 2, w: 1 }, { t: 6, w: 1 }] },
 
-  { id: 'F9', text: 'Adapto mi imagen para lograr metas aunque oculte mi vulnerabilidad.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F10', text: 'El fracaso amenaza mi sentido de valor personal.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F11', text: 'Bajo presi�n acelero y produzco m�s para no sentirme insuficiente.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F12', text: 'Mido el d�a en resultados concretos m�s que en emociones procesadas.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F9', text: 'Mi imagen y resultados definen cuánto valgo.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F10', text: 'Ajusto mi estilo para encajar y ganar.', targets: [{ t: 3, w: 1 }] },
+  { id: 'F11', text: 'Prefiero avanzar rápido aunque no sienta.', targets: [{ t: 3, w: 1 }, { t: 7, w: 1 }] },
+  { id: 'F12', text: 'A veces priorizo la meta sobre el descanso o los vínculos.', targets: [{ t: 3, w: 1 }, { t: 8, w: 1 }] },
 
-  { id: 'F13', text: 'La autenticidad y la profundidad emocional son irrenunciables para m�.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F14', text: 'Temo ser com�n o trivial y busco lo singular.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F15', text: 'Cuando me duele algo me sumerjo en ese sentimiento para entenderlo.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F16', text: 'Comparo lo que tengo con lo que imagino que me falta.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F13', text: 'Prefiero profundidad y autenticidad a lo superficial.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F14', text: 'Me comparo con lo que me falta y siento melancolía.', targets: [{ t: 4, w: 1 }] },
+  { id: 'F15', text: 'Expreso mi singularidad aunque incomode.', targets: [{ t: 4, w: 1 }, { t: 6, w: 1 }] },
+  { id: 'F16', text: 'Bajo estrés me retiro a sentir y nombrar lo que pasa.', targets: [{ t: 4, w: 1 }, { t: 9, w: 1 }] },
 
-  { id: 'F17', text: 'Necesito espacio y tiempo solo para recargar energ�a mental.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F18', text: 'Acumulo conocimiento antes de involucrarme afectivamente.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F19', text: 'El exceso de demandas externas me hace retirarme.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F20', text: 'Prefiero observar y entender antes que mostrar emociones.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F17', text: 'Necesito tiempo a solas para recargar mente y energía.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F18', text: 'Observar y entender antes de actuar me hace sentir seguro.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F19', text: 'Evito depender porque temo quedarme sin recursos.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F20', text: 'Cuando hay demasiada demanda me refugio en mi espacio mental.', targets: [{ t: 5, w: 1 }, { t: 9, w: 1 }] },
 
-  { id: 'F21', text: 'Escaneo riesgos y busco certezas antes de decidir.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F22', text: 'La lealtad y las alianzas confiables me sostienen.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F23', text: 'Dudo de mis decisiones y pido segundas opiniones.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F24', text: 'Bajo presi�n imagino escenarios negativos para prepararme.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F21', text: 'Escaneo riesgos y pido claridad antes de decidir.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F22', text: 'Puedo dudar de la autoridad y cuestionarla.', targets: [{ t: 6, w: 1 }, { t: 8, w: 1 }] },
+  { id: 'F23', text: 'Busco alianzas y protocolos para sentirme tranquilo.', targets: [{ t: 6, w: 1 }] },
+  { id: 'F24', text: 'Si todo es incierto imagino escenarios peores para prepararme.', targets: [{ t: 6, w: 1 }, { t: 1, w: 1 }] },
 
-  { id: 'F25', text: 'Busco opciones y planes para evitar sentirme atrapado en el dolor.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F26', text: 'La idea de perder libertad me inquieta m�s que el esfuerzo.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F27', text: 'Cuando algo me duele lo compenso llenando la agenda de actividades.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F28', text: 'Prefiero experiencias estimulantes a quedarme con emociones densas.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F25', text: 'Busco opciones nuevas para no sentirme atrapado.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F26', text: 'Reencuadro en positivo y salto al siguiente plan.', targets: [{ t: 7, w: 1 }] },
+  { id: 'F27', text: 'Evito emociones densas llenando la agenda.', targets: [{ t: 7, w: 1 }, { t: 3, w: 1 }] },
+  { id: 'F28', text: 'La idea de perder libertad me inquieta más que el esfuerzo.', targets: [{ t: 7, w: 1 }] },
 
-  { id: 'F29', text: 'Protejo mi autonom�a y la de los m�os con fuerza y decisi�n.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F30', text: 'Mostrar vulnerabilidad se siente peligroso para m�.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F31', text: 'Cuando siento injusticia incremento mi intensidad y tomo control.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F32', text: 'Prefiero confrontar directamente antes que quedarme callado.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F29', text: 'Defiendo mi territorio y a los míos con intensidad.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F30', text: 'Mostrar vulnerabilidad se siente peligroso.', targets: [{ t: 8, w: 1 }] },
+  { id: 'F31', text: 'Ante injusticia aumento mi presencia y tomo el control.', targets: [{ t: 8, w: 1 }, { t: 3, w: 1 }] },
+  { id: 'F32', text: 'Prefiero confrontar directo antes que rumiar.', targets: [{ t: 8, w: 1 }, { t: 6, w: 1 }] },
 
-  { id: 'F33', text: 'La paz y la estabilidad valen m�s que imponer mi punto de vista.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F34', text: 'Postergarme y decir "todo bien" evita conflictos aunque me pierda.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F35', text: 'Me cuesta priorizarme si eso puede alterar la armon�a.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F36', text: 'Bajo presi�n me desconecto o adormezco para no sentir la tensi�n.', targets: [{ t: 9, w: 1 }] }
+  { id: 'F33', text: 'Para mantener paz cedo y postergo mis preferencias.', targets: [{ t: 9, w: 1 }] },
+  { id: 'F34', text: 'Me adormezco o desconecto para no entrar en conflicto.', targets: [{ t: 9, w: 1 }] },
+  { id: 'F35', text: 'Tardo en decidir porque quiero que todos estén bien.', targets: [{ t: 9, w: 1 }, { t: 2, w: 1 }] },
+  { id: 'F36', text: 'Cuando alguien presiona busco calmar y mediar en lugar de imponer.', targets: [{ t: 9, w: 1 }, { t: 1, w: 1 }] }
 ];
 
 const FULL_POTENTIAL = FULL_STATEMENTS.reduce((acc, q) => {
@@ -1079,6 +1256,7 @@ const FULL_POTENTIAL = FULL_STATEMENTS.reduce((acc, q) => {
   });
   return acc;
 }, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 });
+
 
 const TestEnneagramModal = ({ isOpen, onClose }) => {
   const [step, setStep] = useState('choice');
@@ -1172,7 +1350,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
               </div>
               <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-3">Mapa de Eneatipo</h2>
               <p className="font-serif italic text-lg text-gray-600 max-w-2xl mx-auto">
-                Elige c�mo empezar: primero una hip�tesis r�pida o una lectura profunda con 36 afirmaciones. Ambos muestran motivaci�n, miedo central y defensas.
+                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 36 afirmaciones. Ambos muestran motivación, miedo central y defensas.
               </p>
             </div>
 
@@ -1181,20 +1359,20 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-[#CC5833]/10 flex items-center justify-center text-[#CC5833] font-bold">1</div>
                   <div>
-                    <p className="font-heading text-xl text-[#1A1A1A]">Primera orientaci�n</p>
-                    <p className="text-sm text-gray-500">Test r�pido � 2�3 minutos</p>
+                    <p className="font-heading text-xl text-[#1A1A1A]">Primera orientación</p>
+                    <p className="text-sm text-gray-500">Test rápido · 2–3 minutos</p>
                   </div>
                 </div>
                 <ul className="text-sm text-[#2E4036] space-y-2">
                   <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Grupo 1 (A/B/C) + Grupo 2 (X/Y/Z).</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Resultado = hip�tesis inicial (no diagn�stico).</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Resultado = hipótesis inicial (no diagnóstico).</li>
                   <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Invita a pasar al test completo.</li>
                 </ul>
                 <button
                 onClick={() => setStep('quick-first')}
                   className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic"
                 >
-                  Hacer test r�pido
+                  Hacer test rápido
                 </button>
               </div>
 
@@ -1203,13 +1381,13 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                   <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-bold">2</div>
                   <div>
                     <p className="font-heading text-xl">Lectura profunda</p>
-                    <p className="text-sm text-gray-300">Test completo � 8�12 minutos</p>
+                    <p className="text-sm text-gray-300">Test completo · 8–12 minutos</p>
                   </div>
                 </div>
                 <ul className="text-sm text-gray-200 space-y-2">
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones � escala Likert 0�4.</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Punt�a 9 eneatipos y muestra ranking real.</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Incluye motivaci�n, miedo, deseo y defensa.</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones · escala Likert 0–4.</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Puntúa 9 eneatipos y muestra ranking real.</li>
+                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Incluye motivación, miedo, deseo y defensa.</li>
                 </ul>
                 <button
                 onClick={() => setStep('full-intro')}
@@ -1224,8 +1402,8 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
 
         {step === 'quick-first' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test r�pido � Paso 1 de 2</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el p�rrafo que mejor describe tu estilo de base</h3>
+            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rápido · Paso 1 de 2</p>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el párrafo que mejor describe tu estilo de base</h3>
             <div className="space-y-3">
               {QUICK_GROUPS.first.map(opt => (
                 <button
@@ -1247,10 +1425,10 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
         {step === 'quick-second' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
             <div className="flex items-center gap-3 text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Test r�pido � Paso 2 de 2</span>
+              <span className="font-mono text-xs text-[#CC5833]">Test rápido · Paso 2 de 2</span>
               <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold text-xs">Elegiste {quickChoice.first}</span>
             </div>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opci�n que describe c�mo manejas tu mundo interno</h3>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
             <div className="space-y-3">
               {QUICK_GROUPS.second.map(opt => (
                 <button
@@ -1275,13 +1453,13 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
               </div>
-              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hip�tesis inicial</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinaci�n {quickResult().code}</h3>
+              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {quickResult().code}</h3>
               <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
-              <p className="text-sm text-gray-500">Esta lectura es orientativa. �sala como punto de partida y valida con el test completo para mayor precisi�n.</p>
+              <p className="text-sm text-gray-500">Esta lectura es orientativa. Úsala como punto de partida y valida con el test completo para mayor precisión.</p>
               <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
                 <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
                 <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickResult().type.type}</h4>
@@ -1289,7 +1467,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
               </div>
               <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
                 <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivaci�n</p>
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivación</p>
                   <p>{quickResult().type.motivation}</p>
                 </div>
                 <div className="bg-white border border-gray-100 rounded-2xl p-3">
@@ -1310,7 +1488,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                 onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }}
                 className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors"
               >
-                Repetir test r�pido
+                Repetir test rápido
               </button>
             </div>
           </div>
@@ -1319,13 +1497,13 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
         {step === 'full-intro' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
             <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test completo</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones � escala 0 a 4</h3>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones · escala 0 a 4</h3>
             <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#2E4036]">
-              <p>Responde seg�n lo que te describe la mayor parte de tu vida, no solo tu estado actual. El resultado mostrar� ranking de eneatipos, segundo candidato (si aplica) y nivel de confianza.</p>
+              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual. El resultado mostrará ranking de eneatipos, segundo candidato (si aplica) y nivel de confianza.</p>
               <ul className="space-y-2">
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada � 4 = Mucho.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivaci�n, miedo, deseo, defensa y reacci�n bajo presi�n.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Puedes volver una pregunta atr�s si necesitas ajustar.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada · 4 = Mucho.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivación, miedo, deseo, defensa y reacción bajo presión.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Puedes volver una pregunta atrás si necesitas ajustar.</li>
               </ul>
             </div>
             <div className="flex gap-3">
@@ -1348,7 +1526,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
         {step === 'full-quiz' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6 flex-1 flex flex-col">
             <div className="flex justify-between items-center text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Afirmaci�n {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
+              <span className="font-mono text-xs text-[#CC5833]">Afirmación {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
               <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{progression}%</span>
             </div>
 
@@ -1375,7 +1553,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
               >
                 Volver
               </button>
-              <p className="text-xs">Lee cada frase desde tu motivaci�n habitual, no desde la imagen ideal.</p>
+              <p className="text-xs">Lee cada frase desde tu motivación habitual, no desde la imagen ideal.</p>
             </div>
           </div>
         )}
@@ -1402,7 +1580,7 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                   <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
                     <div className="grid md:grid-cols-3 gap-3">
                       <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Motivaci�n</p>
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Motivación</p>
                         <p>{res.top.motivation}</p>
                       </div>
                       <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
@@ -1420,12 +1598,12 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                         <p>{res.top.defense}</p>
                       </div>
                       <div className="p-3 bg-white rounded-2xl border border-gray-100">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Patr�n relacional</p>
+                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Patrón relacional</p>
                         <p>{res.top.relation}</p>
                       </div>
                     </div>
                     <div className="p-3 bg-[#2E4036] text-white rounded-2xl">
-                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#00FF66] mb-1">Reacci�n bajo presi�n</p>
+                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#00FF66] mb-1">Reacción bajo presión</p>
                       <p className="text-sm leading-relaxed">{res.top.pressure}</p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
@@ -1448,16 +1626,16 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
 
                   <div className="bg-gray-100/70 border border-gray-200 rounded-3xl p-5 space-y-2 text-sm text-gray-700">
                     <p className="font-semibold text-[#1A1A1A]">Segundo eneatipo probable: {res.second.type}</p>
-                    <p>El resultado sugiere afinidad secundaria si la diferencia es baja. �salo como contraste, no como etiqueta.</p>
+                    <p>El resultado sugiere afinidad secundaria si la diferencia es baja. Úsalo como contraste, no como etiqueta.</p>
                     {res.confidence === 'baja' && (
-                      <p className="text-[#CC5833] font-semibold">Lectura ambigua: responde de nuevo o agenda una sesi�n para profundizar.</p>
+                      <p className="text-[#CC5833] font-semibold">Lectura ambigua: responde de nuevo o agenda una sesión para profundizar.</p>
                     )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() => {
-                        const text = encodeURIComponent(`Hice el test completo. Resultado principal: ${res.top.type} (confianza ${res.confidence}). Segundo: ${res.second.type}. Quiero orientaci�n y Sala de Reducci�n del Ego.`);
+                        const text = encodeURIComponent(`Hice el test completo. Resultado principal: ${res.top.type} (confianza ${res.confidence}). Segundo: ${res.second.type}. Quiero orientación y Sala de Reducción del Ego.`);
                         window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
                         handleClose();
                       }}
