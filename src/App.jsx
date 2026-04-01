@@ -320,7 +320,7 @@ const FeatureTelemetry = () => {
     "Detectando miedo central activado...",
     "Identificando eneatipo dominante...",
     "Cargando mapa de crecimiento...",
-    "Compilando protocolo de autoconocimiento..."
+    "Compilando protocolo de reducción del ego..."
   ];
   const [msgIdx, setMsgIdx] = useState(0);
   const [text, setText] = useState("");
@@ -1203,7 +1203,7 @@ const LIKERT_OPTIONS = [
   { value: 4, label: 'Mucho' }
 ];
 
-﻿const FULL_STATEMENTS = [
+const FULL_STATEMENTS = [
   { id: 'F1', text: 'Me tenso y corrijo cuando algo está fuera de lugar.', targets: [{ t: 1, w: 1 }] },
   { id: 'F2', text: 'La culpa aparece si no cumplo mi propio estándar.', targets: [{ t: 1, w: 1 }] },
   { id: 'F3', text: 'Bajo presión sigo el deber aunque me desgaste.', targets: [{ t: 1, w: 1 }, { t: 6, w: 1 }] },
@@ -1211,8 +1211,8 @@ const LIKERT_OPTIONS = [
 
   { id: 'F5', text: 'Me siento valioso cuando anticipo y cuido los detalles de otros.', targets: [{ t: 2, w: 1 }] },
   { id: 'F6', text: 'Pregunto qué necesitas antes de hablar de lo mío.', targets: [{ t: 2, w: 1 }, { t: 9, w: 1 }] },
-  { id: 'F7', text: 'Me duele que no reconozcan mi apoyo.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F8', text: 'Cuando pongo límites siento que puedo ser egoísta.', targets: [{ t: 2, w: 1 }, { t: 6, w: 1 }] },
+  { id: 'F7', text: 'Me duele que no reconozcan mi apoyo ni la autenticidad con que acompaño.', targets: [{ t: 2, w: 1 }, { t: 4, w: 1 }] },
+  { id: 'F8', text: 'Cuando pongo límites siento que puedo ser egoísta.', targets: [{ t: 2, w: 1 }] },
 
   { id: 'F9', text: 'Mi imagen y resultados definen cuánto valgo.', targets: [{ t: 3, w: 1 }] },
   { id: 'F10', text: 'Ajusto mi estilo para encajar y ganar.', targets: [{ t: 3, w: 1 }] },
@@ -1221,13 +1221,13 @@ const LIKERT_OPTIONS = [
 
   { id: 'F13', text: 'Prefiero profundidad y autenticidad a lo superficial.', targets: [{ t: 4, w: 1 }] },
   { id: 'F14', text: 'Me comparo con lo que me falta y siento melancolía.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F15', text: 'Expreso mi singularidad aunque incomode.', targets: [{ t: 4, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F16', text: 'Bajo estrés me retiro a sentir y nombrar lo que pasa.', targets: [{ t: 4, w: 1 }, { t: 9, w: 1 }] },
+  { id: 'F15', text: 'Expreso mi singularidad aunque el entorno premie solo eficiencia.', targets: [{ t: 4, w: 1 }, { t: 3, w: 1 }] },
+  { id: 'F16', text: 'Bajo estrés me retiro a procesar en profundidad antes de actuar.', targets: [{ t: 4, w: 1 }, { t: 5, w: 1 }] },
 
-  { id: 'F17', text: 'Necesito tiempo a solas para recargar mente y energía.', targets: [{ t: 5, w: 1 }] },
+  { id: 'F17', text: 'Necesito tiempo a solas para recargar mente y energía.', targets: [{ t: 5, w: 1 }, { t: 4, w: 1 }] },
   { id: 'F18', text: 'Observar y entender antes de actuar me hace sentir seguro.', targets: [{ t: 5, w: 1 }, { t: 6, w: 1 }] },
   { id: 'F19', text: 'Evito depender porque temo quedarme sin recursos.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F20', text: 'Cuando hay demasiada demanda me refugio en mi espacio mental.', targets: [{ t: 5, w: 1 }, { t: 9, w: 1 }] },
+  { id: 'F20', text: 'Cuando hay demasiada demanda me refugio en mi espacio mental.', targets: [{ t: 5, w: 1 }] },
 
   { id: 'F21', text: 'Escaneo riesgos y pido claridad antes de decidir.', targets: [{ t: 6, w: 1 }] },
   { id: 'F22', text: 'Puedo dudar de la autoridad y cuestionarla.', targets: [{ t: 6, w: 1 }, { t: 8, w: 1 }] },
@@ -1242,11 +1242,11 @@ const LIKERT_OPTIONS = [
   { id: 'F29', text: 'Defiendo mi territorio y a los míos con intensidad.', targets: [{ t: 8, w: 1 }] },
   { id: 'F30', text: 'Mostrar vulnerabilidad se siente peligroso.', targets: [{ t: 8, w: 1 }] },
   { id: 'F31', text: 'Ante injusticia aumento mi presencia y tomo el control.', targets: [{ t: 8, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F32', text: 'Prefiero confrontar directo antes que rumiar.', targets: [{ t: 8, w: 1 }, { t: 6, w: 1 }] },
+  { id: 'F32', text: 'Prefiero confrontar directo antes que rumiar.', targets: [{ t: 8, w: 1 }] },
 
   { id: 'F33', text: 'Para mantener paz cedo y postergo mis preferencias.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F34', text: 'Me adormezco o desconecto para no entrar en conflicto.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F35', text: 'Tardo en decidir porque quiero que todos estén bien.', targets: [{ t: 9, w: 1 }, { t: 2, w: 1 }] },
+  { id: 'F34', text: 'Me adormezco o me pierdo en contenido mental para no entrar en conflicto.', targets: [{ t: 9, w: 1 }, { t: 5, w: 1 }] },
+  { id: 'F35', text: 'Tardo en decidir porque quiero que todos estén bien.', targets: [{ t: 9, w: 1 }, { t: 2, w: 1 }, { t: 6, w: 1 }] },
   { id: 'F36', text: 'Cuando alguien presiona busco calmar y mediar en lugar de imponer.', targets: [{ t: 9, w: 1 }, { t: 1, w: 1 }] }
 ];
 
@@ -1578,8 +1578,9 @@ const TestEnneagramModal = ({ isOpen, onClose }) => {
                     <p className="text-[#CC5833] font-serif italic">{res.top.subtitle}</p>
                     <div className="flex gap-2 text-xs text-gray-600 mt-1">
                       <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">Confianza {res.confidence}</span>
-                      <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Margen {res.margin} pts</span>
+                      <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Margen {(res.marginNormalized * 100).toFixed(1)}%</span>
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">Lectura orientativa de autoconocimiento (no diagnóstica). Úsala para conversar y, si quieres más rigor, acompáñala con la Sala de Reducción del Ego.</p>
                   </div>
 
                   <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
