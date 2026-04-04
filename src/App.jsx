@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+﻿import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck, Check, ChevronDown, ChevronUp, ArrowLeft
+  Clock, User, Target, ShieldCheck
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 
-// Carga asíncrona de GSAP
+// Carga asÃ­ncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
   if (document.querySelector(`script[src="${src}"]`)) {
     resolve();
@@ -134,19 +134,19 @@ const Navbar = ({ onOpenTest }) => {
 
             {/* CENTRO: Enlaces */}
             <div className={`w-2/4 hidden md:flex justify-center gap-6 lg:gap-8 text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
-              <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
+              <a href="#metodo" className="hover:opacity-70 transition-opacity">MÃ©todo</a>
               <a href="#eneatipos" className="hover:opacity-70 transition-opacity">Eneatipos</a>
               <a href="#archivo" className="hover:opacity-70 transition-opacity">Archivo</a>
 
-              {/* Botón pequeño premium en el Navbar para la sesión Coach */}
+              {/* BotÃ³n pequeÃ±o premium en el Navbar para la sesiÃ³n Coach */}
               <a href="#sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
-                <Star size={12} className="fill-current" /> Sesión Coach
+                <Star size={12} className="fill-current" /> SesiÃ³n Coach
               </a>
 
               <a href="#planes" className="hover:opacity-70 transition-opacity">Planes</a>
             </div>
 
-            {/* DERECHA: Botón CTA */}
+            {/* DERECHA: BotÃ³n CTA */}
             <div className={`w-[55%] md:w-1/4 flex justify-end ${scrolled ? 'items-center' : 'items-start pt-3'}`}>
               <button
                 onClick={onOpenTest}
@@ -162,13 +162,13 @@ const Navbar = ({ onOpenTest }) => {
         </div>
       </nav>
 
-      {/* Menú Móvil */}
+      {/* MenÃº MÃ³vil */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-6 p-6">
-          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Método</a>
+          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">MÃ©todo</a>
           <a href="#eneatipos" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Eneatipos</a>
           <a href="#archivo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Archivo</a>
-          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> Sesión Coach</a>
+          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> SesiÃ³n Coach</a>
           <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Planes</a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
@@ -228,20 +228,16 @@ const Hero = ({ onOpenTest }) => {
             </span>
           </h1>
 
-          <p className="hidden">
-            GEMB es un Gimnasio Emocional: entras a fortalecer tu carácter, descubrir tu patrón dominante y trazar tu ruta de crecimiento con práctica guiada.
-          </p>
-
           <p className="hero-elem text-[#E2C17D] text-xl md:text-2xl font-serif italic mb-5 max-w-2xl">
             Tu mundo interior crea tu mundo exterior.
           </p>
 
           <div className="hero-elem max-w-3xl space-y-4 mb-8">
             <p className="text-[#F2F0E9]/90 text-base md:text-lg font-light leading-relaxed">
-              Si quieres cambiar los frutos, primero debes cambiar las raices; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
+              Si quieres cambiar los frutos, primero debes cambiar las ra?ces; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
             </p>
             <p className="text-[#F2F0E9]/82 text-base md:text-lg leading-relaxed">
-              Haz el test y descubre el eneatipo que identifica la mascara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
+              Haz el test y descubre el eneatipo que identifica la m?scara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
             </p>
           </div>
 
@@ -254,13 +250,13 @@ const Hero = ({ onOpenTest }) => {
               <ArrowRight size={18} />
             </button>
             <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
-              Ver el Método
+              Ver el MÃ©todo
             </a>
           </div>
 
           <div className="hero-elem max-w-3xl rounded-[1.75rem] border border-white/15 bg-black/15 px-5 py-4 backdrop-blur-sm">
             <p className="font-mono text-[11px] md:text-xs text-[#F2F0E9]/70 tracking-[0.16em] uppercase">
-            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Reducción del Ego
+            Guiado por Alexandra Ortega Â· MÃ©todo integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de ReducciÃ³n del Ego
           </p>
         </div>
         </div>
@@ -281,7 +277,7 @@ const FeatureDeck = () => {
     { title: "Eneatipo 5", insight: "El Investigador." },
     { title: "Eneatipo 6", insight: "El Leal." },
     { title: "Eneatipo 7", insight: "El Entusiasta." },
-    { title: "Eneatipo 8", insight: "El Líder / Desafiador." },
+    { title: "Eneatipo 8", insight: "El LÃ­der / Desafiador." },
     { title: "Eneatipo 9", insight: "El Conciliador." }
   ];
 
@@ -328,7 +324,7 @@ const FeatureDeck = () => {
       </div>
       <div className="mt-8 pt-4 border-t border-[#1A1A1A]/10">
         <p className="font-mono text-xs text-[#2E4036] opacity-70">
-          Diagnóstico → Claridad → Protocolo de entrenamiento
+          DiagnÃ³stico â†’ Claridad â†’ Protocolo de entrenamiento
         </p>
       </div>
     </div>
@@ -337,11 +333,11 @@ const FeatureDeck = () => {
 
 const FeatureTelemetry = () => {
   const messages = [
-    "Analizando patrón motivacional...",
+    "Analizando patrÃ³n motivacional...",
     "Detectando miedo central activado...",
     "Identificando eneatipo dominante...",
     "Cargando mapa de crecimiento...",
-    "Compilando protocolo de reducción del ego..."
+    "Compilando protocolo de reducciÃ³n del ego..."
   ];
   const [msgIdx, setMsgIdx] = useState(0);
   const [text, setText] = useState("");
@@ -382,13 +378,13 @@ const FeatureTelemetry = () => {
 
       <div className="mt-auto pt-4 border-t border-white/10 space-y-2">
         <div className="flex justify-between items-center opacity-70">
-          <span>Claridad</span> <span className="text-[#00FF66]">↑ 85%</span>
+          <span>Claridad</span> <span className="text-[#00FF66]">â†‘ 85%</span>
         </div>
         <div className="flex justify-between items-center opacity-70">
-          <span>Ruido mental</span> <span className="text-[#CC5833]">↓ 20%</span>
+          <span>Ruido mental</span> <span className="text-[#CC5833]">â†“ 20%</span>
         </div>
         <div className="flex justify-between items-center opacity-70">
-          <span>Liderazgo emocional</span> <span className="text-[#00FF66]">↑ 92%</span>
+          <span>Liderazgo emocional</span> <span className="text-[#00FF66]">â†‘ 92%</span>
         </div>
       </div>
     </div>
@@ -401,7 +397,7 @@ const FeatureAgenda = () => {
   const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
   const [activeDay, setActiveDay] = useState(2);
   const [isCopied, setIsCopied] = useState(false);
-  const protocolText = "Protocolo de Entrenamiento GEMB:\n- Sala de Reducción del Ego (Sesión semanal)\n- Práctica: Meditación 15 min";
+  const protocolText = "Protocolo de Entrenamiento GEMB:\n- Sala de ReducciÃ³n del Ego (SesiÃ³n semanal)\n- PrÃ¡ctica: MeditaciÃ³n 15 min";
 
   useLayoutEffect(() => {
     const gsap = window.gsap;
@@ -462,14 +458,14 @@ const FeatureAgenda = () => {
         <div className="p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex items-start gap-3">
           <div className="w-2 h-2 rounded-full bg-[#CC5833] mt-1.5"></div>
           <div>
-            <p className="text-sm font-bold text-[#1A1A1A]">Sala de Reducción del Ego</p>
-            <p className="text-xs text-gray-500">Sesión semanal en vivo</p>
+            <p className="text-sm font-bold text-[#1A1A1A]">Sala de ReducciÃ³n del Ego</p>
+            <p className="text-xs text-gray-500">SesiÃ³n semanal en vivo</p>
           </div>
         </div>
         <div className="p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex items-start gap-3">
           <div className="w-2 h-2 rounded-full bg-[#2E4036] mt-1.5"></div>
           <div>
-            <p className="text-sm font-bold text-[#1A1A1A]">Práctica: Meditación</p>
+            <p className="text-sm font-bold text-[#1A1A1A]">PrÃ¡ctica: MeditaciÃ³n</p>
             <p className="text-xs text-gray-500">Protocolo de 15 min</p>
           </div>
         </div>
@@ -512,7 +508,7 @@ const FeaturesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24">
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] max-w-2xl leading-tight">
-            Herramientas diseñadas para <span className="text-[#2E4036]">descifrar</span> tu patrón y entrenar desde la raíz.
+            Herramientas diseÃ±adas para <span className="text-[#2E4036]">descifrar</span> tu patrÃ³n y entrenar desde la raÃ­z.
           </h2>
         </div>
 
@@ -594,7 +590,7 @@ const Manifesto = () => {
 
         <p className="manifesto-line text-[#F2F0E9]/80 text-lg md:text-2xl font-light max-w-3xl mx-auto leading-relaxed">
           En GEMB no buscamos "arreglar" personas. Entrenamos resistencia emocional, claridad y disciplina interior.<br />
-          <span className="text-white font-medium mt-4 block">No somos clínica. Somos Gimnasio. No pacientes: atletas emocionales.</span>
+          <span className="text-white font-medium mt-4 block">No somos clÃ­nica. Somos Gimnasio. No pacientes: atletas emocionales.</span>
         </p>
       </div>
     </section>
@@ -608,15 +604,15 @@ const StackedCards = () => {
 
   const cards = [
     {
-      title: "Sala de Reducción del Ego",
+      title: "Sala de ReducciÃ³n del Ego",
       text: "Un espacio semanal para desactivar la voz que sabotea, y volver al centro.",
       icon: <Activity size={48} className="text-[#CC5833] animate-[spin_10s_linear_infinite]" />,
       bg: "bg-[#F2F0E9]",
       textCol: "text-[#1A1A1A]"
     },
     {
-      title: "12 Pasos · Disciplina con propósito",
-      text: "Estructura. Progreso. Servicio. Un camino que no depende de motivación: depende de práctica.",
+      title: "12 Pasos Â· Disciplina con propÃ³sito",
+      text: "Estructura. Progreso. Servicio. Un camino que no depende de motivaciÃ³n: depende de prÃ¡ctica.",
       icon: (
         <div className="relative w-16 h-16">
           <div className="absolute inset-0 border-2 border-[#2E4036] rounded-sm opacity-20"></div>
@@ -627,8 +623,8 @@ const StackedCards = () => {
       textCol: "text-[#1A1A1A]"
     },
     {
-      title: "Instante Santo · Recableado",
-      text: "Oración, meditación y perdón práctico: cuando la mente baja el ruido, el alma respira.",
+      title: "Instante Santo Â· Recableado",
+      text: "OraciÃ³n, meditaciÃ³n y perdÃ³n prÃ¡ctico: cuando la mente baja el ruido, el alma respira.",
       icon: (
         <svg viewBox="0 0 100 40" className="w-24 h-12 stroke-[#F2F0E9] fill-none stroke-2">
           <path d="M0 20 L20 20 L30 5 L40 35 L50 20 L60 20 L65 10 L75 30 L80 20 L100 20" className="animate-[dash_3s_linear_infinite] [stroke-dasharray:100] [stroke-dashoffset:100]" />
@@ -688,7 +684,7 @@ const StackedCards = () => {
               {card.icon}
             </div>
             <h2 className="font-heading font-bold text-5xl md:text-7xl mb-6 tracking-tight">
-              {card.title.split('·').map((part, i) => (
+              {card.title.split('Â·').map((part, i) => (
                 <React.Fragment key={i}>
                   {i > 0 && <span className="block font-serif italic font-normal opacity-70 mt-2">{part}</span>}
                   {i === 0 && part}
@@ -705,11 +701,11 @@ const StackedCards = () => {
   );
 };
 
-// --- NUEVA SECCIÓN: COACH SESSION (VERSIÓN PREMIUM & PERSUASIVA) ---
+// --- NUEVA SECCIÃ“N: COACH SESSION (VERSIÃ“N PREMIUM & PERSUASIVA) ---
 
 const painPoints = [
-  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'El patrón del Ayudador te está agotando. Desactivaremos esa necesidad de rescatar para que recuperes tu energía vital.' },
-  { id: 'limites', label: 'Me cuesta poner límites', response: 'El miedo al rechazo te domina hoy. Trazaremos una línea clara y te daré el guion exacto para decir NO sin culpa.' },
+  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'El patrÃ³n del Ayudador te estÃ¡ agotando. Desactivaremos esa necesidad de rescatar para que recuperes tu energÃ­a vital.' },
+  { id: 'limites', label: 'Me cuesta poner lÃ­mites', response: 'El miedo al rechazo te domina hoy. Trazaremos una lÃ­nea clara y te darÃ© el guion exacto para decir NO sin culpa.' },
   { id: 'mente', label: 'Mi mente no se apaga', response: 'Exceso de futuro y control. Implementaremos un protocolo guiado para bajar el ruido mental y volver a tu centro.' }
 ];
 
@@ -717,7 +713,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
   const [selectedPain, setSelectedPain] = useState(null);
 
   const handleWA = () => {
-    const text = encodeURIComponent("Hola, quiero agendar una Sesión Guía Coach con Alexandra Ortega. Estoy listo/a para entrenar. ¿Qué disponibilidad hay esta semana?");
+    const text = encodeURIComponent("Hola, quiero agendar una SesiÃ³n GuÃ­a Coach con Alexandra Ortega. Estoy listo/a para entrenar. Â¿QuÃ© disponibilidad hay esta semana?");
     window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
   };
 
@@ -726,25 +722,25 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-[#1A1A1A] radius-huge p-8 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.15)] relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-center border border-[#2E4036]/20">
 
-          {/* Tapykue oñemoĩva ipype (Glow background) */}
+          {/* Tapykue oÃ±emoÄ©va ipype (Glow background) */}
           <div className="absolute inset-0 radius-huge overflow-hidden pointer-events-none">
             <div className="absolute top-[-40%] right-[-10%] w-[70%] h-[140%] bg-gradient-to-bl from-[#CC5833]/10 via-[#2E4036]/20 to-transparent blur-3xl rounded-full"></div>
           </div>
 
-          {/* Jekuaa porã (Badge Recomendado) */}
+          {/* Jekuaa porÃ£ (Badge Recomendado) */}
           <div className="absolute top-0 left-8 md:left-14 -translate-y-1/2 bg-[#CC5833] text-white text-[10px] md:text-xs font-bold px-5 py-2 rounded-full tracking-widest uppercase shadow-[0_5px_15px_rgba(204,88,51,0.4)] flex items-center gap-2 z-20">
-            <Star size={14} className="fill-current" /> Ruta Rápida · 1:1
+            <Star size={14} className="fill-current" /> Ruta RÃ¡pida Â· 1:1
           </div>
 
-          {/* Columna Izquierda: Copy persuasivo e Interacción */}
+          {/* Columna Izquierda: Copy persuasivo e InteracciÃ³n */}
           <div className="flex-1 relative z-10 w-full mt-6 md:mt-2">
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#F2F0E9] mb-3 leading-tight">
-              Sesión Guía Coach
+              SesiÃ³n GuÃ­a Coach
               <span className="block text-[#E2C17D] font-serif italic font-normal text-3xl md:text-4xl mt-1">con Alexandra Ortega</span>
             </h2>
 
             <p className="text-lg md:text-xl text-white/90 font-light mb-6">
-              Ve directo a la raíz. En 45 minutos desactivamos el patrón que hoy te sabotea y trazamos tu ruta de acción clara.
+              Ve directo a la raÃ­z. En 45 minutos desactivamos el patrÃ³n que hoy te sabotea y trazamos tu ruta de acciÃ³n clara.
             </p>
 
             {/* Contadores Minimalistas */}
@@ -759,15 +755,15 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               </div>
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
                 <Target size={14} className="text-[#CC5833]" />
-                <span className="text-xs text-white/80 font-mono">Protocolo Práctico</span>
+                <span className="text-xs text-white/80 font-mono">Protocolo PrÃ¡ctico</span>
               </div>
             </div>
 
             <p className="text-[#E2C17D] font-serif italic text-xl md:text-2xl mb-8 border-l-2 border-[#E2C17D]/30 pl-4">
-              "No te dejo con motivación. Te dejo con un plan."
+              "No te dejo con motivaciÃ³n. Te dejo con un plan."
             </p>
 
-            {/* Mini Interacción */}
+            {/* Mini InteracciÃ³n */}
             <div className="bg-[#2a2a2a]/50 p-6 rounded-3xl border border-white/5 mb-8">
               <p className="text-white font-medium mb-4 text-sm flex items-center gap-2">
                 <Activity size={16} className="text-[#00FF66]" /> Selecciona tu mayor reto hoy:
@@ -787,7 +783,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                 ))}
               </div>
 
-              {/* Resultado de la interacción */}
+              {/* Resultado de la interacciÃ³n */}
               {selectedPain && (
                 <div className="mt-5 p-4 bg-[#2E4036]/30 border border-[#2E4036] rounded-xl animate-[fadeIn_0.3s_ease-out]">
                   <p className="text-[#F2F0E9] text-sm leading-relaxed">
@@ -797,13 +793,13 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               )}
             </div>
 
-            {/* CTA y Fricción Cero */}
+            {/* CTA y FricciÃ³n Cero */}
             <div className="relative">
               <button
                 onClick={handleWA}
                 className="w-full md:w-auto px-8 py-4 rounded-full bg-[#E2C17D] text-[#1A1A1A] font-bold btn-magnetic shadow-[0_0_20px_rgba(226,193,125,0.2)] flex justify-center items-center gap-3 border border-transparent hover:bg-white transition-colors"
               >
-                {selectedPain ? 'Quiero mi Sesión (WhatsApp)' : 'Agendar Sesión (WhatsApp)'}
+                {selectedPain ? 'Quiero mi SesiÃ³n (WhatsApp)' : 'Agendar SesiÃ³n (WhatsApp)'}
                 <ArrowRight size={18} />
               </button>
 
@@ -812,20 +808,20 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                   <AlertCircle size={10} /> Cupos limitados por semana
                 </p>
                 <p className="text-xs text-white/40 mt-1">
-                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos → te enviamos horarios → confirmas tu cupo.
+                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos â†’ te enviamos horarios â†’ confirmas tu cupo.
                 </p>
               </div>
 
-              {/* Sello Premium de Garantía Actualizado */}
+              {/* Sello Premium de GarantÃ­a Actualizado */}
               <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-md shadow-lg group hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 rounded-full bg-[#2E4036]/50 border border-[#00FF66]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(0,255,102,0.1)]">
                   <ShieldCheck size={24} className="text-[#00FF66]" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">Garantía 100% (Proceso Completo)</h4>
+                  <h4 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">GarantÃ­a 100% (Proceso Completo)</h4>
                   <p className="text-white/70 text-[11px] md:text-xs mt-1 leading-tight font-light">Aplica al completar todo el plan indicado.</p>
                   <button onClick={onOpenGuarantee} className="text-[#E2C17D] text-[10px] uppercase tracking-widest font-mono mt-2 hover:text-white transition-colors underline decoration-[#E2C17D]/30 underline-offset-4">
-                    Ver términos y condiciones
+                    Ver tÃ©rminos y condiciones
                   </button>
                 </div>
               </div>
@@ -840,10 +836,10 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
 
             <ul className="space-y-6">
               {[
-                "Diagnóstico claro del patrón (Eneatipo) que hoy te bloquea o agota.",
-                "Protocolo de entrenamiento 7 días (límites, calma y acción).",
-                "Ruta recomendada exacta para no perder el tiempo buscando qué hacer.",
-                "Acceso directo a las herramientas del Gimnasio Emocional (12 Pasos, Meditación, etc)."
+                "DiagnÃ³stico claro del patrÃ³n (Eneatipo) que hoy te bloquea o agota.",
+                "Protocolo de entrenamiento 7 dÃ­as (lÃ­mites, calma y acciÃ³n).",
+                "Ruta recomendada exacta para no perder el tiempo buscando quÃ© hacer.",
+                "Acceso directo a las herramientas del Gimnasio Emocional (12 Pasos, MeditaciÃ³n, etc)."
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4 group">
                   <div className="w-7 h-7 rounded-full bg-[#2E4036] flex items-center justify-center shrink-0 mt-0.5 border border-[#00FF66]/30 group-hover:bg-[#CC5833] transition-colors duration-300">
@@ -858,7 +854,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
 
             <div className="mt-8 pt-6 border-t border-white/10">
               <p className="text-sm text-[#E2C17D] italic font-serif opacity-80 text-center">
-                Un encuentro diseñado para darte claridad inmediata.
+                Un encuentro diseÃ±ado para darte claridad inmediata.
               </p>
             </div>
           </div>
@@ -885,17 +881,17 @@ const Pricing = ({ onOpenTest }) => {
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
             Elige tu nivel de entrenamiento.
           </h2>
-          <p className="text-[#1A1A1A]/60 font-serif italic text-xl">Sin atajos. Solo práctica.</p>
+          <p className="text-[#1A1A1A]/60 font-serif italic text-xl">Sin atajos. Solo prÃ¡ctica.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           {/* Plan 1 */}
           <div className="bg-white radius-huge p-8 md:p-10 border border-gray-200 shadow-sm flex flex-col h-full">
-            <h3 className="font-heading font-bold text-2xl text-[#1A1A1A] mb-2">Diagnóstico</h3>
+            <h3 className="font-heading font-bold text-2xl text-[#1A1A1A] mb-2">DiagnÃ³stico</h3>
             <p className="text-gray-500 mb-8 text-sm">Tu punto de partida.</p>
 
             <ul className="space-y-4 mb-10 flex-1">
-              {["Test del Eneagrama (Gratis)", "Resultado + insight claro", "Ruta recomendada (próximo paso)"].map((item, i) => (
+              {["Test del Eneagrama (Gratis)", "Resultado + insight claro", "Ruta recomendada (prÃ³ximo paso)"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
                   <CheckCircle2 size={18} className="text-[#2E4036] shrink-0 mt-0.5" />
                   <span>{item}</span>
@@ -915,11 +911,11 @@ const Pricing = ({ onOpenTest }) => {
             <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#CC5833] text-xs font-bold px-4 py-1 rounded-full tracking-widest uppercase">
               Recomendado
             </div>
-            <h3 className="font-heading font-bold text-3xl mb-2">Acceso Total · 7 Días</h3>
-            <p className="text-[#F2F0E9]/70 mb-8 font-serif italic">Prueba el método desde dentro.</p>
+            <h3 className="font-heading font-bold text-3xl mb-2">Acceso Total Â· 7 DÃ­as</h3>
+            <p className="text-[#F2F0E9]/70 mb-8 font-serif italic">Prueba el mÃ©todo desde dentro.</p>
 
             <ul className="space-y-5 mb-10 flex-1">
-              {["Sala de Reducción del Ego", "Prácticas guiadas (meditación/oración)", "Protocolos de límites y amor propio", "Entrada al método sin compromiso largo"].map((item, i) => (
+              {["Sala de ReducciÃ³n del Ego", "PrÃ¡cticas guiadas (meditaciÃ³n/oraciÃ³n)", "Protocolos de lÃ­mites y amor propio", "Entrada al mÃ©todo sin compromiso largo"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-[#F2F0E9]">
                   <CheckCircle2 size={20} className="text-[#CC5833] shrink-0 mt-0.5" />
                   <span>{item}</span>
@@ -927,10 +923,10 @@ const Pricing = ({ onOpenTest }) => {
               ))}
             </ul>
             <button
-              onClick={() => handleWA("Hola, quiero activar Acceso Total · 7 Días.")}
+              onClick={() => handleWA("Hola, quiero activar Acceso Total Â· 7 DÃ­as.")}
               className="w-full py-5 rounded-full bg-[#CC5833] text-white font-bold btn-magnetic text-lg shadow-[0_0_20px_rgba(204,88,51,0.4)] flex justify-center items-center gap-2"
             >
-              <MessageCircle size={20} /> Activar 7 Días
+              <MessageCircle size={20} /> Activar 7 DÃ­as
             </button>
           </div>
 
@@ -940,7 +936,7 @@ const Pricing = ({ onOpenTest }) => {
             <p className="text-gray-500 mb-8 text-sm">Compromiso total con el proceso.</p>
 
             <ul className="space-y-4 mb-10 flex-1">
-              {["Mentoría de Pasos", "Acompañamiento y seguimiento", "Kits de Transformación (emocional/vida)", "Diseño de protocolo personal"].map((item, i) => (
+              {["MentorÃ­a de Pasos", "AcompaÃ±amiento y seguimiento", "Kits de TransformaciÃ³n (emocional/vida)", "DiseÃ±o de protocolo personal"].map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
                   <CheckCircle2 size={18} className="text-[#2E4036] shrink-0 mt-0.5" />
                   <span>{item}</span>
@@ -972,27 +968,27 @@ const Footer = () => {
               <GoldenLogoLockup scrolled={false} inFooter={true} />
             </div>
             <p className="font-serif italic text-gray-400 text-lg max-w-sm mt-4">
-              Gimnasio Emocional Mentes Brillantes. Entrenando la paz interior, un día a la vez.
+              Gimnasio Emocional Mentes Brillantes. Entrenando la paz interior, un dÃ­a a la vez.
             </p>
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-4">
             <div className="flex gap-8 font-medium text-sm text-gray-300">
-              <a href="#metodo" className="hover:text-white transition-colors">Método</a>
+              <a href="#metodo" className="hover:text-white transition-colors">MÃ©todo</a>
               <a href="#archivo" className="hover:text-white transition-colors">Archivo</a>
               <a href="#planes" className="hover:text-white transition-colors">Planes</a>
             </div>
             <div className="flex items-center gap-2 mt-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <div className="w-2 h-2 rounded-full bg-[#00FF66] animate-pulse"></div>
-              <span className="font-mono text-xs text-gray-400">Sistema Operativo · Activo</span>
+              <span className="font-mono text-xs text-gray-400">Sistema Operativo Â· Activo</span>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
-          <p>© {new Date().getFullYear()} GEMB. Todos los derechos reservados.</p>
+          <p>Â© {new Date().getFullYear()} GEMB. Todos los derechos reservados.</p>
           <p className="max-w-xl text-center md:text-right">
-            Bienestar y entrenamiento emocional. Si estás en crisis o necesitas atención clínica inmediata, busca ayuda profesional en tu país.
+            Bienestar y entrenamiento emocional. Si estÃ¡s en crisis o necesitas atenciÃ³n clÃ­nica inmediata, busca ayuda profesional en tu paÃ­s.
           </p>
         </div>
       </div>
@@ -1004,128 +1000,128 @@ const Footer = () => {
 
 const ENEATYPES = {
   1: {
-    type: "Eneatipo 1 — El Perfeccionista",
-    subtitle: "Integridad, estándares altos y sentido del deber",
-    desc: "Buscas vivir con coherencia y justicia. El miedo a equivocarte o corromperte te lleva a exigirte y tensar el entorno cuando algo no cumple el estándar.",
-    motivation: "Ser correcto y mantener un estándar moral alto",
+    type: "Eneatipo 1 â€” El Perfeccionista",
+    subtitle: "Integridad, estÃ¡ndares altos y sentido del deber",
+    desc: "Buscas vivir con coherencia y justicia. El miedo a equivocarte o corromperte te lleva a exigirte y tensar el entorno cuando algo no cumple el estÃ¡ndar.",
+    motivation: "Ser correcto y mantener un estÃ¡ndar moral alto",
     fear: "Ser defectuoso o corromperse",
     desire: "Integridad, rectitud y orden",
-    defense: "Control, crítica y perfeccionismo",
+    defense: "Control, crÃ­tica y perfeccionismo",
     relation: "Se vincula desde el deber y la coherencia",
     pressure: "Aumenta la rigidez, corrige y juzga",
-    strengths: ["Ética y responsabilidad", "Capacidad de mejora continua", "Claridad de estándares"],
-    blindSpot: "Confundir perfección con valor personal y endurecerse con los demás.",
-    growth: "Aceptar la imperfección, practicar compasión y descanso intencional."
+    strengths: ["Ã‰tica y responsabilidad", "Capacidad de mejora continua", "Claridad de estÃ¡ndares"],
+    blindSpot: "Confundir perfecciÃ³n con valor personal y endurecerse con los demÃ¡s.",
+    growth: "Aceptar la imperfecciÃ³n, practicar compasiÃ³n y descanso intencional."
   },
   2: {
-    type: "Eneatipo 2 — El Ayudador",
-    subtitle: "Vínculo, servicio y sentirse necesario",
-    desc: "Sientes que tu valor crece cuando eres útil. Temes no ser amado, por eso te adelantas a cuidar y puedes olvidar tus propios límites.",
-    motivation: "Conseguir amor a través de la entrega",
+    type: "Eneatipo 2 â€” El Ayudador",
+    subtitle: "VÃ­nculo, servicio y sentirse necesario",
+    desc: "Sientes que tu valor crece cuando eres Ãºtil. Temes no ser amado, por eso te adelantas a cuidar y puedes olvidar tus propios lÃ­mites.",
+    motivation: "Conseguir amor a travÃ©s de la entrega",
     fear: "No ser querido o volverse prescindible",
-    desire: "Amor, cercanía y reciprocidad",
-    defense: "Generosidad estratégica y seducción por servicio",
-    relation: "Ofrece apoyo para asegurar vínculo",
-    pressure: "Se sobreinvolucra y espera gratitud implícita",
-    strengths: ["Empatía aguda", "Calidez y apoyo práctico", "Lectura emocional del otro"],
+    desire: "Amor, cercanÃ­a y reciprocidad",
+    defense: "Generosidad estratÃ©gica y seducciÃ³n por servicio",
+    relation: "Ofrece apoyo para asegurar vÃ­nculo",
+    pressure: "Se sobreinvolucra y espera gratitud implÃ­cita",
+    strengths: ["EmpatÃ­a aguda", "Calidez y apoyo prÃ¡ctico", "Lectura emocional del otro"],
     blindSpot: "Dar para sentirse necesario y descuidar lo propio.",
-    growth: "Pedir de forma directa, poner límites y reconocer su valor sin sobreentrega."
+    growth: "Pedir de forma directa, poner lÃ­mites y reconocer su valor sin sobreentrega."
   },
   3: {
-    type: "Eneatipo 3 — El Triunfador",
-    subtitle: "Éxito, eficiencia y reconocimiento",
-    desc: "Orientas tu energía a lograr y lucir resultados. El fracaso amenaza tu sentido de valor y puedes confundir quién eres con lo que logras.",
-    motivation: "Demostrar valor a través de metas alcanzadas",
-    fear: "Fracasar o parecer inútil",
-    desire: "Éxito visible y admiración",
-    defense: "Gestión de imagen, ritmo alto y foco en objetivos",
-    relation: "Se muestra competente y resuelve rápido",
+    type: "Eneatipo 3 â€” El Triunfador",
+    subtitle: "Ã‰xito, eficiencia y reconocimiento",
+    desc: "Orientas tu energÃ­a a lograr y lucir resultados. El fracaso amenaza tu sentido de valor y puedes confundir quiÃ©n eres con lo que logras.",
+    motivation: "Demostrar valor a travÃ©s de metas alcanzadas",
+    fear: "Fracasar o parecer inÃºtil",
+    desire: "Ã‰xito visible y admiraciÃ³n",
+    defense: "GestiÃ³n de imagen, ritmo alto y foco en objetivos",
+    relation: "Se muestra competente y resuelve rÃ¡pido",
     pressure: "Acelera, compite y desconecta emociones",
-    strengths: ["Orientación a resultados", "Adaptabilidad", "Energía motivadora"],
+    strengths: ["OrientaciÃ³n a resultados", "Adaptabilidad", "EnergÃ­a motivadora"],
     blindSpot: "Confundir la imagen con la identidad y relegar emociones.",
-    growth: "Bajar el ritmo, validar lo que siente y medir el éxito también en autenticidad."
+    growth: "Bajar el ritmo, validar lo que siente y medir el Ã©xito tambiÃ©n en autenticidad."
   },
   4: {
-    type: "Eneatipo 4 — El Individualista",
+    type: "Eneatipo 4 â€” El Individualista",
     subtitle: "Identidad, profundidad y autenticidad",
-    desc: "Buscas significado y expresarte de forma única. Temes ser común y puedes intensificar tus emociones o compararte con lo que falta.",
-    motivation: "Ser auténtico y reconocido en su singularidad",
+    desc: "Buscas significado y expresarte de forma Ãºnica. Temes ser comÃºn y puedes intensificar tus emociones o compararte con lo que falta.",
+    motivation: "Ser autÃ©ntico y reconocido en su singularidad",
     fear: "Ser trivial o no tener identidad",
-    desire: "Expresión genuina y profundidad emocional",
-    defense: "Retiro, dramatización y comparación",
-    relation: "Se vincula desde la intimidad y la sensibilidad estética",
-    pressure: "Se sumerge en la melancolía o dramatiza",
-    strengths: ["Sensibilidad estética", "Introspección", "Creatividad expresiva"],
+    desire: "ExpresiÃ³n genuina y profundidad emocional",
+    defense: "Retiro, dramatizaciÃ³n y comparaciÃ³n",
+    relation: "Se vincula desde la intimidad y la sensibilidad estÃ©tica",
+    pressure: "Se sumerge en la melancolÃ­a o dramatiza",
+    strengths: ["Sensibilidad estÃ©tica", "IntrospecciÃ³n", "Creatividad expresiva"],
     blindSpot: "Idealizar lo que falta y quedarse en el anhelo.",
     growth: "Aterrizar en acciones concretas, valorar lo presente y regular la intensidad."
   },
   5: {
-    type: "Eneatipo 5 — El Investigador",
-    subtitle: "Conocimiento, claridad y autonomía",
-    desc: "Observas para entender y conservar energía. Temes ser invadido o incapaz, por eso acumulas recursos y te refugias en tu mente.",
+    type: "Eneatipo 5 â€” El Investigador",
+    subtitle: "Conocimiento, claridad y autonomÃ­a",
+    desc: "Observas para entender y conservar energÃ­a. Temes ser invadido o incapaz, por eso acumulas recursos y te refugias en tu mente.",
     motivation: "Conservar recursos y entender antes de actuar",
-    fear: "Incompetencia o invasión",
+    fear: "Incompetencia o invasiÃ³n",
     desire: "Competencia y autosuficiencia",
-    defense: "Retiro, observación y acumulación de información",
+    defense: "Retiro, observaciÃ³n y acumulaciÃ³n de informaciÃ³n",
     relation: "Vincula desde la objetividad y el espacio personal",
     pressure: "Se distancia, intelectualiza y minimiza necesidades",
-    strengths: ["Análisis profundo", "Objetividad", "Independencia"],
-    blindSpot: "Aislarse y postergar la acción; desconexión afectiva.",
-    growth: "Bajar al cuerpo, pedir ayuda y compartir saberes en acción."
+    strengths: ["AnÃ¡lisis profundo", "Objetividad", "Independencia"],
+    blindSpot: "Aislarse y postergar la acciÃ³n; desconexiÃ³n afectiva.",
+    growth: "Bajar al cuerpo, pedir ayuda y compartir saberes en acciÃ³n."
   },
   6: {
-    type: "Eneatipo 6 — El Leal",
-    subtitle: "Seguridad, previsión y compromiso",
-    desc: "Escaneas riesgos para mantenerte a salvo. La duda y la búsqueda de certezas pueden frenarte o llevarte a desafiar para probar la solidez del entorno.",
+    type: "Eneatipo 6 â€” El Leal",
+    subtitle: "Seguridad, previsiÃ³n y compromiso",
+    desc: "Escaneas riesgos para mantenerte a salvo. La duda y la bÃºsqueda de certezas pueden frenarte o llevarte a desafiar para probar la solidez del entorno.",
     motivation: "Anticipar riesgos y asegurar apoyo",
-    fear: "Quedarse sin guía o protección",
+    fear: "Quedarse sin guÃ­a o protecciÃ³n",
     desire: "Certeza y apoyo mutuo",
     defense: "Duda, cuestionamiento y lealtad intensa",
     relation: "Busca acuerdos claros y pertenencia",
-    pressure: "Se vuelve hipervigilante o desafía más",
+    pressure: "Se vuelve hipervigilante o desafÃ­a mÃ¡s",
     strengths: ["Lealtad", "Pensamiento de escenarios", "Trabajo en equipo"],
-    blindSpot: "Sostener la duda como protección y proyectar sospecha.",
+    blindSpot: "Sostener la duda como protecciÃ³n y proyectar sospecha.",
     growth: "Confiar en su criterio, modular la alarma y decidir desde la calma."
   },
   7: {
-    type: "Eneatipo 7 — El Entusiasta",
+    type: "Eneatipo 7 â€” El Entusiasta",
     subtitle: "Libertad, opciones y entusiasmo",
-    desc: "Te mueves rápido hacia lo estimulante. Temes quedar atrapado en dolor o aburrimiento y llenas tu agenda para no sentirte limitado.",
+    desc: "Te mueves rÃ¡pido hacia lo estimulante. Temes quedar atrapado en dolor o aburrimiento y llenas tu agenda para no sentirte limitado.",
     motivation: "Mantener libertad y evitar dolor prolongado",
-    fear: "Quedar atrapado en sufrimiento o restricción",
+    fear: "Quedar atrapado en sufrimiento o restricciÃ³n",
     desire: "Disfrute, variedad y plenitud",
-    defense: "Reencuadre positivo, distracción y múltiples planes",
-    relation: "Conecta desde la energía y la aventura compartida",
+    defense: "Reencuadre positivo, distracciÃ³n y mÃºltiples planes",
+    relation: "Conecta desde la energÃ­a y la aventura compartida",
     pressure: "Se dispersa y evita profundizar; salta a lo siguiente",
-    strengths: ["Creatividad para opciones", "Energía contagiosa", "Agilidad mental"],
+    strengths: ["Creatividad para opciones", "EnergÃ­a contagiosa", "Agilidad mental"],
     blindSpot: "Usar la actividad para no tocar el malestar.",
     growth: "Elegir foco, tolerar emociones densas y permanecer presente."
   },
   8: {
-    type: "Eneatipo 8 — El Líder",
-    subtitle: "Fuerza, control y protección",
+    type: "Eneatipo 8 â€” El LÃ­der",
+    subtitle: "Fuerza, control y protecciÃ³n",
     desc: "Buscas mantener el control para no ser vulnerado. Eres directo y protector, pero tu intensidad puede imponerse sobre otros.",
-    motivation: "Autonomía y protección de los suyos",
-    fear: "Ser controlado, débil o traicionado",
+    motivation: "AutonomÃ­a y protecciÃ³n de los suyos",
+    fear: "Ser controlado, dÃ©bil o traicionado",
     desire: "Sentir poder personal y justicia",
-    defense: "Confrontación, dominio y exceso de fuerza",
+    defense: "ConfrontaciÃ³n, dominio y exceso de fuerza",
     relation: "Se vincula con franqueza y toma espacios con rapidez",
     pressure: "Sube la intensidad, decide por otros y minimiza sensibilidad",
-    strengths: ["Decisión y valentía", "Claridad frente a la injusticia", "Capacidad de acción inmediata"],
+    strengths: ["DecisiÃ³n y valentÃ­a", "Claridad frente a la injusticia", "Capacidad de acciÃ³n inmediata"],
     blindSpot: "Desconocer el impacto de su fuerza y negar la vulnerabilidad.",
-    growth: "Practicar contención, escuchar y mostrar vulnerabilidad con seguridad."
+    growth: "Practicar contenciÃ³n, escuchar y mostrar vulnerabilidad con seguridad."
   },
   9: {
-    type: "Eneatipo 9 — El Conciliador",
-    subtitle: "Paz, armonía y estabilidad",
+    type: "Eneatipo 9 â€” El Conciliador",
+    subtitle: "Paz, armonÃ­a y estabilidad",
     desc: "Anhelas tranquilidad y evitas el conflicto. Puedes diluir tus prioridades para mantener la paz y postergar decisiones.",
-    motivation: "Evitar el conflicto y conservar la conexión",
-    fear: "Ruptura, separación o perderse a sí mismo",
+    motivation: "Evitar el conflicto y conservar la conexiÃ³n",
+    fear: "Ruptura, separaciÃ³n o perderse a sÃ­ mismo",
     desire: "Estabilidad y paz interior",
-    defense: "Disociación, postergación y fusión con otros",
-    relation: "Media y cede para mantener armonía",
+    defense: "DisociaciÃ³n, postergaciÃ³n y fusiÃ³n con otros",
+    relation: "Media y cede para mantener armonÃ­a",
     pressure: "Se adormece, procrastina o se bloquea",
-    strengths: ["Ecuanimidad", "Capacidad de mediación", "Escucha paciente"],
+    strengths: ["Ecuanimidad", "Capacidad de mediaciÃ³n", "Escucha paciente"],
     blindSpot: "Olvidar su propia agenda y caer en inercia.",
     growth: "Priorizarse, decidir con firmeza y tolerar el desacuerdo."
   }
@@ -1135,13 +1131,13 @@ const QUICK_GROUPS = {
   "first": [
     {
       "code": "A",
-      "title": "Impulso y autonomía",
+      "title": "Impulso y autonomÃ­a",
       "desc": "Independencia, empuje, objetivos claros, deseo de impacto y baja tolerancia a que otros marquen tu paso."
     },
     {
       "code": "B",
       "title": "Reserva y quietud",
-      "desc": "Preferencia por la soledad elegida, imaginación, poca competitividad y gusto por la calma."
+      "desc": "Preferencia por la soledad elegida, imaginaciÃ³n, poca competitividad y gusto por la calma."
     },
     {
       "code": "C",
@@ -1153,7 +1149,7 @@ const QUICK_GROUPS = {
     {
       "code": "X",
       "title": "Optimismo y evitar dolor",
-      "desc": "Actitud positiva, búsqueda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso."
+      "desc": "Actitud positiva, bÃºsqueda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso."
     },
     {
       "code": "Y",
@@ -1163,7 +1159,7 @@ const QUICK_GROUPS = {
     {
       "code": "Z",
       "title": "Control y distancia",
-      "desc": "Lógica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contención emocional."
+      "desc": "LÃ³gica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contenciÃ³n emocional."
     }
   ]
 };
@@ -1172,37 +1168,37 @@ const QUICK_MATRIX = {
   "AX": {
     "typeId": 7,
     "label": "Entusiasta",
-    "note": "Energía alta, optimismo y búsqueda de opciones."
+    "note": "EnergÃ­a alta, optimismo y bÃºsqueda de opciones."
   },
   "AY": {
     "typeId": 8,
-    "label": "Líder",
-    "note": "Autoafirmación, fuerza y control del terreno."
+    "label": "LÃ­der",
+    "note": "AutoafirmaciÃ³n, fuerza y control del terreno."
   },
   "AZ": {
     "typeId": 3,
     "label": "Triunfador",
-    "note": "Orientación a logro, eficiencia e imagen eficaz."
+    "note": "OrientaciÃ³n a logro, eficiencia e imagen eficaz."
   },
   "BX": {
     "typeId": 9,
     "label": "Conciliador",
-    "note": "Calma, receptividad y preferencia por la armonía."
+    "note": "Calma, receptividad y preferencia por la armonÃ­a."
   },
   "BY": {
     "typeId": 4,
     "label": "Individualista",
-    "note": "Sensibilidad, identidad propia y expresión emocional."
+    "note": "Sensibilidad, identidad propia y expresiÃ³n emocional."
   },
   "BZ": {
     "typeId": 5,
     "label": "Investigador",
-    "note": "Observación, objetividad y protección de energía."
+    "note": "ObservaciÃ³n, objetividad y protecciÃ³n de energÃ­a."
   },
   "CX": {
     "typeId": 2,
     "label": "Ayudador",
-    "note": "Entrega, cuidado y búsqueda de conexión."
+    "note": "Entrega, cuidado y bÃºsqueda de conexiÃ³n."
   },
   "CY": {
     "typeId": 6,
@@ -1216,503 +1212,32 @@ const QUICK_MATRIX = {
   }
 };
 
-const LIKERT_OPTIONS = [
-  { value: 0, label: 'Nada' },
-  { value: 1, label: 'Poco' },
-  { value: 2, label: 'Medio' },
-  { value: 3, label: 'Bastante' },
-  { value: 4, label: 'Mucho' }
-];
-
-const FULL_STATEMENTS = [
-  { id: 'F1', text: 'Me tenso y corrijo cuando algo está fuera de lugar.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F2', text: 'La culpa aparece si no cumplo mi propio estándar.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F3', text: 'Bajo presión sigo el deber aunque me desgaste.', targets: [{ t: 1, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F4', text: 'Me cuesta delegar porque temo que el resultado no sea correcto.', targets: [{ t: 1, w: 1 }] },
-
-  { id: 'F5', text: 'Me siento valioso cuando anticipo y cuido los detalles de otros.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F6', text: 'Pregunto qué necesitas antes de hablar de lo mío.', targets: [{ t: 2, w: 1 }, { t: 9, w: 1 }] },
-  { id: 'F7', text: 'Me duele que no reconozcan mi apoyo ni la autenticidad con que acompaño.', targets: [{ t: 2, w: 1 }, { t: 4, w: 1 }] },
-  { id: 'F8', text: 'Cuando pongo límites siento que puedo ser egoísta.', targets: [{ t: 2, w: 1 }] },
-
-  { id: 'F9', text: 'Mi imagen y resultados definen cuánto valgo.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F10', text: 'Ajusto mi estilo para encajar y ganar.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F11', text: 'Prefiero avanzar rápido aunque no sienta.', targets: [{ t: 3, w: 1 }, { t: 7, w: 1 }] },
-  { id: 'F12', text: 'A veces priorizo la meta sobre el descanso o los vínculos.', targets: [{ t: 3, w: 1 }, { t: 8, w: 1 }] },
-
-  { id: 'F13', text: 'Prefiero profundidad y autenticidad a lo superficial.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F14', text: 'Me comparo con lo que me falta y siento melancolía.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F15', text: 'Expreso mi singularidad aunque el entorno premie solo eficiencia.', targets: [{ t: 4, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F16', text: 'Bajo estrés me retiro a procesar en profundidad antes de actuar.', targets: [{ t: 4, w: 1 }, { t: 5, w: 1 }] },
-
-  { id: 'F17', text: 'Necesito tiempo a solas para recargar mente y energía.', targets: [{ t: 5, w: 1 }, { t: 4, w: 1 }] },
-  { id: 'F18', text: 'Observar y entender antes de actuar me hace sentir seguro.', targets: [{ t: 5, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F19', text: 'Evito depender porque temo quedarme sin recursos.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F20', text: 'Cuando hay demasiada demanda me refugio en mi espacio mental.', targets: [{ t: 5, w: 1 }] },
-
-  { id: 'F21', text: 'Escaneo riesgos y pido claridad antes de decidir.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F22', text: 'Puedo dudar de la autoridad y cuestionarla.', targets: [{ t: 6, w: 1 }, { t: 8, w: 1 }] },
-  { id: 'F23', text: 'Busco alianzas y protocolos para sentirme tranquilo.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F24', text: 'Si todo es incierto imagino escenarios peores para prepararme.', targets: [{ t: 6, w: 1 }, { t: 1, w: 1 }] },
-
-  { id: 'F25', text: 'Busco opciones nuevas para no sentirme atrapado.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F26', text: 'Reencuadro en positivo y salto al siguiente plan.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F27', text: 'Evito emociones densas llenando la agenda.', targets: [{ t: 7, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F28', text: 'La idea de perder libertad me inquieta más que el esfuerzo.', targets: [{ t: 7, w: 1 }] },
-
-  { id: 'F29', text: 'Defiendo mi territorio y a los míos con intensidad.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F30', text: 'Mostrar vulnerabilidad se siente peligroso.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F31', text: 'Ante injusticia aumento mi presencia y tomo el control.', targets: [{ t: 8, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F32', text: 'Prefiero confrontar directo antes que rumiar.', targets: [{ t: 8, w: 1 }] },
-
-  { id: 'F33', text: 'Para mantener paz cedo y postergo mis preferencias.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F34', text: 'Me adormezco o me pierdo en contenido mental para no entrar en conflicto.', targets: [{ t: 9, w: 1 }, { t: 5, w: 1 }] },
-  { id: 'F35', text: 'Tardo en decidir porque quiero que todos estén bien.', targets: [{ t: 9, w: 1 }, { t: 2, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F36', text: 'Cuando alguien presiona busco calmar y mediar en lugar de imponer.', targets: [{ t: 9, w: 1 }, { t: 1, w: 1 }] }
-];
-
-const FULL_POTENTIAL = FULL_STATEMENTS.reduce((acc, q) => {
-  q.targets.forEach(({ t, w }) => {
-    acc[t] = (acc[t] || 0) + w * 4;
-  });
-  return acc;
-}, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 });
-
-
-const TestEnneagramModal = ({ isOpen, onClose }) => {
-  const [step, setStep] = useState('choice');
-  const [quickChoice, setQuickChoice] = useState({ first: null, second: null });
-  const [fullIndex, setFullIndex] = useState(0);
-  const [fullAnswers, setFullAnswers] = useState([]);
-
-  const handleClose = () => {
-    setStep('choice');
-    setQuickChoice({ first: null, second: null });
-    setFullIndex(0);
-    setFullAnswers([]);
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  const quickResult = () => {
-    if (!quickChoice.first || !quickChoice.second) return null;
-    const code = `${quickChoice.first}${quickChoice.second}`;
-    const combo = QUICK_MATRIX[code];
-    if (!combo) return null;
-    return {
-      code,
-      label: combo.label,
-      note: combo.note,
-      type: ENEATYPES[combo.typeId]
-    };
-  };
-
-  const handleFullAnswer = (value) => {
-    const updated = [...fullAnswers];
-    updated[fullIndex] = value;
-    setFullAnswers(updated);
-    if (fullIndex < FULL_STATEMENTS.length - 1) {
-      setFullIndex(fullIndex + 1);
-    } else {
-      setStep('full-result');
-    }
-  };
-
-  const computeFullScores = () => {
-    const totals = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-    fullAnswers.forEach((ans, idx) => {
-      if (ans === undefined || ans === null) return;
-      FULL_STATEMENTS[idx].targets.forEach(({ t, w }) => {
-        totals[t] += ans * w;
-      });
-    });
-    return totals;
-  };
-
-  const fullResult = () => {
-    const totals = computeFullScores();
-    const normalized = Object.entries(totals).map(([id, rawScore]) => {
-      const maxPossible = FULL_POTENTIAL[id] || 1;
-      const normalizedScore = maxPossible ? rawScore / maxPossible : 0;
-      return { id, rawScore, maxPossible, normalizedScore };
-    });
-
-    const ranking = normalized.sort((a, b) => b.normalizedScore - a.normalizedScore);
-    const [top, second] = ranking;
-    const marginNormalized = top.normalizedScore - second.normalizedScore;
-    const coverageNormalized = top.normalizedScore;
-
-    let confidence = 'baja';
-    if (coverageNormalized >= 0.7 && marginNormalized >= 0.1) confidence = 'alta';
-    else if (coverageNormalized >= 0.55 && marginNormalized >= 0.06) confidence = 'media';
-
-    return {
-      ranking,
-      top: { ...ENEATYPES[top.id], rawScore: top.rawScore, maxPossible: top.maxPossible, normalizedScore: top.normalizedScore },
-      second: { ...ENEATYPES[second.id], rawScore: second.rawScore, maxPossible: second.maxPossible, normalizedScore: second.normalizedScore },
-      marginNormalized,
-      coverageNormalized,
-      confidence
-    };
-  };
-
-  const progression = Math.round((fullIndex / FULL_STATEMENTS.length) * 100);
-
-  return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={handleClose}></div>
-
-      <div className="relative bg-[#F2F0E9] w-full max-w-3xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
-        <button onClick={handleClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
-          <X size={24} />
-        </button>
-
-        {step === 'choice' && (
-          <div className="space-y-8 animate-[fadeIn_0.4s_ease-out]">
-            <div className="text-center">
-              <div className="flex justify-center mb-6">
-                <ScanLine size={48} className="text-[#CC5833]" />
-              </div>
-              <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-3">Mapa de Eneatipo</h2>
-              <p className="font-serif italic text-lg text-gray-600 max-w-2xl mx-auto">
-                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 36 afirmaciones. Ambos muestran motivación, miedo central y defensas.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#CC5833]/10 flex items-center justify-center text-[#CC5833] font-bold">1</div>
-                  <div>
-                    <p className="font-heading text-xl text-[#1A1A1A]">Primera orientación</p>
-                    <p className="text-sm text-gray-500">Test rápido · 2–3 minutos</p>
-                  </div>
-                </div>
-                <ul className="text-sm text-[#2E4036] space-y-2">
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Grupo 1 (A/B/C) + Grupo 2 (X/Y/Z).</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Resultado = hipótesis inicial (no diagnóstico).</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Invita a pasar al test completo.</li>
-                </ul>
-                <button
-                onClick={() => setStep('quick-first')}
-                  className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic"
-                >
-                  Hacer test rápido
-                </button>
-              </div>
-
-              <div className="bg-[#1A1A1A] text-[#F2F0E9] rounded-3xl p-6 shadow-lg flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-bold">2</div>
-                  <div>
-                    <p className="font-heading text-xl">Lectura profunda</p>
-                    <p className="text-sm text-gray-300">Test completo · 8–12 minutos</p>
-                  </div>
-                </div>
-                <ul className="text-sm text-gray-200 space-y-2">
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones · escala Likert 0–4.</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Puntúa 9 eneatipos y muestra ranking real.</li>
-                  <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Incluye motivación, miedo, deseo y defensa.</li>
-                </ul>
-                <button
-                onClick={() => setStep('full-intro')}
-                  className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic"
-                >
-                  Hacer test completo
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {step === 'quick-first' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rápido · Paso 1 de 2</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el párrafo que mejor describe tu estilo de base</h3>
-            <div className="space-y-3">
-              {QUICK_GROUPS.first.map(opt => (
-                <button
-                  key={opt.code}
-                  onClick={() => { setQuickChoice({ ...quickChoice, first: opt.code }); setStep('quick-second'); }}
-                  className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-9 h-9 rounded-xl bg-[#CC5833]/10 text-[#CC5833] font-bold flex items-center justify-center">{opt.code}</span>
-                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 'quick-second' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Test rápido · Paso 2 de 2</span>
-              <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold text-xs">Elegiste {quickChoice.first}</span>
-            </div>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
-            <div className="space-y-3">
-              {QUICK_GROUPS.second.map(opt => (
-                <button
-                  key={opt.code}
-                  onClick={() => { setQuickChoice({ ...quickChoice, second: opt.code }); setStep('quick-result'); }}
-                  className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-9 h-9 rounded-xl bg-[#2E4036]/10 text-[#2E4036] font-bold flex items-center justify-center">{opt.code}</span>
-                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 'quick-result' && quickResult() && (
-          <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
-            <div className="flex flex-col items-center text-center gap-2">
-              <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
-                <Activity className="text-[#00FF66]" size={22} />
-              </div>
-              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {quickResult().code}</h3>
-              <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
-              <p className="text-sm text-gray-500">Esta lectura es orientativa. Úsala como punto de partida y valida con el test completo para mayor precisión.</p>
-              <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
-                <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
-                <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickResult().type.type}</h4>
-                <p className="text-[#CC5833] text-sm font-serif italic">{quickResult().type.subtitle}</p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
-                <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivación</p>
-                  <p>{quickResult().type.motivation}</p>
-                </div>
-                <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Miedo central</p>
-                  <p>{quickResult().type.fear}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => setStep('full-intro')}
-                className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic"
-              >
-                Pasar a lectura profunda
-              </button>
-              <button
-                onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }}
-                className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors"
-              >
-                Repetir test rápido
-              </button>
-            </div>
-          </div>
-        )}
-
-        {step === 'full-intro' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test completo</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones · escala 0 a 4</h3>
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#2E4036]">
-              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual. El resultado mostrará ranking de eneatipos, segundo candidato (si aplica) y nivel de confianza.</p>
-              <ul className="space-y-2">
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada · 4 = Mucho.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivación, miedo, deseo, defensa y reacción bajo presión.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Puedes volver una pregunta atrás si necesitas ajustar.</li>
-              </ul>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setStep('full-quiz')}
-                className="bg-[#2E4036] text-white px-8 py-4 rounded-full font-bold btn-magnetic"
-              >
-                Iniciar lectura profunda
-              </button>
-              <button
-                onClick={() => { setStep('choice'); }}
-                className="px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100"
-              >
-                Volver
-              </button>
-            </div>
-          </div>
-        )}
-
-        {step === 'full-quiz' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6 flex-1 flex flex-col">
-            <div className="flex justify-between items-center text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Afirmación {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
-              <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{progression}%</span>
-            </div>
-
-            <h3 className="font-heading text-2xl text-[#1A1A1A] leading-snug">{FULL_STATEMENTS[fullIndex].text}</h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 mt-auto">
-              {LIKERT_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleFullAnswer(opt.value)}
-                  className={`rounded-2xl border px-3 py-4 text-center font-bold text-sm transition-all ${fullAnswers[fullIndex] === opt.value ? 'bg-[#2E4036] text-white border-[#2E4036]' : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#2E4036]'}`}
-                >
-                  <div className="text-lg">{opt.label}</div>
-                  <div className="text-[11px] opacity-70">{opt.value}</div>
-                </button>
-              ))}
-            </div>
-
-            <div className="flex justify-between items-center pt-2 text-sm text-gray-600">
-              <button
-                disabled={fullIndex === 0}
-                onClick={() => setFullIndex((prev) => Math.max(0, prev - 1))}
-                className={`px-3 py-2 rounded-full border ${fullIndex === 0 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-600 hover:bg-gray-100'}`}
-              >
-                Volver
-              </button>
-              <p className="text-xs">Lee cada frase desde tu motivación habitual, no desde la imagen ideal.</p>
-            </div>
-          </div>
-        )}
-
-        {step === 'full-result' && (
-          <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
-            {(() => {
-              const res = fullResult();
-              return (
-                <>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
-                      <Activity className="text-[#00FF66]" size={22} />
-                    </div>
-                    <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Lectura profunda</p>
-                    <h3 className="font-heading text-3xl text-[#1A1A1A]">{res.top.type}</h3>
-                    <p className="text-[#CC5833] font-serif italic">{res.top.subtitle}</p>
-                    <div className="flex gap-2 text-xs text-gray-600 mt-1">
-                      <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">Confianza {res.confidence}</span>
-                      <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Margen {(res.marginNormalized * 100).toFixed(1)}%</span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Lectura orientativa de autoconocimiento (no diagnóstica). Úsala para conversar y, si quieres más rigor, acompáñala con la Sala de Reducción del Ego.</p>
-                  </div>
-
-                  <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
-                    <div className="grid md:grid-cols-3 gap-3">
-                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Motivación</p>
-                        <p>{res.top.motivation}</p>
-                      </div>
-                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Miedo central</p>
-                        <p>{res.top.fear}</p>
-                      </div>
-                      <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Deseo central</p>
-                        <p>{res.top.desire}</p>
-                      </div>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-white rounded-2xl border border-gray-100">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Defensa habitual</p>
-                        <p>{res.top.defense}</p>
-                      </div>
-                      <div className="p-3 bg-white rounded-2xl border border-gray-100">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Patrón relacional</p>
-                        <p>{res.top.relation}</p>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-[#2E4036] text-white rounded-2xl">
-                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#00FF66] mb-1">Reacción bajo presión</p>
-                      <p className="text-sm leading-relaxed">{res.top.pressure}</p>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Fortalezas</p>
-                        <ul className="space-y-1">
-                          {res.top.strengths.map((s, idx) => (
-                            <li key={idx} className="flex gap-2"><CheckCircle2 size={14} className="text-[#00FF66] mt-0.5" /> {s}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                        <p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Riesgo / punto ciego</p>
-                        <p>{res.top.blindSpot}</p>
-                        <p className="mt-2 text-[#2E4036] font-semibold">Ruta de crecimiento:</p>
-                        <p>{res.top.growth}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-100/70 border border-gray-200 rounded-3xl p-5 space-y-2 text-sm text-gray-700">
-                    <p className="font-semibold text-[#1A1A1A]">Segundo eneatipo probable: {res.second.type}</p>
-                    <p>El resultado sugiere afinidad secundaria si la diferencia es baja. Úsalo como contraste, no como etiqueta.</p>
-                    {res.confidence === 'baja' && (
-                      <p className="text-[#CC5833] font-semibold">Lectura ambigua: responde de nuevo o agenda una sesión para profundizar.</p>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button
-                      onClick={() => {
-                        const text = encodeURIComponent(`Hice el test completo. Resultado principal: ${res.top.type} (confianza ${res.confidence}). Segundo: ${res.second.type}. Quiero orientación y Sala de Reducción del Ego.`);
-                        window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
-                        handleClose();
-                      }}
-                      className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]"
-                    >
-                      Compartir y ver siguiente paso
-                    </button>
-                    <button
-                      onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); setFullIndex(0); setFullAnswers([]); }}
-                      className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100"
-                    >
-                      Repetir lectura
-                    </button>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const guaranteeItems = [
-  "El proceso se define en la primera sesión con Alexandra según tu caso. No vendemos 'una sesión': definimos un plan.",
-  "La garantía aplica solo si completas el proceso completo indicado por la entrenadora, sin dejarlo a medias.",
+  "El proceso se define en la primera sesiÃ³n con Alexandra segÃºn tu caso. No vendemos 'una sesiÃ³n': definimos un plan.",
+  "La garantÃ­a aplica solo si completas el proceso completo indicado por la entrenadora, sin dejarlo a medias.",
   (
     <span key="lista-proceso" className="block">
-      El proceso puede incluir (según tu caso):
+      El proceso puede incluir (segÃºn tu caso):
       <ul className="list-none mt-3 space-y-2 pl-3 border-l-2 border-[#CC5833]/30">
-        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Sesiones Guía Coach 1:1</li>
-        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Sala de Reducción del Ego (asistencia y práctica)</li>
+        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Sesiones GuÃ­a Coach 1:1</li>
+        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Sala de ReducciÃ³n del Ego (asistencia y prÃ¡ctica)</li>
         <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Un Curso de Milagros (UCDM)</li>
         <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Vipassana (cuando sea indicado)</li>
-        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>12 Pasos (trabajo y acompañamiento)</li>
-        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Prácticas de meditación/oración, límites y servicio</li>
-        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Cualquier asignación o protocolo indicado por la entrenadora</li>
+        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>12 Pasos (trabajo y acompaÃ±amiento)</li>
+        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>PrÃ¡cticas de meditaciÃ³n/oraciÃ³n, lÃ­mites y servicio</li>
+        <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#2E4036] opacity-70"></span>Cualquier asignaciÃ³n o protocolo indicado por la entrenadora</li>
       </ul>
     </span>
   ),
-  "Aquí el cambio es 50% guía (nosotros) y 50% práctica (tú). La garantía requiere evidencias mínimas de cumplimiento: asistencia, tareas, prácticas y seguimiento.",
-  "Si completas todo el proceso acordado (todo lo indicado) y aun así no percibes cambios reales y medibles, puedes solicitar la devolución del 100%."
+  "AquÃ­ el cambio es 50% guÃ­a (nosotros) y 50% prÃ¡ctica (tÃº). La garantÃ­a requiere evidencias mÃ­nimas de cumplimiento: asistencia, tareas, prÃ¡cticas y seguimiento.",
+  "Si completas todo el proceso acordado (todo lo indicado) y aun asÃ­ no percibes cambios reales y medibles, puedes solicitar la devoluciÃ³n del 100%."
 ];
 
 const GuaranteeModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleSendWA = () => {
-    const text = encodeURIComponent("Hola, quiero solicitar la garantía de satisfacción. Completé el proceso completo indicado por Alexandra (sesiones + prácticas + espacios sugeridos) y deseo iniciar la verificación.");
+    const text = encodeURIComponent("Hola, quiero solicitar la garantÃ­a de satisfacciÃ³n. CompletÃ© el proceso completo indicado por Alexandra (sesiones + prÃ¡cticas + espacios sugeridos) y deseo iniciar la verificaciÃ³n.");
     window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
     onClose();
   };
@@ -1731,7 +1256,7 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
             <ShieldCheck className="text-[#00FF66]" size={32} />
           </div>
           <span className="font-mono text-xs font-bold text-[#CC5833] tracking-widest mb-2">COMPROMISO MUTUO</span>
-          <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] leading-tight">Garantía de Satisfacción</h2>
+          <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] leading-tight">GarantÃ­a de SatisfacciÃ³n</h2>
         </div>
 
         <div className="space-y-6 mb-8 animate-[fadeIn_0.5s_ease-out_0.1s]">
@@ -1746,7 +1271,7 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
         </div>
 
         <p className="text-center text-[11px] text-gray-500 font-mono uppercase tracking-wider mb-8 animate-[fadeIn_0.5s_ease-out_0.1s]">
-          Los detalles del plan se confirman y se ajustan por escrito durante el proceso, sesión a sesión (normalmente ~10 sesiones), según avances y cumplimiento.
+          Los detalles del plan se confirman y se ajustan por escrito durante el proceso, sesiÃ³n a sesiÃ³n (normalmente ~10 sesiones), segÃºn avances y cumplimiento.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full animate-[fadeIn_0.5s_ease-out_0.2s]">
@@ -1806,7 +1331,7 @@ export default function App() {
         <Manifesto />
         <StackedCards />
 
-        {/* Nueva sección: Sesión Guía Coach */}
+        {/* Nueva secciÃ³n: SesiÃ³n GuÃ­a Coach */}
         <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
 
         <Pricing onOpenTest={() => setTestOpen(true)} />
@@ -1827,6 +1352,8 @@ export default function App() {
     </>
   );
 }
+
+
 
 
 
