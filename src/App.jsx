@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck
+  Clock, User, Target, ShieldCheck, Check, ChevronDown, ChevronUp, ArrowLeft
 } from 'lucide-react';
+import EnhancedTestEnneagramModal from './TestEnneagramModal';
 
 // Carga asíncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
@@ -212,21 +213,39 @@ const Hero = ({ onOpenTest }) => {
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-end h-full">
-        <div className="max-w-3xl mt-auto">
-          <h1 className="text-white leading-[1.1] mb-6">
-            <span className="hero-elem block font-heading font-bold text-5xl md:text-7xl tracking-tight">
+        <div className="max-w-4xl mt-auto">
+          <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm mb-5">
+            <span className="h-2 w-2 rounded-full bg-[#E2C17D]"></span>
+            Eneagrama para autoconocimiento y entrenamiento interior
+          </div>
+
+          <h1 className="text-white leading-[1.02] mb-5 max-w-4xl">
+            <span className="hero-elem block font-heading font-bold text-[2.7rem] sm:text-6xl md:text-7xl tracking-tight">
               Esto no es terapia.
             </span>
-            <span className="hero-elem block font-serif italic text-6xl md:text-8xl text-[#F2F0E9] mt-2">
-              Es Entrenamiento.
+            <span className="hero-elem block font-serif italic text-[2.95rem] sm:text-[4.6rem] md:text-[5.3rem] text-[#F2F0E9] mt-1 md:mt-2">
+              Es entrenamiento para grandes resultados.
             </span>
           </h1>
 
-          <p className="hero-elem text-[#F2F0E9]/90 text-lg md:text-xl font-light max-w-2xl mb-8 leading-relaxed">
+          <p className="hidden">
             GEMB es un Gimnasio Emocional: entras a fortalecer tu carácter, descubrir tu patrón dominante y trazar tu ruta de crecimiento con práctica guiada.
           </p>
 
-          <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-10">
+          <p className="hero-elem text-[#E2C17D] text-xl md:text-2xl font-serif italic mb-5 max-w-2xl">
+            Tu mundo interior crea tu mundo exterior.
+          </p>
+
+          <div className="hero-elem max-w-3xl space-y-4 mb-8">
+            <p className="text-[#F2F0E9]/90 text-base md:text-lg font-light leading-relaxed">
+              Si quieres cambiar los frutos, primero debes cambiar las raices; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
+            </p>
+            <p className="text-[#F2F0E9]/82 text-base md:text-lg leading-relaxed">
+              Haz el test y descubre el eneatipo que identifica la mascara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
+            </p>
+          </div>
+
+          <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-8">
             <button
               onClick={onOpenTest}
               className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
@@ -239,9 +258,11 @@ const Hero = ({ onOpenTest }) => {
             </a>
           </div>
 
-          <p className="hero-elem font-mono text-xs text-[#F2F0E9]/60 tracking-wider uppercase">
+          <div className="hero-elem max-w-3xl rounded-[1.75rem] border border-white/15 bg-black/15 px-5 py-4 backdrop-blur-sm">
+            <p className="font-mono text-[11px] md:text-xs text-[#F2F0E9]/70 tracking-[0.16em] uppercase">
             Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Reducción del Ego
           </p>
+        </div>
         </div>
       </div>
     </section>
@@ -1794,7 +1815,14 @@ export default function App() {
       <Footer />
 
       {/* Modales Inyectados */}
-      <TestEnneagramModal isOpen={isTestOpen} onClose={() => setTestOpen(false)} />
+      <EnhancedTestEnneagramModal
+        isOpen={isTestOpen}
+        onClose={() => setTestOpen(false)}
+        quickGroups={QUICK_GROUPS}
+        quickMatrix={QUICK_MATRIX}
+        eneatypes={ENEATYPES}
+        waNumber={WA_NUMBER}
+      />
       <GuaranteeModal isOpen={isGuaranteeOpen} onClose={() => setGuaranteeOpen(false)} />
     </>
   );
