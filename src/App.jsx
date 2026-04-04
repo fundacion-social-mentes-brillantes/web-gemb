@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
@@ -134,13 +134,13 @@ const Navbar = ({ onOpenTest }) => {
 
             {/* CENTRO: Enlaces */}
             <div className={`w-2/4 hidden md:flex justify-center gap-6 lg:gap-8 text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
-              <a href="#metodo" className="hover:opacity-70 transition-opacity">MÃ©todo</a>
+              <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
               <a href="#eneatipos" className="hover:opacity-70 transition-opacity">Eneatipos</a>
               <a href="#archivo" className="hover:opacity-70 transition-opacity">Archivo</a>
 
-              {/* BotÃ³n pequeÃ±o premium en el Navbar para la sesiÃ³n Coach */}
+              {/* Botón pequeño premium en el Navbar para la sesión Coach */}
               <a href="#sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
-                <Star size={12} className="fill-current" /> SesiÃ³n Coach
+                <Star size={12} className="fill-current" /> Sesión Coach
               </a>
 
               <a href="#planes" className="hover:opacity-70 transition-opacity">Planes</a>
@@ -162,13 +162,13 @@ const Navbar = ({ onOpenTest }) => {
         </div>
       </nav>
 
-      {/* MenÃº MÃ³vil */}
+      {/* Menú Móvil */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-6 p-6">
-          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">MÃ©todo</a>
+          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Método</a>
           <a href="#eneatipos" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Eneatipos</a>
           <a href="#archivo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Archivo</a>
-          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> SesiÃ³n Coach</a>
+          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> Sesión Coach</a>
           <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Planes</a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
@@ -234,10 +234,10 @@ const Hero = ({ onOpenTest }) => {
 
           <div className="hero-elem max-w-3xl space-y-4 mb-8">
             <p className="text-[#F2F0E9]/90 text-base md:text-lg font-light leading-relaxed">
-              Si quieres cambiar los frutos, primero debes cambiar las ra?ces; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
+              Si quieres cambiar los frutos, primero debes cambiar las raíces; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
             </p>
             <p className="text-[#F2F0E9]/82 text-base md:text-lg leading-relaxed">
-              Haz el test y descubre el eneatipo que identifica la m?scara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
+              Haz el test y descubre el eneatipo que identifica la máscara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
             </p>
           </div>
 
@@ -250,13 +250,13 @@ const Hero = ({ onOpenTest }) => {
               <ArrowRight size={18} />
             </button>
             <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
-              Ver el MÃ©todo
+              Ver el Método
             </a>
           </div>
 
           <div className="hero-elem max-w-3xl rounded-[1.75rem] border border-white/15 bg-black/15 px-5 py-4 backdrop-blur-sm">
             <p className="font-mono text-[11px] md:text-xs text-[#F2F0E9]/70 tracking-[0.16em] uppercase">
-            Guiado por Alexandra Ortega Â· MÃ©todo integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de ReducciÃ³n del Ego
+            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Reducción del Ego
           </p>
         </div>
         </div>

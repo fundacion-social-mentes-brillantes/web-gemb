@@ -205,7 +205,7 @@ export default function TestEnneagramModal({
     if (!tieBreakerConfig) return;
     const updated = [...tieBreakerAnswers, typeId];
     setTieBreakerAnswers(updated);
-    setAnswerFeedback(`Respuesta guardada: te acercas mas a ${eneatypes[typeId].type}`);
+    setAnswerFeedback(`Respuesta guardada: te acercas más a ${eneatypes[typeId].type}`);
     maybeVibrate();
     if (tieBreakerIndex < tieBreakerConfig.questions.length - 1) {
       setTieBreakerIndex((prev) => prev + 1);
@@ -238,7 +238,7 @@ export default function TestEnneagramModal({
               </div>
               <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-3">Mapa de Eneatipo</h2>
               <p className="font-serif italic text-lg text-gray-600 max-w-2xl mx-auto">
-                Elige como empezar: primero una hipotesis rapida o una lectura profunda con 36 afirmaciones.
+                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 36 afirmaciones.
               </p>
             </div>
           </div>
@@ -250,17 +250,17 @@ export default function TestEnneagramModal({
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-[#CC5833]/10 flex items-center justify-center text-[#CC5833] font-bold">1</div>
                 <div>
-                  <p className="font-heading text-xl text-[#1A1A1A]">Hipotesis inicial de eneatipo</p>
-                  <p className="text-sm text-gray-500">Test rapido · 2-3 minutos</p>
+                  <p className="font-heading text-xl text-[#1A1A1A]">Hipótesis inicial de eneatipo</p>
+                  <p className="text-sm text-gray-500">Test rápido · 2-3 minutos</p>
                 </div>
               </div>
               <ul className="text-sm text-[#2E4036] space-y-2">
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Grupo 1 (A/B/C) + Grupo 2 (X/Y/Z).</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Orientativo, no diagnostico definitivo.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Orientativo, no diagnóstico definitivo.</li>
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Sirve como punto de partida para pasar al test completo.</li>
               </ul>
               <button onClick={() => setStep('quick-first')} className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
-                Hacer test rapido
+                Hacer test rápido
               </button>
             </div>
 
@@ -275,7 +275,7 @@ export default function TestEnneagramModal({
               <ul className="text-sm text-gray-200 space-y-2">
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones · escala Likert 0-4.</li>
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Puntua 9 eneatipos con ranking por score normalizado.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Lectura orientativa de autoconocimiento, no diagnostica.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Lectura orientativa de autoconocimiento, no diagnóstica.</li>
               </ul>
               <button onClick={() => setStep('full-intro')} className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
                 Hacer test completo
@@ -286,7 +286,7 @@ export default function TestEnneagramModal({
 
         {step === 'quick-first' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rapido · Paso 1 de 2</p>
+            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rápido · Paso 1 de 2</p>
             <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el parrafo que mejor describe tu estilo de base</h3>
             <div className="space-y-3">
               {quickGroups.first.map(opt => (
@@ -305,10 +305,10 @@ export default function TestEnneagramModal({
         {step === 'quick-second' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
             <div className="flex items-center gap-3 text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Test rapido · Paso 2 de 2</span>
+              <span className="font-mono text-xs text-[#CC5833]">Test rápido · Paso 2 de 2</span>
               <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold text-xs">Elegiste {quickChoice.first}</span>
             </div>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opcion que describe como manejas tu mundo interno</h3>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
             <div className="space-y-3">
               {quickGroups.second.map(opt => (
                 <button key={opt.code} onClick={() => { setQuickChoice({ ...quickChoice, second: opt.code }); setStep('quick-result'); }} className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all">
@@ -329,7 +329,7 @@ export default function TestEnneagramModal({
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
               </div>
-              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipotesis inicial de eneatipo</p>
+              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial de eneatipo</p>
               <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinacion {quickResult().code}</h3>
               <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
             </div>
@@ -338,7 +338,7 @@ export default function TestEnneagramModal({
 
         {step === 'quick-result' && quickResult() && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
-            <p className="text-sm text-gray-500">Orientativo, no diagnostico definitivo. Usalo como punto de partida y valida con el test completo para una lectura mas profunda.</p>
+            <p className="text-sm text-gray-500">Orientativo, no diagnóstico definitivo. Úsalo como punto de partida y valida con el test completo para una lectura más profunda.</p>
             <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
               <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
               <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickResult().type.type}</h4>
@@ -356,7 +356,7 @@ export default function TestEnneagramModal({
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <button onClick={() => setStep('full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
-              <button onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rapido</button>
+              <button onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rápido</button>
             </div>
           </div>
         )}
@@ -366,11 +366,11 @@ export default function TestEnneagramModal({
             <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test completo</p>
             <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones · escala 0 a 4</h3>
             <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#2E4036]">
-              <p>Responde segun lo que te describe la mayor parte de tu vida, no solo tu estado actual ni tu version ideal. Esta lectura es orientativa de autoconocimiento, no diagnostica.</p>
+              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual ni tu versión ideal. Esta lectura es orientativa de autoconocimiento, no diagnóstica.</p>
               <ul className="space-y-2">
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada · 4 = Mucho.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivacion, miedo, defensa, punto ciego y patron relacional.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Si el resultado queda muy cerca entre dos tipos, se activara un mini desempate.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivación, miedo, defensa, punto ciego y patrón relacional.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Si el resultado queda muy cerca entre dos tipos, se activará un mini desempate.</li>
               </ul>
             </div>
             <div className="flex gap-3">
@@ -384,7 +384,7 @@ export default function TestEnneagramModal({
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-5 flex-1 flex flex-col">
             <div className="space-y-3">
               <div className="flex justify-between items-center gap-3 text-sm text-gray-600">
-                <span className="font-mono text-xs text-[#CC5833]">Afirmacion {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
+                <span className="font-mono text-xs text-[#CC5833]">Afirmación {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
                 <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{progression}%</span>
               </div>
               <div className="h-2 rounded-full bg-[#2E4036]/10 overflow-hidden">
@@ -396,7 +396,7 @@ export default function TestEnneagramModal({
               <h3 className="font-heading text-[1.55rem] sm:text-3xl text-[#1A1A1A] leading-snug">{currentStatement.text}</h3>
               <div className="mt-4">
                 <button onClick={() => setHelperOpen((prev) => !prev)} className="inline-flex items-center gap-2 text-sm font-semibold text-[#2E4036] hover:text-[#1A1A1A] transition-colors">
-                  <span>¿Que quiere decir esta afirmacion?</span>
+                  <span>¿Qué quiere decir esta afirmación?</span>
                   {helperOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
                 {helperOpen && (
@@ -429,14 +429,14 @@ export default function TestEnneagramModal({
 
             <div className="mt-auto pt-2 space-y-4">
               <div className={`min-h-[2.5rem] rounded-2xl border px-4 py-3 text-sm transition-all ${answerFeedback ? 'border-[#2E4036]/15 bg-[#2E4036]/8 text-[#2E4036]' : 'border-transparent bg-transparent text-gray-400'}`}>
-                {answerFeedback ? <div className="flex items-center gap-2"><CheckCircle2 size={16} className="text-[#2E4036]" /><span>{answerFeedback}</span></div> : <span>Toca una opcion para guardar y avanzar.</span>}
+                {answerFeedback ? <div className="flex items-center gap-2"><CheckCircle2 size={16} className="text-[#2E4036]" /><span>{answerFeedback}</span></div> : <span>Toca una opción para guardar y avanzar.</span>}
               </div>
               <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-1 border-t border-[#2E4036]/10">
                 <button disabled={fullIndex === 0 || isTransitioningQuestion} onClick={() => setFullIndex((prev) => Math.max(0, prev - 1))} className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full border ${fullIndex === 0 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors'}`}>
                   <ArrowLeft size={16} />
                   Volver
                 </button>
-                <p className="text-xs sm:text-right text-gray-600 leading-relaxed max-w-md">Lee cada frase desde tu motivacion habitual, no desde tu imagen ideal ni solo desde como te sientes hoy.</p>
+                <p className="text-xs sm:text-right text-gray-600 leading-relaxed max-w-md">Lee cada frase desde tu motivación habitual, no desde tu imagen ideal ni solo desde cómo te sientes hoy.</p>
               </div>
             </div>
           </div>
@@ -450,7 +450,7 @@ export default function TestEnneagramModal({
                 <span className="text-xs px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Resultado muy cercano</span>
               </div>
               <div className="rounded-3xl border border-[#CC5833]/20 bg-[#FFF7F1] p-4 text-sm text-[#7A3A25]">
-                Tus respuestas activaron dos patrones muy cercanos: <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[0]].type}</span> y <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[1]].type}</span>. Esta mini fase contrasta motivacion y defensa para afinar la lectura sin vender una certeza falsa.
+                Tus respuestas activaron dos patrones muy cercanos: <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[0]].type}</span> y <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[1]].type}</span>. Esta mini fase contrasta motivación y defensa para afinar la lectura sin vender una certeza falsa.
               </div>
             </div>
             <div className="rounded-[2rem] bg-white border border-gray-200 shadow-sm p-5 sm:p-6">
@@ -462,7 +462,7 @@ export default function TestEnneagramModal({
                 <button key={`${tieBreakerConfig.questions[tieBreakerIndex].id}-${option.typeId}`} onClick={() => handleTieBreakerAnswer(option.typeId)} className="rounded-[1.6rem] border border-gray-200 bg-white p-5 text-left hover:border-[#2E4036] hover:-translate-y-0.5 transition-all shadow-sm">
                   <div className="flex items-center justify-between gap-3 mb-3">
                     <span className="font-heading text-xl text-[#1A1A1A]">{option.title}</span>
-                    <span className="px-3 py-1 rounded-full bg-[#F2F0E9] text-xs font-semibold text-[#2E4036]">Me describe mas</span>
+                    <span className="px-3 py-1 rounded-full bg-[#F2F0E9] text-xs font-semibold text-[#2E4036]">Me describe más</span>
                   </div>
                   <p className="text-sm text-gray-700 leading-relaxed">{option.text}</p>
                 </button>
@@ -474,7 +474,7 @@ export default function TestEnneagramModal({
         {step === 'full-result' && (() => {
           const res = buildPresentationResult();
           const headerTitle = res.isMixed ? `Resultado mixto entre ${res.top.type} y ${res.second.type}` : res.tieBreakerWinner && res.tieBreakerWinner.id === res.displayedTop.id ? `Lectura ajustada: ${res.displayedTop.type}` : res.displayedTop.type;
-          const prudenceCopy = res.isMixed ? 'Tus respuestas activaron dos patrones muy cercanos. Toma este resultado como una hipotesis dual para contrastar, no como una etiqueta cerrada.' : res.confidence === 'baja' ? 'La lectura apunta en esta direccion, pero el nivel de certeza sigue siendo prudente. Leela como orientacion, no como definicion cerrada.' : 'Lectura orientativa de autoconocimiento, no diagnostica.';
+          const prudenceCopy = res.isMixed ? 'Tus respuestas activaron dos patrones muy cercanos. Toma este resultado como una hipótesis dual para contrastar, no como una etiqueta cerrada.' : res.confidence === 'baja' ? 'La lectura apunta en esta dirección, pero el nivel de certeza sigue siendo prudente. Léela como orientación, no como definición cerrada.' : 'Lectura orientativa de autoconocimiento, no diagnóstica.';
           return (
             <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
               <div className="flex flex-col items-center text-center gap-2">
@@ -505,11 +505,11 @@ export default function TestEnneagramModal({
 
               <div className="bg-gray-100/70 border border-gray-200 rounded-3xl p-5 space-y-2 text-sm text-gray-700">
                 {res.isMixed ? <p className="font-semibold text-[#1A1A1A]">Los dos patrones a contrastar son {res.top.type} y {res.second.type}.</p> : <p className="font-semibold text-[#1A1A1A]">Segundo eneatipo a contrastar: {res.displayedSecond.type}</p>}
-                {res.confidence === 'baja' && <p className="text-[#CC5833] font-semibold">Nivel de certeza prudente: si algo no te cierra, repite el test desde tu motivacion real o profundiza en acompanamiento.</p>}
+                {res.confidence === 'baja' && <p className="text-[#CC5833] font-semibold">Nivel de certeza prudente: si algo no te cierra, repite el test desde tu motivación real o profundiza en acompañamiento.</p>}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={() => { const sharedType = res.isMixed ? `resultado mixto entre ${res.top.type} y ${res.second.type}` : `resultado principal ${res.displayedTop.type}`; const text = encodeURIComponent(`Hice el test completo. Tengo ${sharedType} (confianza ${res.confidence}). Quiero orientacion y Sala de Reduccion del Ego.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); handleClose(); }} className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]">Compartir y ver siguiente paso</button>
+                <button onClick={() => { const sharedType = res.isMixed ? `resultado mixto entre ${res.top.type} y ${res.second.type}` : `resultado principal ${res.displayedTop.type}`; const text = encodeURIComponent(`Hice el test completo. Tengo ${sharedType} (confianza ${res.confidence}). Quiero orientación y Sala de Reducción del Ego.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); handleClose(); }} className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]">Compartir y ver siguiente paso</button>
                 <button onClick={() => { resetModal(); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100">Repetir lectura</button>
               </div>
             </div>
