@@ -236,7 +236,7 @@ const Hero = ({ onOpenTest }) => {
             <p className="text-[#F2F0E9]/90 text-base md:text-lg font-light leading-relaxed">
               Si quieres cambiar los frutos, primero debes cambiar las raíces; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
             </p>
-            <p className="text-[#F2F0E9]/82 text-base md:text-lg leading-relaxed">
+            <p className="text-[#F2F0E9]/[0.82] text-base md:text-lg leading-relaxed">
               Haz el test y descubre el eneatipo que identifica la máscara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
             </p>
           </div>
@@ -1352,7 +1352,6 @@ export default function App() {
     </>
   );
 }
-
 
 
 
