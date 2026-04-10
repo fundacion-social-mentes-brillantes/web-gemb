@@ -4,6 +4,19 @@ export const FULL_RESPONSE_OPTIONS = [
   { value: 0, label: 'NADA' }
 ];
 
+export const QUESTION_ENEATYPES = [
+  3, 5, 2, 8, 4, 4, 6, 3, 9, 8, 1, 7, 2, 4,
+  8, 5, 8, 2, 7, 9, 2, 2, 6, 3, 5, 6, 2, 3,
+  8, 3, 8, 5, 7, 9, 1, 3, 3, 6, 7, 4, 8, 4,
+  6, 1, 2, 3, 2, 1, 9, 5, 5, 7, 5, 2, 8, 4,
+  4, 3, 5, 6, 7, 2, 1, 3, 4, 9, 5, 4, 1, 6,
+  6, 7, 7, 7, 9, 8, 3, 1, 2, 8, 6, 4, 1, 7,
+  3, 3, 3, 9, 2, 8, 8, 2, 5, 5, 7, 3, 1, 8,
+  6, 7, 5, 2, 6, 8, 4, 1, 6, 1, 9, 5, 8, 1,
+  1, 8, 3, 2, 7, 5, 1, 7, 9, 2, 7, 9, 5, 8,
+  8, 3, 5, 4, 3, 2, 9, 5, 9
+];
+
 const RAW_QUESTIONS = [
   `Me esfuerzo por superarme cada día. Me gusta sentirme capaz y obtener reconocimiento en aquello que me propongo.`,
   `Antes de iniciar un proyecto o tarea suelo estudiarlo muy bien. Eso me genera mayor confianza y competencia y me permite perder el menor tiempo posible.`,
@@ -161,7 +174,8 @@ export const FULL_STATEMENTS = RAW_QUESTIONS.map((text, index) => {
     id: `P${String(order).padStart(3, '0')}`,
     order,
     block,
-    text
+    text,
+    eneatype: QUESTION_ENEATYPES[index]
   };
 });
 
@@ -178,6 +192,7 @@ export const FULL_BLOCKS = [
   { id: 'B10', title: 'Bloque 10', start: 123, end: 135 }
 ];
 
-export const FULL_POTENTIAL = null;
-export const TIEBREAKER_MARGIN_THRESHOLD = null;
-export const createTieBreakerQuestions = () => [];
+export const FULL_TYPE_DISTRIBUTION = QUESTION_ENEATYPES.reduce((acc, eneatype) => {
+  acc[eneatype] = (acc[eneatype] || 0) + 1;
+  return acc;
+}, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 });
