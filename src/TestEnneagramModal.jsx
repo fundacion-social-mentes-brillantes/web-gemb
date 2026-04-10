@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { X, ScanLine, CheckCircle2, Activity, Check, ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
-import { FULL_STATEMENTS, FULL_POTENTIAL, TIEBREAKER_MARGIN_THRESHOLD, createTieBreakerQuestions } from './testConfig';
-
-const LIKERT_OPTIONS = [
-  { value: 0, label: 'Nada' },
-  { value: 1, label: 'Poco' },
-  { value: 2, label: 'Medio' },
-  { value: 3, label: 'Bastante' },
-  { value: 4, label: 'Mucho' }
-];
+import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft } from 'lucide-react';
+import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
 
 export default function TestEnneagramModal({
   isOpen,
@@ -22,13 +14,9 @@ export default function TestEnneagramModal({
   const [step, setStep] = useState('choice');
   const [fullIndex, setFullIndex] = useState(0);
   const [fullAnswers, setFullAnswers] = useState([]);
-  const [helperOpen, setHelperOpen] = useState(false);
   const [answerFeedback, setAnswerFeedback] = useState('');
   const [questionMotion, setQuestionMotion] = useState('idle');
   const [isTransitioningQuestion, setIsTransitioningQuestion] = useState(false);
-  const [tieBreakerConfig, setTieBreakerConfig] = useState(null);
-  const [tieBreakerIndex, setTieBreakerIndex] = useState(0);
-  const [tieBreakerAnswers, setTieBreakerAnswers] = useState([]);
 
   useEffect(() => {
     if (!answerFeedback) return undefined;
@@ -41,13 +29,9 @@ export default function TestEnneagramModal({
     setQuickChoice({ first: null, second: null });
     setFullIndex(0);
     setFullAnswers([]);
-    setHelperOpen(false);
     setAnswerFeedback('');
     setQuestionMotion('idle');
     setIsTransitioningQuestion(false);
-    setTieBreakerConfig(null);
-    setTieBreakerIndex(0);
-    setTieBreakerAnswers([]);
   };
 
   const handleClose = () => {
@@ -65,82 +49,6 @@ export default function TestEnneagramModal({
     return { code, label: combo.label, note: combo.note, type: eneatypes[combo.typeId] };
   };
 
-  const computeFullScores = (answers = fullAnswers) => {
-    const totals = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
-    answers.forEach((ans, idx) => {
-      if (ans === undefined || ans === null) return;
-      FULL_STATEMENTS[idx].targets.forEach(({ t, w }) => {
-        totals[t] += ans * w;
-      });
-    });
-    return totals;
-  };
-
-  const fullResult = () => {
-    const totals = computeFullScores();
-    const normalized = Object.entries(totals).map(([id, rawScore]) => {
-      const maxPossible = FULL_POTENTIAL[id] || 1;
-      const normalizedScore = maxPossible ? rawScore / maxPossible : 0;
-      return { id, rawScore, maxPossible, normalizedScore };
-    });
-
-    const ranking = normalized.sort((a, b) => b.normalizedScore - a.normalizedScore);
-    const [top, second] = ranking;
-    const marginNormalized = top.normalizedScore - second.normalizedScore;
-    const coverageNormalized = top.normalizedScore;
-
-    let confidence = 'baja';
-    if (coverageNormalized >= 0.7 && marginNormalized >= 0.1) confidence = 'alta';
-    else if (coverageNormalized >= 0.55 && marginNormalized >= 0.06) confidence = 'media';
-
-    return {
-      ranking,
-      top: { ...eneatypes[top.id], rawScore: top.rawScore, maxPossible: top.maxPossible, normalizedScore: top.normalizedScore },
-      second: { ...eneatypes[second.id], rawScore: second.rawScore, maxPossible: second.maxPossible, normalizedScore: second.normalizedScore },
-      marginNormalized,
-      coverageNormalized,
-      confidence
-    };
-  };
-
-  const buildPresentationResult = () => {
-    const base = fullResult();
-    const tiePair = tieBreakerConfig?.pair;
-    const tieQuestionsCompleted = tieBreakerConfig && tieBreakerAnswers.length === tieBreakerConfig.questions.length;
-    const pairIds = tiePair ? tiePair.map((value) => Number(value)) : [];
-    const votes = pairIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
-
-    if (tieQuestionsCompleted) {
-      tieBreakerAnswers.forEach((answer) => {
-        if (votes[answer] !== undefined) votes[answer] += 1;
-      });
-    }
-
-    const lowMargin = base.marginNormalized < TIEBREAKER_MARGIN_THRESHOLD;
-    const firstVotes = votes[pairIds[0]] || 0;
-    const secondVotes = votes[pairIds[1]] || 0;
-    const decisiveByTieBreaker = tieQuestionsCompleted && Math.abs(firstVotes - secondVotes) >= 2
-      ? (firstVotes > secondVotes ? pairIds[0] : pairIds[1])
-      : null;
-
-    let displayedTop = base.top;
-    let displayedSecond = base.second;
-
-    if (decisiveByTieBreaker && decisiveByTieBreaker === Number(base.second.id)) {
-      displayedTop = base.second;
-      displayedSecond = base.top;
-    }
-
-    return {
-      ...base,
-      displayedTop,
-      displayedSecond,
-      tieBreakerCompleted: tieQuestionsCompleted,
-      tieBreakerWinner: decisiveByTieBreaker ? eneatypes[decisiveByTieBreaker] : null,
-      isMixed: lowMargin && !decisiveByTieBreaker
-    };
-  };
-
   const maybeVibrate = () => {
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
       navigator.vibrate(20);
@@ -148,7 +56,6 @@ export default function TestEnneagramModal({
   };
 
   const moveToQuestion = (nextIndex) => {
-    setHelperOpen(false);
     setQuestionMotion('out');
     setIsTransitioningQuestion(true);
 
@@ -168,31 +75,11 @@ export default function TestEnneagramModal({
     const updated = [...fullAnswers];
     updated[fullIndex] = value;
     setFullAnswers(updated);
-    setAnswerFeedback(`Respuesta guardada: ${LIKERT_OPTIONS.find((opt) => opt.value === value)?.label || value}`);
+    setAnswerFeedback(`Respuesta guardada: ${FULL_RESPONSE_OPTIONS.find((opt) => opt.value === value)?.label || value}`);
     maybeVibrate();
 
     if (fullIndex < FULL_STATEMENTS.length - 1) {
       moveToQuestion(fullIndex + 1);
-      return;
-    }
-
-    const normalized = Object.entries(computeFullScores(updated)).map(([id, rawScore]) => {
-      const maxPossible = FULL_POTENTIAL[id] || 1;
-      const normalizedScore = maxPossible ? rawScore / maxPossible : 0;
-      return { id, rawScore, maxPossible, normalizedScore };
-    }).sort((a, b) => b.normalizedScore - a.normalizedScore);
-
-    const [top, second] = normalized;
-    if (top.normalizedScore - second.normalizedScore < TIEBREAKER_MARGIN_THRESHOLD) {
-      setTieBreakerConfig({
-        pair: [top.id, second.id],
-        questions: createTieBreakerQuestions(top.id, second.id, eneatypes)
-      });
-      setTieBreakerIndex(0);
-      setTieBreakerAnswers([]);
-      setStep('full-tiebreak');
-      setQuestionMotion('idle');
-      setIsTransitioningQuestion(false);
       return;
     }
 
@@ -201,21 +88,10 @@ export default function TestEnneagramModal({
     setIsTransitioningQuestion(false);
   };
 
-  const handleTieBreakerAnswer = (typeId) => {
-    if (!tieBreakerConfig) return;
-    const updated = [...tieBreakerAnswers, typeId];
-    setTieBreakerAnswers(updated);
-    setAnswerFeedback(`Respuesta guardada: te acercas más a ${eneatypes[typeId].type}`);
-    maybeVibrate();
-    if (tieBreakerIndex < tieBreakerConfig.questions.length - 1) {
-      setTieBreakerIndex((prev) => prev + 1);
-      return;
-    }
-    setStep('full-result');
-  };
-
   const progression = Math.round(((fullIndex + 1) / FULL_STATEMENTS.length) * 100);
   const currentStatement = FULL_STATEMENTS[fullIndex];
+  const currentBlock = FULL_BLOCKS.find((block) => currentStatement.order >= block.start && currentStatement.order <= block.end);
+  const answeredCount = fullAnswers.filter((value) => value !== undefined && value !== null).length;
   const motionClass = questionMotion === 'out'
     ? 'opacity-0 translate-y-5 md:translate-x-6'
     : questionMotion === 'in'
@@ -238,7 +114,7 @@ export default function TestEnneagramModal({
               </div>
               <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] mb-3">Mapa de Eneatipo</h2>
               <p className="font-serif italic text-lg text-gray-600 max-w-2xl mx-auto">
-                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 36 afirmaciones.
+                Elige cómo empezar: primero una hipótesis rápida o una lectura profunda con 135 preguntas en 10 bloques.
               </p>
             </div>
           </div>
@@ -269,13 +145,13 @@ export default function TestEnneagramModal({
                 <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center font-bold">2</div>
                 <div>
                   <p className="font-heading text-xl">Lectura profunda</p>
-                  <p className="text-sm text-gray-300">Test completo · 8-12 minutos</p>
+                  <p className="text-sm text-gray-300">Test completo · 10 bloques</p>
                 </div>
               </div>
               <ul className="text-sm text-gray-200 space-y-2">
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 36 afirmaciones · escala Likert 0-4.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Puntua 9 eneatipos con ranking por score normalizado.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Lectura orientativa de autoconocimiento, no diagnóstica.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> 135 preguntas oficiales.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Respuestas: MUCHO, POCO, NADA.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> El flujo queda activo mientras se ajusta el nuevo mapa de scoring.</li>
               </ul>
               <button onClick={() => setStep('full-intro')} className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
                 Hacer test completo
@@ -330,7 +206,7 @@ export default function TestEnneagramModal({
                 <Activity className="text-[#00FF66]" size={22} />
               </div>
               <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial de eneatipo</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinacion {quickResult().code}</h3>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {quickResult().code}</h3>
               <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
             </div>
           </div>
@@ -364,13 +240,13 @@ export default function TestEnneagramModal({
         {step === 'full-intro' && (
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
             <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test completo</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">36 afirmaciones · escala 0 a 4</h3>
+            <h3 className="font-heading text-2xl text-[#1A1A1A]">135 preguntas · MUCHO / POCO / NADA</h3>
             <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#2E4036]">
-              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual ni tu versión ideal. Esta lectura es orientativa de autoconocimiento, no diagnóstica.</p>
+              <p>Responde según lo que te describe la mayor parte de tu vida, no solo tu estado actual ni tu versión ideal. Este flujo ya usa el nuevo banco oficial validado en el chat.</p>
               <ul className="space-y-2">
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 0 = Nada · 4 = Mucho.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Foco en motivación, miedo, defensa, punto ciego y patrón relacional.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Si el resultado queda muy cerca entre dos tipos, se activará un mini desempate.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> MUCHO = 2 · POCO = 1 · NADA = 0.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Orden exacto: P001 a P135.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> División en 10 bloques con progreso visible.</li>
               </ul>
             </div>
             <div className="flex gap-3">
@@ -384,8 +260,12 @@ export default function TestEnneagramModal({
           <div className="animate-[fadeIn_0.3s_ease-out] space-y-5 flex-1 flex flex-col">
             <div className="space-y-3">
               <div className="flex justify-between items-center gap-3 text-sm text-gray-600">
-                <span className="font-mono text-xs text-[#CC5833]">Afirmación {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
+                <span className="font-mono text-xs text-[#CC5833]">Pregunta {currentStatement.id} · {fullIndex + 1} de {FULL_STATEMENTS.length}</span>
                 <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{progression}%</span>
+              </div>
+              <div className="flex justify-between items-center gap-3 text-xs text-gray-600">
+                <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">{currentBlock?.id} · {currentBlock?.title}</span>
+                <span>Rango {currentBlock?.start}–{currentBlock?.end}</span>
               </div>
               <div className="h-2 rounded-full bg-[#2E4036]/10 overflow-hidden">
                 <div className="h-full rounded-full bg-gradient-to-r from-[#CC5833] to-[#2E4036] transition-all duration-300" style={{ width: `${progression}%` }}></div>
@@ -394,22 +274,10 @@ export default function TestEnneagramModal({
 
             <div className={`rounded-[2rem] bg-white border border-gray-200 shadow-sm p-5 sm:p-6 transition-all duration-300 ease-out ${motionClass}`}>
               <h3 className="font-heading text-[1.55rem] sm:text-3xl text-[#1A1A1A] leading-snug">{currentStatement.text}</h3>
-              <div className="mt-4">
-                <button onClick={() => setHelperOpen((prev) => !prev)} className="inline-flex items-center gap-2 text-sm font-semibold text-[#2E4036] hover:text-[#1A1A1A] transition-colors">
-                  <span>¿Qué quiere decir esta afirmación?</span>
-                  {helperOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-                {helperOpen && (
-                  <div className="mt-3 rounded-2xl bg-[#F2F0E9] border border-[#2E4036]/10 p-4 text-sm text-[#2E4036] leading-relaxed">
-                    <p>{currentStatement.helper}</p>
-                    {currentStatement.example && <p className="mt-2 text-[#1A1A1A]"><span className="font-semibold">Ejemplo:</span> {currentStatement.example}</p>}
-                  </div>
-                )}
-              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-              {LIKERT_OPTIONS.map(opt => {
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {FULL_RESPONSE_OPTIONS.map(opt => {
                 const isSelected = fullAnswers[fullIndex] === opt.value;
                 return (
                   <button key={opt.value} onClick={() => handleFullAnswer(opt.value)} className={`rounded-[1.4rem] border px-4 py-4 text-left sm:text-center font-bold text-sm transition-all duration-200 ${isSelected ? 'bg-[#2E4036] text-white border-[#2E4036] shadow-[0_14px_30px_-18px_rgba(46,64,54,0.85)] scale-[1.01]' : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#2E4036] hover:-translate-y-0.5'}`}>
@@ -436,85 +304,48 @@ export default function TestEnneagramModal({
                   <ArrowLeft size={16} />
                   Volver
                 </button>
-                <p className="text-xs sm:text-right text-gray-600 leading-relaxed max-w-md">Lee cada frase desde tu motivación habitual, no desde tu imagen ideal ni solo desde cómo te sientes hoy.</p>
+                <p className="text-xs sm:text-right text-gray-600 leading-relaxed max-w-md">Lee cada frase desde tu experiencia habitual. Respondidas: {answeredCount} de {FULL_STATEMENTS.length}.</p>
               </div>
             </div>
           </div>
         )}
 
-        {step === 'full-tiebreak' && tieBreakerConfig && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6 flex-1 flex flex-col">
-            <div className="space-y-3">
-              <div className="flex justify-between items-center gap-3 text-sm text-gray-600">
-                <span className="font-mono text-xs text-[#CC5833]">Desempate {tieBreakerIndex + 1} de {tieBreakerConfig.questions.length}</span>
-                <span className="text-xs px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Resultado muy cercano</span>
+        {step === 'full-result' && (
+          <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
+            <div className="flex flex-col items-center text-center gap-2">
+              <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center"><Activity className="text-[#00FF66]" size={22} /></div>
+              <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Lectura profunda</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Banco oficial cargado</h3>
+              <p className="text-[#CC5833] font-serif italic">135 preguntas · 10 bloques · MUCHO / POCO / NADA</p>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
+              <div className="grid md:grid-cols-3 gap-3">
+                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Preguntas</p>
+                  <p className="font-heading text-2xl">{FULL_STATEMENTS.length}</p>
+                </div>
+                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Bloques</p>
+                  <p className="font-heading text-2xl">{FULL_BLOCKS.length}</p>
+                </div>
+                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Respondidas</p>
+                  <p className="font-heading text-2xl">{answeredCount}</p>
+                </div>
               </div>
-              <div className="rounded-3xl border border-[#CC5833]/20 bg-[#FFF7F1] p-4 text-sm text-[#7A3A25]">
-                Tus respuestas activaron dos patrones muy cercanos: <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[0]].type}</span> y <span className="font-semibold">{eneatypes[tieBreakerConfig.pair[1]].type}</span>. Esta mini fase contrasta motivación y defensa para afinar la lectura sin vender una certeza falsa.
+
+              <div className="rounded-2xl border border-[#CC5833]/20 bg-[#FFF7F1] p-4 text-sm text-[#7A3A25]">
+                El test completo ya carga el nuevo banco oficial validado en chat. El resultado final queda pendiente porque el motor actual dependía de un mapa de scoring de las preguntas anteriores basado en <span className="font-semibold">targets</span>, y ese mapa todavía no existe para las 135 preguntas nuevas.
               </div>
             </div>
-            <div className="rounded-[2rem] bg-white border border-gray-200 shadow-sm p-5 sm:p-6">
-              <h3 className="font-heading text-2xl text-[#1A1A1A] leading-snug">{tieBreakerConfig.questions[tieBreakerIndex].prompt}</h3>
-              <p className="mt-3 text-sm text-[#2E4036] leading-relaxed">{tieBreakerConfig.questions[tieBreakerIndex].helper}</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3">
-              {[tieBreakerConfig.questions[tieBreakerIndex].left, tieBreakerConfig.questions[tieBreakerIndex].right].map((option) => (
-                <button key={`${tieBreakerConfig.questions[tieBreakerIndex].id}-${option.typeId}`} onClick={() => handleTieBreakerAnswer(option.typeId)} className="rounded-[1.6rem] border border-gray-200 bg-white p-5 text-left hover:border-[#2E4036] hover:-translate-y-0.5 transition-all shadow-sm">
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="font-heading text-xl text-[#1A1A1A]">{option.title}</span>
-                    <span className="px-3 py-1 rounded-full bg-[#F2F0E9] text-xs font-semibold text-[#2E4036]">Me describe más</span>
-                  </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{option.text}</p>
-                </button>
-              ))}
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button onClick={() => { const text = encodeURIComponent('Ya respondí el nuevo banco oficial de 135 preguntas del test completo. Quiero continuar con el siguiente paso cuando esté listo el mapa de scoring.'); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); handleClose(); }} className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]">Compartir y ver siguiente paso</button>
+              <button onClick={() => { resetModal(); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100">Repetir lectura</button>
             </div>
           </div>
         )}
-
-        {step === 'full-result' && (() => {
-          const res = buildPresentationResult();
-          const headerTitle = res.isMixed ? `Resultado mixto entre ${res.top.type} y ${res.second.type}` : res.tieBreakerWinner && res.tieBreakerWinner.id === res.displayedTop.id ? `Lectura ajustada: ${res.displayedTop.type}` : res.displayedTop.type;
-          const prudenceCopy = res.isMixed ? 'Tus respuestas activaron dos patrones muy cercanos. Toma este resultado como una hipótesis dual para contrastar, no como una etiqueta cerrada.' : res.confidence === 'baja' ? 'La lectura apunta en esta dirección, pero el nivel de certeza sigue siendo prudente. Léela como orientación, no como definición cerrada.' : 'Lectura orientativa de autoconocimiento, no diagnóstica.';
-          return (
-            <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
-              <div className="flex flex-col items-center text-center gap-2">
-                <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center"><Activity className="text-[#00FF66]" size={22} /></div>
-                <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Lectura profunda</p>
-                <h3 className="font-heading text-3xl text-[#1A1A1A]">{headerTitle}</h3>
-                <p className="text-[#CC5833] font-serif italic">{res.displayedTop.subtitle}</p>
-                <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-600 mt-1">
-                  <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">Confianza {res.confidence}</span>
-                  {res.isMixed ? <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Diferencia muy cercana</span> : <span className="px-3 py-1 rounded-full bg-[#CC5833]/10 text-[#CC5833] font-semibold">Margen {(res.marginNormalized * 100).toFixed(1)}%</span>}
-                </div>
-                <p className="text-xs text-gray-500 mt-1 max-w-2xl">{prudenceCopy}</p>
-              </div>
-
-              {res.isMixed && <div className="bg-[#FFF7F1] border border-[#CC5833]/20 rounded-3xl p-5 space-y-2 text-sm text-[#7A3A25]"><p className="font-semibold">Resultado mixto entre {res.top.type} y {res.second.type}</p><p>Tus respuestas activaron dos patrones muy cercanos. El ranking no alcanza para presentarte un tipo principal definitivo con honestidad.</p></div>}
-
-              <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-sm text-[#1A1A1A]">
-                <div className="grid md:grid-cols-3 gap-3">
-                  <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200"><p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Motivacion</p><p>{res.displayedTop.motivation}</p></div>
-                  <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200"><p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Miedo central</p><p>{res.displayedTop.fear}</p></div>
-                  <div className="p-3 bg-[#F2F0E9] rounded-2xl border border-gray-200"><p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Deseo central</p><p>{res.displayedTop.desire}</p></div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-3">
-                  <div className="p-3 bg-white rounded-2xl border border-gray-100"><p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Defensa habitual</p><p>{res.displayedTop.defense}</p></div>
-                  <div className="p-3 bg-white rounded-2xl border border-gray-100"><p className="font-mono text-[11px] uppercase tracking-widest text-[#CC5833] mb-1">Patron relacional</p><p>{res.displayedTop.relation}</p></div>
-                </div>
-              </div>
-
-              <div className="bg-gray-100/70 border border-gray-200 rounded-3xl p-5 space-y-2 text-sm text-gray-700">
-                {res.isMixed ? <p className="font-semibold text-[#1A1A1A]">Los dos patrones a contrastar son {res.top.type} y {res.second.type}.</p> : <p className="font-semibold text-[#1A1A1A]">Segundo eneatipo a contrastar: {res.displayedSecond.type}</p>}
-                {res.confidence === 'baja' && <p className="text-[#CC5833] font-semibold">Nivel de certeza prudente: si algo no te cierra, repite el test desde tu motivación real o profundiza en acompañamiento.</p>}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={() => { const sharedType = res.isMixed ? `resultado mixto entre ${res.top.type} y ${res.second.type}` : `resultado principal ${res.displayedTop.type}`; const text = encodeURIComponent(`Hice el test completo. Tengo ${sharedType} (confianza ${res.confidence}). Quiero orientación y Sala de Reducción del Ego.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); handleClose(); }} className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]">Compartir y ver siguiente paso</button>
-                <button onClick={() => { resetModal(); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100">Repetir lectura</button>
-              </div>
-            </div>
-          );
-        })()}
       </div>
     </div>
   );

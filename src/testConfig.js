@@ -1,97 +1,183 @@
-export const FULL_STATEMENTS = [
-  { id: 'F1', text: 'Me cuesta relajarme cuando veo un error que podría corregirse.', helper: 'Apunta a la tensión interna por mejorar lo que no está bien hecho.', example: 'Aunque nadie te lo pida, ajustas detalles porque te cuesta dejarlos así.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F2', text: 'Si no cumplo mi propio estándar, me juzgo duro por dentro.', helper: 'No habla de quedar bien con otros, sino del juez interno que te exige.', example: 'Puedes hacer mucho bien y aun así quedarte pensando en lo que faltó.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F3', text: 'Aun cansado, sigo respondiendo porque siento que debo hacerlo bien.', helper: 'Mide deber, autoexigencia y dificultad para parar cuando hay responsabilidad.', example: 'Sigues cumpliendo incluso cuando tu cuerpo ya te pide bajar el ritmo.', targets: [{ t: 1, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F4', text: 'Me cuesta soltar control cuando algo importante depende de otros.', helper: 'No se trata de mandar por mandar, sino de desconfiar de que quede bien si tú no lo revisas.', example: 'Delegas, pero igual quieres mirar el resultado al final.', targets: [{ t: 1, w: 1 }] },
-  { id: 'F5', text: 'Siento que aporto valor cuando estoy atento a lo que otros necesitan.', helper: 'Mide si tu valor se activa al cuidar, ayudar o anticiparte por otros.', example: 'Te sale notar rápido qué le hace falta al otro y moverte hacia eso.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F6', text: 'Me sale ocuparme de otros antes que decir lo que yo necesito.', helper: 'Se enfoca en la tendencia a postergarte para sostener el vínculo.', example: 'Preguntas cómo ayudar antes de admitir que también necesitas algo.', targets: [{ t: 2, w: 1 }, { t: 9, w: 1 }] },
-  { id: 'F7', text: 'Me duele sentir que mi entrega pasa desapercibida.', helper: 'No mide vanidad superficial, sino la herida de no sentirte visto en lo que das.', example: 'Te afecta más de lo que muestras cuando tu apoyo no es reconocido.', targets: [{ t: 2, w: 1 }, { t: 4, w: 1 }] },
-  { id: 'F8', text: 'Poner límites me hace sentir frío o egoísta.', helper: 'Busca ver si decir no te activa culpa o miedo a perder conexión.', example: 'Aunque estés saturado, te cuesta cortar una demanda de alguien cercano.', targets: [{ t: 2, w: 1 }] },
-  { id: 'F9', text: 'Una parte de mi autoestima depende de rendir bien y mostrar resultados.', helper: 'Mide cuánto valor personal apoyas en desempeño, logros e imagen de eficacia.', example: 'Cuando las cosas te salen bien, te sientes más seguro de quién eres.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F10', text: 'Adapto mi imagen o estilo para proyectar eficacia.', helper: 'No habla de falsedad simple, sino de ajustar tu presentación para funcionar y avanzar.', example: 'Cambias tu tono o forma de mostrarte según lo que ayude a lograr el objetivo.', targets: [{ t: 3, w: 1 }] },
-  { id: 'F11', text: 'Cuando voy por una meta, puedo desconectarme de lo que siento.', helper: 'Revisa si el rendimiento toma prioridad sobre registrar tu mundo emocional.', example: 'Sigues produciendo aun cuando por dentro estás triste, ansioso o vacío.', targets: [{ t: 3, w: 1 }, { t: 7, w: 1 }] },
-  { id: 'F12', text: 'Me cuesta bajar el ritmo si eso amenaza mis logros o compromisos.', helper: 'Mide si te cuesta frenar cuando sientes que descansar puede costarte avance o reconocimiento.', example: 'Postergas descanso, pausas o conversaciones importantes para no perder tracción.', targets: [{ t: 3, w: 1 }, { t: 8, w: 1 }] },
-  { id: 'F13', text: 'Necesito sentir que lo que vivo tiene profundidad y significado personal.', helper: 'No es gusto estético solamente; habla de buscar experiencia con sentido y autenticidad.', example: 'Lo vacío, automático o demasiado superficial te deja desconectado.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F14', text: 'Me comparo con lo que me falta y eso me baja el ánimo.', helper: 'Mide la tendencia a mirar lo ausente o lo incompleto en ti o en tu vida.', example: 'Aun con cosas buenas, puedes sentir que falta justo lo que te haría pleno.', targets: [{ t: 4, w: 1 }] },
-  { id: 'F15', text: 'Me pesa tener que esconder lo que soy para encajar.', helper: 'Apunta a la fricción entre autenticidad y adaptación al entorno.', example: 'Cuando sientes que debes volverte más práctico o neutro para ser aceptado, algo por dentro se resiente.', targets: [{ t: 4, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F16', text: 'Cuando algo me mueve mucho, primero me retiro a procesarlo por dentro.', helper: 'Mide la necesidad de retirarte a sentir y entender antes de actuar.', example: 'Si algo te toca profundo, prefieres estar solo un rato antes de responder.', targets: [{ t: 4, w: 1 }, { t: 5, w: 1 }] },
-  { id: 'F17', text: 'Necesito espacios de soledad para recuperar energía mental.', helper: 'Busca ver si tu sistema necesita distancia y silencio para volver a sentir capacidad.', example: 'Después de mucha interacción, necesitas recogerte para volver a estar bien.', targets: [{ t: 5, w: 1 }, { t: 4, w: 1 }] },
-  { id: 'F18', text: 'Entender bien algo me da más seguridad que improvisar.', helper: 'Mide si primero buscas comprender, ordenar y observar antes de entrar en acción.', example: 'Te sientes más tranquilo cuando ya estudiaste el terreno.', targets: [{ t: 5, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F19', text: 'Me cuesta depender de otros porque temo quedarme sin energía o recursos.', helper: 'No se refiere solo a dinero; también a tiempo, fuerza mental y disponibilidad interna.', example: 'Prefieres arreglártelas solo antes que sentirte demasiado expuesto o demandado.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F20', text: 'Cuando me piden demasiado, me cierro y me refugio en mi mundo.', helper: 'Mide retiro como defensa frente a invasión, exceso de demanda o saturación.', example: 'Si sientes demasiadas expectativas encima, te apagas o tomas distancia.', targets: [{ t: 5, w: 1 }] },
-  { id: 'F21', text: 'Antes de decidir, necesito revisar riesgos y aclarar dudas.', helper: 'Apunta a la necesidad de seguridad y a la mente que revisa escenarios antes de avanzar.', example: 'Te calma más tener claridad que lanzarte sin verificar.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F22', text: 'Aunque respete a alguien, tiendo a poner a prueba si realmente es confiable.', helper: 'Mide ambivalencia con la autoridad o con quienes tienen poder sobre ti.', example: 'No te basta con que alguien diga algo; necesitas comprobar si responde de verdad.', targets: [{ t: 6, w: 1 }, { t: 8, w: 1 }] },
-  { id: 'F23', text: 'Tener acuerdos claros me calma.', helper: 'Se enfoca en la tranquilidad que da saber reglas, roles o pasos definidos.', example: 'Cuando todo está claro, tu mente deja de gastar energía anticipando problemas.', targets: [{ t: 6, w: 1 }] },
-  { id: 'F24', text: 'Cuando algo es incierto, mi mente se prepara para lo peor.', helper: 'Mide anticipación defensiva: pensar riesgos para no quedar desprotegido.', example: 'Antes de una respuesta importante, imaginas varios problemas para no agarrarte en frío.', targets: [{ t: 6, w: 1 }, { t: 1, w: 1 }] },
-  { id: 'F25', text: 'Busco alternativas para no sentir que quedo encerrado en una sola opción.', helper: 'Mide necesidad de apertura, variedad y margen de maniobra.', example: 'Si una puerta se cierra, tu mente enseguida quiere abrir otra.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F26', text: 'Si algo se pone pesado, mi mente enseguida busca otra posibilidad más liviana.', helper: 'Apunta al reencuadre rápido que evita quedarse mucho tiempo en lo incómodo.', example: 'Cuando una conversación se pone densa, ya estás pensando en cómo salir o cambiar de foco.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F27', text: 'A veces me mantengo ocupado para no quedarme con emociones incómodas.', helper: 'No mide productividad sana, sino actividad usada para no tocar dolor o vacío.', example: 'Llenas agenda, planes o ideas cuando no quieres sentir algo difícil.', targets: [{ t: 7, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F28', text: 'Perder libertad o margen de maniobra me pesa mucho.', helper: 'Busca ver si la sensación de límite o encierro te activa más que el esfuerzo mismo.', example: 'Puedes tolerar trabajo duro, pero no sentirte atrapado sin opciones.', targets: [{ t: 7, w: 1 }] },
-  { id: 'F29', text: 'Si siento amenaza o abuso, reacciono con fuerza para protegerme o proteger a los míos.', helper: 'Mide impulso a responder con intensidad frente a control, injusticia o vulneración.', example: 'Cuando percibes atropello, se te activa rápido la energía para poner un alto.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F30', text: 'Mostrar mi parte vulnerable me hace sentir expuesto.', helper: 'Apunta a la dificultad de bajar la armadura y dejar ver fragilidad real.', example: 'Te sale más fácil sostenerte fuerte que admitir que algo te dolió.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F31', text: 'Cuando veo una injusticia, me cuesta no tomar el mando.', helper: 'Mide tendencia a subir presencia y control para enderezar lo que ves torcido.', example: 'Si nadie actúa, sientes que te toca entrar con fuerza.', targets: [{ t: 8, w: 1 }, { t: 3, w: 1 }] },
-  { id: 'F32', text: 'Prefiero decir las cosas de frente antes que tragármelas.', helper: 'Se enfoca en confrontación directa como forma de proteger verdad o territorio.', example: 'Aunque incomode, prefieres hablar claro a quedarte rumiando.', targets: [{ t: 8, w: 1 }] },
-  { id: 'F33', text: 'Para evitar tensión, a veces cedo aunque no quiera.', helper: 'Mide tendencia a postergar tu posición para conservar calma o conexión.', example: 'Dices que sí o dejas pasar algo para no abrir una fricción.', targets: [{ t: 9, w: 1 }] },
-  { id: 'F34', text: 'Cuando hay conflicto, me desconecto o me distraigo para no sentir fricción.', helper: 'No habla solo de estar en paz; apunta a apagarte, dispersarte o adormecerte frente al choque.', example: 'En vez de entrar en el tema, te vas al celular, a pensar en otra cosa o simplemente te apagas.', targets: [{ t: 9, w: 1 }, { t: 5, w: 1 }] },
-  { id: 'F35', text: 'Me cuesta decidir si siento que alguien puede salir afectado.', helper: 'Busca ver si priorizas sostener armonía y evitar incomodar, incluso a costa de tu claridad.', example: 'Te tardas porque quieres que nadie quede mal con tu decisión.', targets: [{ t: 9, w: 1 }, { t: 2, w: 1 }, { t: 6, w: 1 }] },
-  { id: 'F36', text: 'Cuando otros se alteran, suelo intentar bajar la tensión antes que imponerme.', helper: 'Mide reflejo de mediar, suavizar y estabilizar el ambiente.', example: 'Tu primera reacción suele ser calmar o conectar a las partes antes que empujar tu postura.', targets: [{ t: 9, w: 1 }, { t: 1, w: 1 }] }
+export const FULL_RESPONSE_OPTIONS = [
+  { value: 2, label: 'MUCHO' },
+  { value: 1, label: 'POCO' },
+  { value: 0, label: 'NADA' }
 ];
 
-export const FULL_POTENTIAL = FULL_STATEMENTS.reduce((acc, q) => {
-  q.targets.forEach(({ t, w }) => {
-    acc[t] = (acc[t] || 0) + w * 4;
-  });
-  return acc;
-}, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 });
+const RAW_QUESTIONS = [
+  `Me esfuerzo por superarme cada día. Me gusta sentirme capaz y obtener reconocimiento en aquello que me propongo.`,
+  `Antes de iniciar un proyecto o tarea suelo estudiarlo muy bien. Eso me genera mayor confianza y competencia y me permite perder el menor tiempo posible.`,
+  `Me siento impulsado a apoyar a los demás para lograr que sean cada vez mejores.`,
+  `Siempre trato de resolver las diferencias hablando pero dejando muy claros mis argumentos, mi posición y mi verdad.`,
+  `Habitualmente recreo en mi imaginación situaciones con contenidos emocionales muy intensos que contrastan bastante con lo que sucede externamente.`,
+  `Me atrae sobre todo lo que es inusual o fuera de lo común, llegando incluso hasta lo que es raro. Lo que a los demás puede parecerles ordinario, a mí me parece fascinante.`,
+  `Cuando tengo que tomar decisiones cruciales, estudio a fondo la situación con todos sus pros y contras, y lo converso con personas importantes de mi vida, para considerar nuevos puntos de vista.`,
+  `Tengo gran capacidad para obtener resultados. Me gusta sentirme activo y en movimiento.`,
+  `Muchas veces pienso en hacer cosas que son necesarias para mi bienestar, pero siempre encuentro algo que me desvía hacia otras actividades más urgentes.`,
+  `Soy una persona justa, fuerte, decidida e independiente. Quien pone las reglas del juego sin necesidad de caer bien o tener que demostrar nada a nadie.`,
+  `Con cierta frecuencia mis amigos me comentan que debería ser menos exigente o preocupón y disfrutar un poco más.`,
+  `Con frecuencia he logrado resolver situaciones muy difíciles o conflictivas gracias a mi buen sentido del humor, espontaneidad y versatilidad.`,
+  `En mis relaciones afectivas suelo entregarme al 100%, pero al mismo tiempo, espero de vuelta una entrega al mismo nivel que yo.`,
+  `Quiero que mi vida sea profunda, única y singular. Que se diferencie de la del resto de las personas.`,
+  `Me considero una persona firme, directa y si es necesario confrontativa: voy directo al grano, sin tapujos ni rodeos.`,
+  `He detectado que puedo quedarme atrapado mucho tiempo en modo de preparación, en el que no dejo de recopilar información que pueda serme de utilidad más adelante.`,
+  `Cuando tengo la razón, defiendo mi postura de forma enérgica y directa.`,
+  `Dar a los demás aquello que necesitan y tratarlos de manera especial, es una motivación fundamental en mi vida.`,
+  `Me encanta conectar de forma creativa situaciones o temas que son muy distintos entre sí.`,
+  `Sirvo de apoyo a otros para mantener la armonía de mi entorno.`,
+  `Tengo una gran capacidad para detectar e identificar aquellas cosas que más le interesan y atraen a alguien más, incluso mucho antes de que el otro lo exprese abiertamente.`,
+  `Para mí es fundamental la conexión que puedo lograr con las personas y el lugar especial y preponderante que ocupo en la vida de los demás.`,
+  `Tiendo a ser desconfiado por naturaleza, por lo que me gusta tener siempre encendida una pequeña alerta y estar atento a lo que pudiese suceder.`,
+  `Cuando me enfoco en terminar una tarea o sacar adelante un proyecto, me coloco el traje que sea necesario, hago a un lado mis cuestionamientos y me pongo manos a la obra.`,
+  `En una conversación animada generalmente soy un observador y oyente callado; suelo reservar mi participación a las cuestiones significativas.`,
+  `Me considero una persona realista, que tiene muy en cuenta lo que podría salir mal, aunque con frecuencia me juzguen como pesimista.`,
+  `Disfruto mucho cuando consigo despertar emociones positivas en los demás, por la manera como los trato y la conexión que genero con ellos.`,
+  `Tengo fuertes deseos de sobresalir pero no suelo expresarlos abiertamente; prefiero que lo que hago sea lo que hable y demuestre mi capacidad y talento.`,
+  `Cuando quiero algo tomo la iniciativa y me mantengo sólido hasta conseguirlo. Disfruto las situaciones estimulantes y participar en discusiones que me permitan demostrar mi fortaleza.`,
+  `Me gusta recibir reconocimiento, pero regocijarme en ello me hace sentir egoísta y temo que los demás me consideren vanidoso y se distancien de mí.`,
+  `Me siento muy cómodo en el rol de líder o jefe. Soy muy protector de mi gente y ellos se sienten seguros junto a mí, porque valoran mi capacidad de hacerle frente a los desafíos que se me presentan.`,
+  `Necesito en gran medida alejarme y tener mi espacio para reflexionar y digerir mis impresiones.`,
+  `Me siento responsable de inyectar energía y entusiasmo en cada situación, para que las cosas no se vuelvan monótonas o aburridas.`,
+  `Me es fácil mantenerme en un puesto cuando siento que aporto valor y hay armonía a mi alrededor, pudiendo postergar otros desafíos si me siento a gusto donde estoy.`,
+  `Continuamente busco hacer las cosas bien. Ojalá los demás no se conformaran con hacer las cosas a medias o apenas aceptables.`,
+  `Soy un experto en resaltar aquellos aspectos que más me favorecen, logrando así crear una muy buena impresión de mí ante los demás.`,
+  `Para mí es natural el ir midiendo mis avances o logros, y esto me ayuda a mantener mi ritmo y energía vital.`,
+  `A menudo converso con personas de confianza sobre las situaciones adversas que me tomaron por sorpresa, con el propósito de compartir lo que aprendí y evitar que les pase algo similar.`,
+  `Cuando me reconozco frustrado, tiendo a moverme para generar algo positivo en el ambiente, que me motive y me cambie el chip.`,
+  `Con frecuencia me descubro recreando en mi mente escenas pasadas, agregando nuevos diálogos e intentando comprender el significado de alguna frase o acto, motivo por el cual me cuesta mucho pasar página y cerrar situaciones.`,
+  `Soy una persona de "Todo o Nada", no me interesa guardar las apariencias ni caerle simpático a la gente.`,
+  `Siento que soy distinto y aunque trato de encajar no lo logro del todo. La mayoría de las veces tampoco quiero encajar, si eso significa ceder en aquellos aspectos que para mí son auténticos y no negociables.`,
+  `En lo cotidiano no me gusta suponer, y menos improvisar. Prefiero preguntar para tener certeza de las cosas, pero qué bueno sería que existiera un manual claro y completo para todo.`,
+  `Cuando algo no está bien hecho, suelo instruir o corregir a los demás, incluso sin que me lo pidan.`,
+  `En mis relaciones afectivas me veo invirtiendo mucha energía y haciendo todo lo necesario para que éstas funcionen.`,
+  `Me gustan los retos, porque me generan combustible para mantenerme en movimiento y enfocado. Generalmente soy impaciente con aquellos que van a un ritmo más lento.`,
+  `Para mí son de vital importancia los vínculos estrechos que pueda establecer con los demás. Sentirme cercano y conectado hace que se torne mucho más amable mi vida.`,
+  `Me siento tenso y ofuscado cuando una situación no se ajusta a lo correcto, y cuando lo expreso, me sorprende que los demás no deseen corregir de manera inmediata lo que está mal hecho o no funciona.`,
+  `Siempre busco evitar que surjan conflictos a mi alrededor, y minimizar los que son inevitables. Para mí es importante que haya paz y armonía en el ambiente.`,
+  `Soy muy buen observador, lo que me permite tener sólidos argumentos si decido opinar sobre los temas que son de mi interés.`,
+  `Puedo agotarme mentalmente por completo o no conseguir concentrarme si no tengo tiempo a solas para recargarme. En estos casos las necesidades emocionales de los demás pueden presentarse como demasiado abrumadoras.`,
+  `Pongo mucha energía y busco activamente llenar mi día de experiencias valiosas y gratificantes, que me mantengan entusiasmado y ocupado.`,
+  `Tengo una marcada preferencia por la comprensión más que la acción y por observar más que participar. Si participo, me gusta mantenerme independiente y, en la medida de lo posible, poder gestionar mi disponibilidad.`,
+  `Puedo hacer a un lado mis intereses para poner primero el bienestar de las personas más cercanas e importantes para mí.`,
+  `Incluso en las situaciones más difíciles no suelo echarme para atrás, las confronto y sigo adelante.`,
+  `No termino de saber por qué unos días puedo ser la persona más encantadora y amable del mundo, y otros días le encuentro "peros" a todo.`,
+  `Para mí es muy importante poder expresarme y dejar una huella personal en lo que hago. Que cuando yo no esté, se note que pasé por ahí.`,
+  `Soy una persona a la que le gusta ir directo a la acción y encontrar soluciones que se puedan aplicar de forma inmediata y práctica. Amo la eficiencia.`,
+  `En general soy moderado en la comunicación y aunque tengo un mundo interno muy vasto, tiendo a controlarme en la expresión de lo que siento y ser reservado en lo que comunico.`,
+  `A diario, o de manera muy frecuente, me preocupo de cuál será mi futuro en unos meses, unos años y, sobre todo, en mi vejez.`,
+  `En muchas ocasiones consigo encontrar soluciones inesperadas y de último momento, eso algunos lo llaman "suerte", yo lo llamo conexión de múltiples ideas o "encender la chispa".`,
+  `Uno de mis grandes valores es la capacidad que tengo para el compromiso en las relaciones que establezco y la habilidad de escuchar a las personas y hacerles sentir bien.`,
+  `Siempre actúo de acuerdo a lo que yo considero correcto o bueno, y no según lo que creen o piensan los demás.`,
+  `Algunas elecciones y decisiones importantes tomadas en mi vida, han buscado obtener la valoración y reconocimiento de mi entorno.`,
+  `Hablar respecto a cómo siento y pienso es una de mis conversaciones favoritas, aunque a veces me excedo, con el fin de llegar a ser comprendido.`,
+  `Los ambientes conflictivos me generan ansiedad y no entiendo por qué las personas no ceden más en sus intereses personales para poder sentirnos todos bien.`,
+  `De aquellos temas que me atraen, me interesa adquirir la mayor cantidad posible de información hasta desarrollar mis propios conceptos y sacar mis propias conclusiones.`,
+  `Pierdo fácilmente el interés en las cosas o relaciones que me parecen poco trascendentes, comunes o que tengo al alcance de la mano.`,
+  `Considero que el reconocimiento propio o ajeno es bien merecido cuando uno se acerca a la excelencia. Hacer las cosas simplemente "bien" es apenas aceptable.`,
+  `Soy un miembro leal y estable de mis grupos y asociaciones. Ahí, donde participo, prefiero lineamientos y estatutos claros y mantenerme atento a que quien lidere sea confiable.`,
+  `Saber cómo se hacen las cosas, ya sea en el trabajo, en un juego de mesa, o cuando hay una enfermedad, es vital para mí, ya que de lo contrario me quedaría paralizado.`,
+  `Mi mente no para de funcionar, saltando de una idea a otra e imaginando incluso situaciones extraordinarias, que me llevan a pensar que todo puede estar de alguna forma relacionado.`,
+  `Tengo una gran habilidad y destreza mental para ligar diversas soluciones a situaciones complejas, saltando de un tema a otro con tanta facilidad, como un simio se cambia de rama en un árbol.`,
+  `Si no encuentro suficientes estímulos agradables en el ambiente, paso rápidamente a otra actividad o me voy a otro lugar.`,
+  `De forma natural presto atención al bienestar del grupo y antepongo las necesidades externas a las internas.`,
+  `Me gustan las cosas claras. Si en una conversación detecto omisiones o falta de claridad, soy contundente y presiono hasta que se muestran los verdaderos intereses ocultos.`,
+  `Es muy importante para mí proyectar siempre una buena imagen en el lugar donde estoy.`,
+  `Siempre hay una forma correcta de hacer las cosas: perfectas y como deben hacerse, más allá de los gustos y de las preferencias personales.`,
+  `En las relaciones el mayor egoísmo se demuestra por la falta de gratitud o consideración de lo que uno ha hecho por el otro.`,
+  `Dada mi firmeza y franqueza, en muchas ocasiones casi sin proponérmelo, suelo intimidar a las personas que me rodean.`,
+  `Cuando he tomado decisiones difíciles, aunque haya obtenido un resultado positivo, reflexiono mucho respecto a si pude haberme preparado mejor o si fui demasiado impulsivo ante una decisión que implicaba tanto.`,
+  `Cuando algo me incomoda, me doy cuenta por mis sensaciones corporales, pero usualmente suelo ignorarlas. Después, imagino conversaciones en las que expreso aquello que me incomodó.`,
+  `Nadie llega a ser tan severo y crítico como lo soy conmigo mismo, por eso me siento agobiado cuando me equivoco y me cuesta mucho simplemente dejarlo ir.`,
+  `Encuentro excitantes los proyectos donde tengo posibilidad de explorar soluciones diversas; incluso sobre la marcha, usualmente se me ocurren nuevas ideas que complementan el plan inicial o le dan un giro inesperado.`,
+  `Hay veces que no expreso completamente la verdad sobre mí, sino lo que me gustaría que hubiese sido.`,
+  `No basta con ser bueno. Me gusta tener metas claras y saber en qué lugar del camino me encuentro para continuar trabajando en ser la mejor versión de mí mismo.`,
+  `Soy un buen vendedor de mí mismo y sé cómo convencer a los demás.`,
+  `Cuando no quiero hacer algo o algo no me interesa, únicamente me moviliza a hacerlo el hecho de evitar una posible discusión o conflicto.`,
+  `Me caracterizo por ser una persona generosa con su tiempo y atención cuando alguien me necesita, y aunque en ocasiones llego a terminar agotado emocionalmente, suele valer la pena por apoyar a alguien más.`,
+  `No tolero el abuso o la injusticia a los más vulnerables. En esos casos actúo para equilibrar las cosas.`,
+  `Protejo de forma apasionada a quienes se encuentran bajo mi tutela, siendo extremadamente territorial, aunque mantengo en estricta privacidad lo que siento por las personas que me rodean.`,
+  `Cuando una persona que aprecio se encuentra en dificultades, a menudo tomo el rol de apoyo, escucha y soporte, al grado de que muchas veces hago míos sus problemas.`,
+  `Reconozco que me cuesta, pero me gustaría ser más sociable o expresivo con aquellos que me rodean, sobre todo con las personas más cercanas y allegadas a mí.`,
+  `Disfruto adentrarme con total profundidad en aquellos temas que me interesan, logrando extraer conclusiones e ideas que aporten un nuevo enfoque a lo que hasta entonces se conocía.`,
+  `Mientras me encuentro en un sitio, tengo mucha facilidad para crear un buen ambiente, usando mi espontaneidad, simpatía y sentido del humor.`,
+  `A menudo logro obtener la atención del otro debido a que conozco bien los aspectos que más me favorecen.`,
+  `Difícilmente me encuentro satisfecho con lo que hago; tengo un juez interno muy activo que me insta a hacerlo siempre mejor.`,
+  `Tengo una gran capacidad para mantenerme autónomo e independiente.`,
+  `Las rutinas y hábitos me dan seguridad y paz, tener que modificarlos me genera un conflicto interno que a veces es difícil de comprender por parte de los demás.`,
+  `Me siento en el mundo como si fuese el invitado a un gran banquete, es decir un lugar donde existen siempre infinitas posibilidades de conocer, explorar y disfrutar.`,
+  `En mis relaciones suelo cambiar entre momentos de mucha cercanía y otros donde necesito separarme mucho para poder recargarme en solitario.`,
+  `Tengo muy desarrollada la capacidad para crear conexiones con las personas, incluso desde un primer encuentro o acercamiento.`,
+  `Puedo detectar muchas de las incongruencias y falsedades de las personas y, a veces, se las hago notar a través de comentarios humorísticos pero certeros.`,
+  `Fácilmente me doy cuenta de las fortalezas, debilidades y poder que tienen los demás.`,
+  `Aprecio mucho la originalidad y la sensibilidad, y trato de manifestarlas sutilmente en los temas de los que hablo, en lo que pienso y en lo que expresa mi forma de ser.`,
+  `Soy muy autoexigente y siempre que cometo fallos, me fastidia tanto que me impide poder disfrutar o valorar todo lo que sí he logrado hacer bien.`,
+  `Mi mente tiene un gran capacidad para detectar todo aquello que podría salir mal, fallar o no funcionar.`,
+  `Me encuentro continuamente orientado hacia la superación y por ello la más mínima falla suele ponerme de mal humor.`,
+  `Muchas veces, cuando identifico una necesidad o deseo propio que puede confrontar al prójimo, tiendo a quitármelo de la cabeza, realizando otro tipo de actividades en beneficio común o incluso ajeno.`,
+  `Usualmente me muestro muy reservado, sin embargo con algunas pocas personas suelo mostrarme muy abierto e incluso cómico y gracioso. Me encanta hacer reír con salidas irreverentes.`,
+  `Soy firme a la hora de expresar y defender mis ideas, incluso en los entornos más difíciles, logrando mantener mi posición a pesar de las resistencias que se presenten. Algunas veces mi contundencia es entendida como prepotencia, intolerancia y arrogancia.`,
+  `Antes de relajarme necesito primero haber cumplido con mis responsabilidades o deberes.`,
+  `Me pregunto por qué no se acepta más a menudo que, en muchas de las cosas, el mundo estaba mejor en otros tiempos pasados.`,
+  `Me gusta expresar mi voluntad, ser mi propia autoridad y mantener el control de las situaciones. En algunas ocasiones me pueden tachar de inconformista e individualista.`,
+  `Suelo aprovechar las oportunidades que se me presentan para alcanzar mis metas y lograr mis propósitos.`,
+  `Me involucro activamente cuando alguien tiene problemas, dándole fuerzas para superarlos u ofreciéndole mi apoyo, cercanía y empatía.`,
+  `Mi deseo de pensar positivamente es un enganche muy poderoso que reencuadra las cosas de manera automática hacia el lado más luminoso.`,
+  `En mis relaciones afectivas requiero de mucho espacio y que se respete, por encima de todo, mi privacidad y mi tiempo.`,
+  `Apoyo a las personas que lo necesitan y lo solicitan. Estoy a favor de que todos estemos en igualdad de condiciones.`,
+  `Más que seguir los pasos de manera secuencial, me gusta explorar en mi mente ideas poco convencionales para lograr el resultado deseado.`,
+  `Me identifico con los diferentes enfoques que forman parte de un conflicto y por ello se me da bien mediar entre ellos. Lo que me cuesta es ver y defender lo que realmente me interesa a mí.`,
+  `Puedo darme cuenta con mucha facilidad de las cosas que le harían sentir bien a alguien, a veces incluso mucho mejor que la propia persona.`,
+  `Me doy cuenta que los demás disfrutan mucho de mi compañía, porque siempre inyecto energía positiva e ingeniosa en los ambientes rutinarios, facilitando el enfoque hacia objetivos compartidos.`,
+  `Detesto las solicitudes y las imposiciones que alteren mi rutina diaria o las actividades que ya tenía planificadas.`,
+  `Mi capacidad de abstraerme y concentrarme en aquello que me interesa, me permite crear una burbuja mental a mi alrededor en la que puedo sumergirme por largos periodos, desapareciendo en ese momento el resto del mundo que me rodea.`,
+  `Tengo claro lo que deseo y sobre todo lo que no, por lo que no tengo problema alguno en ejecutar cambios a mi alrededor hasta lograr que las cosas vayan en la dirección que deseo.`,
+  `Tengo un radar interno bien desarrollado, el cual me permite reconocer el nivel de fuerza de alguien más y determinar si está de mi lado o no.`,
+  `Cuando algo falla y no obtengo el éxito o el reconocimiento esperado, resulta devastador para mí y me toma tiempo el superarlo aunque no lo demuestro.`,
+  `A pesar de ser incluido en un grupo, tiendo a marcar una distancia con los demás, ya sea física, emocional o intelectual.`,
+  `De manera constante mantengo diálogos internos muy intensos, en los que busco dar respuesta a situaciones que me han afectado emocionalmente.`,
+  `La presentación de uno mismo es tan importante como lo que hay detrás, por lo que me preocupo en proyectar una imagen adecuada.`,
+  `Muchas veces la gente me busca como alguien que les aporte comprensión empática, escucha o un espacio donde se sienten "a salvo".`,
+  `Soy muy flexible a la hora de ceder en situaciones y en lo que quieren los demás, aunque a veces sienta que traiciono un poco mis verdaderos deseos.`,
+  `Soy muy reservado, distante y muy selectivo a la hora de incluir personas en mi mundo o en mi espacio privado.`,
+  `La confrontación me desgasta y suelo evitarla cambiando de tema o haciendo como que no existe, prefiero buscar una alternativa que no pase por la confrontación, aunque tenga que renunciar a cosas importantes para mí.`
+];
 
-export const TIEBREAKER_MARGIN_THRESHOLD = 0.04;
-
-const TIEBREAKER_TRAITS = {
-  1: { motivation: 'hacer lo correcto y sostener un criterio alto', fear: 'equivocarme, fallar moralmente o ser irresponsable', defense: 'controlarme, corregir y exigir más', relation: 'ordenar o ajustar para que todo quede bien' },
-  2: { motivation: 'sentirme querido siendo útil o necesario', fear: 'no importar o volverme prescindible', defense: 'dar de más y leer lo que el otro necesita', relation: 'ganarme el lugar cuidando y acompañando' },
-  3: { motivation: 'demostrar valor con resultados y eficacia', fear: 'fracasar o no valer lo suficiente', defense: 'adaptarme, acelerar y rendir', relation: 'mostrar competencia y mantener el ritmo' },
-  4: { motivation: 'ser auténtico y fiel a mi identidad', fear: 'ser común, vacío o perder mi singularidad', defense: 'retirarme en lo que siento y compararme', relation: 'buscar profundidad y reconocimiento emocional' },
-  5: { motivation: 'proteger mi energía y entender antes de entrar', fear: 'ser invadido, exigido o quedar incompetente', defense: 'tomar distancia, observar y reservarme', relation: 'guardar espacio antes de vincularme' },
-  6: { motivation: 'tener seguridad, claridad y apoyo confiable', fear: 'quedar sin respaldo, guía o piso firme', defense: 'dudar, anticipar y verificar', relation: 'probar lealtades y buscar acuerdos claros' },
-  7: { motivation: 'mantener opciones, aire y libertad', fear: 'quedar atrapado en dolor, límite o restricción', defense: 'reencuadrar, distraerme y moverme a lo siguiente', relation: 'abrir posibilidades y subir energía' },
-  8: { motivation: 'mantener autonomía y no ser dominado', fear: 'ser controlado, debilitado o traicionado', defense: 'endurecerme, confrontar y tomar fuerza', relation: 'proteger marcando territorio y presencia' },
-  9: { motivation: 'conservar paz, estabilidad y conexión', fear: 'romper el vínculo, entrar en conflicto o desaparecer', defense: 'apagarme, postergar o fundirme con el ambiente', relation: 'acomodarme para que todo siga en calma' }
-};
-
-export const createTieBreakerQuestions = (firstId, secondId, eneatypes) => {
-  const first = eneatypes[firstId];
-  const second = eneatypes[secondId];
-  const firstTraits = TIEBREAKER_TRAITS[firstId];
-  const secondTraits = TIEBREAKER_TRAITS[secondId];
-
-  return [
-    {
-      id: 'TB1',
-      prompt: '¿Qué motor de fondo se parece más a ti?',
-      helper: 'Elige la opción que te organiza más a menudo, incluso cuando no te gusta admitirlo.',
-      left: { typeId: Number(firstId), title: first.type, text: `Suelo moverme para ${firstTraits.motivation}.` },
-      right: { typeId: Number(secondId), title: second.type, text: `Suelo moverme para ${secondTraits.motivation}.` }
-    },
-    {
-      id: 'TB2',
-      prompt: 'Cuando te desestabilizas, ¿qué temor pesa más?',
-      helper: 'No pienses en lo correcto o bonito, sino en el miedo que más rápido se activa por dentro.',
-      left: { typeId: Number(firstId), title: first.type, text: `Me pesa ${firstTraits.fear}.` },
-      right: { typeId: Number(secondId), title: second.type, text: `Me pesa ${secondTraits.fear}.` }
-    },
-    {
-      id: 'TB3',
-      prompt: 'Sin pensarlo mucho, ¿cómo tiendes a protegerte?',
-      helper: 'Busca tu defensa más automática bajo presión, no la que quisieras tener.',
-      left: { typeId: Number(firstId), title: first.type, text: `Me protejo al ${firstTraits.defense}.` },
-      right: { typeId: Number(secondId), title: second.type, text: `Me protejo al ${secondTraits.defense}.` }
-    },
-    {
-      id: 'TB4',
-      prompt: 'En tus relaciones, ¿qué patrón aparece más?',
-      helper: 'Piensa en tu estilo repetido cuando hay tensión, cercanía o desacuerdo.',
-      left: { typeId: Number(firstId), title: first.type, text: `Se me nota más ${firstTraits.relation}.` },
-      right: { typeId: Number(secondId), title: second.type, text: `Se me nota más ${secondTraits.relation}.` }
-    }
+export const FULL_STATEMENTS = RAW_QUESTIONS.map((text, index) => {
+  const order = index + 1;
+  const blockRanges = [
+    [1, 14, 'B01'],
+    [15, 28, 'B02'],
+    [29, 42, 'B03'],
+    [43, 56, 'B04'],
+    [57, 70, 'B05'],
+    [71, 83, 'B06'],
+    [84, 96, 'B07'],
+    [97, 109, 'B08'],
+    [110, 122, 'B09'],
+    [123, 135, 'B10']
   ];
-};
+  const block = blockRanges.find(([start, end]) => order >= start && order <= end)?.[2] || 'B10';
+  return {
+    id: `P${String(order).padStart(3, '0')}`,
+    order,
+    block,
+    text
+  };
+});
+
+export const FULL_BLOCKS = [
+  { id: 'B01', title: 'Bloque 1', start: 1, end: 14 },
+  { id: 'B02', title: 'Bloque 2', start: 15, end: 28 },
+  { id: 'B03', title: 'Bloque 3', start: 29, end: 42 },
+  { id: 'B04', title: 'Bloque 4', start: 43, end: 56 },
+  { id: 'B05', title: 'Bloque 5', start: 57, end: 70 },
+  { id: 'B06', title: 'Bloque 6', start: 71, end: 83 },
+  { id: 'B07', title: 'Bloque 7', start: 84, end: 96 },
+  { id: 'B08', title: 'Bloque 8', start: 97, end: 109 },
+  { id: 'B09', title: 'Bloque 9', start: 110, end: 122 },
+  { id: 'B10', title: 'Bloque 10', start: 123, end: 135 }
+];
+
+export const FULL_POTENTIAL = null;
+export const TIEBREAKER_MARGIN_THRESHOLD = null;
+export const createTieBreakerQuestions = () => [];
