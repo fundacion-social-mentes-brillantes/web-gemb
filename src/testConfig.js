@@ -5,16 +5,22 @@ export const FULL_RESPONSE_OPTIONS = [
 ];
 
 export const QUESTION_ENEATYPES = [
-  3, 5, 2, 8, 4, 4, 6, 3, 9, 8, 1, 7, 2, 4,
+  3, 6, 2, 8, 4, 4, 6, 3, 9, 8, 1, 7, 2, 4,
   8, 5, 8, 2, 7, 9, 2, 2, 6, 3, 5, 6, 2, 3,
   8, 3, 8, 5, 7, 9, 1, 3, 3, 6, 7, 4, 8, 4,
   6, 1, 2, 3, 2, 1, 9, 5, 5, 7, 5, 2, 8, 4,
-  4, 3, 5, 6, 7, 2, 1, 3, 4, 9, 5, 4, 1, 6,
+  1, 3, 5, 6, 7, 2, 1, 3, 4, 9, 5, 4, 1, 6,
   6, 7, 7, 7, 9, 8, 3, 1, 2, 8, 6, 4, 1, 7,
   3, 3, 3, 9, 2, 8, 8, 2, 5, 5, 7, 3, 1, 8,
-  6, 7, 5, 2, 6, 8, 4, 1, 6, 1, 9, 5, 8, 1,
+  6, 7, 5, 2, 6, 8, 4, 1, 6, 1, 9, 5, 8, 9,
   1, 8, 3, 2, 7, 5, 1, 7, 9, 2, 7, 9, 5, 8,
   8, 3, 5, 4, 3, 2, 9, 5, 9
+];
+
+export const QUESTION_MAPPING_REVISIONS = [
+  { id: 'P002', from: 5, to: 6, reason: 'La motivación principal es seguridad y preparación anticipada más que acumulación intelectual.' },
+  { id: 'P056', from: 4, to: 1, reason: 'La oscilación descrita gira alrededor de ver defectos y reaccionar críticamente, más alineado con el ideal rígido del tipo 1.' },
+  { id: 'P119', from: 1, to: 9, reason: 'El énfasis está en apoyar cuando lo piden y sostener igualdad sin imponerse, más propio de armonía y mediación del tipo 9.' }
 ];
 
 const RAW_QUESTIONS = [

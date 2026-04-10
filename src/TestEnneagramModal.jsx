@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft } from 'lucide-react';
-import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS, FULL_TYPE_DISTRIBUTION } from './testConfig';
+import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight } from 'lucide-react';
+import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
 
 const RESPONSE_SCORE_MAP = {
   2: 1,
@@ -18,6 +18,33 @@ const TYPE_TO_CENTER = {
   7: 'Mental',
   8: 'Visceral',
   9: 'Visceral'
+};
+
+const CENTER_TO_KEY = {
+  Visceral: 'visceral',
+  Emocional: 'emocional',
+  Mental: 'mental'
+};
+
+const TYPE_VISUALS = {
+  1: { glow: 'from-[#D7B55C] via-[#F4E8B7] to-[#EFE9D2]', accent: '#A47A1E' },
+  2: { glow: 'from-[#CC6D58] via-[#F1B2A3] to-[#F7E2DA]', accent: '#B95542' },
+  3: { glow: 'from-[#C56A31] via-[#E9B07D] to-[#F6E5D5]', accent: '#B4571B' },
+  4: { glow: 'from-[#7D5AA6] via-[#B9A0D8] to-[#EEE6F7]', accent: '#684290' },
+  5: { glow: 'from-[#3D6681] via-[#86AFC9] to-[#E4EEF4]', accent: '#2E566F' },
+  6: { glow: 'from-[#4E7F75] via-[#94B9B0] to-[#E5F0ED]', accent: '#3D6B62' },
+  7: { glow: 'from-[#D38A2F] via-[#F2C97C] to-[#FBF0DA]', accent: '#BC761D' },
+  8: { glow: 'from-[#7E3A33] via-[#C88377] to-[#F2DFDB]', accent: '#6A2D28' },
+  9: { glow: 'from-[#6B7C52] via-[#B7C49C] to-[#EFF3E6]', accent: '#56663E' }
+};
+
+const RESULT_TABLE_LABELS = {
+  strategy: 'Estrategia principal',
+  traits: 'Rasgos principales',
+  center: 'Centro de expresión',
+  selfView: 'Visión de sí mismo',
+  strength: 'Fuerza',
+  weakness: 'Debilidad'
 };
 
 const sortTypesWithTieBreak = (a, b, triads, muchosByType) => {
@@ -93,6 +120,19 @@ const calculateFullResult = (answers) => {
     triads,
     dominantCenter
   };
+};
+
+const getResultTableRows = (typeData, centerLabel) => {
+  if (!typeData) return [];
+
+  return [
+    { label: RESULT_TABLE_LABELS.strategy, value: typeData.motivation },
+    { label: RESULT_TABLE_LABELS.traits, value: typeData.strengths?.join(' • ') || typeData.subtitle },
+    { label: RESULT_TABLE_LABELS.center, value: centerLabel },
+    { label: RESULT_TABLE_LABELS.selfView, value: typeData.desire || typeData.relation },
+    { label: RESULT_TABLE_LABELS.strength, value: typeData.strengths?.[0] || typeData.growth },
+    { label: RESULT_TABLE_LABELS.weakness, value: typeData.blindSpot || typeData.pressure || typeData.defense }
+  ];
 };
 
 export default function TestEnneagramModal({
@@ -186,6 +226,12 @@ export default function TestEnneagramModal({
   const currentBlock = FULL_BLOCKS.find((block) => currentStatement.order >= block.start && currentStatement.order <= block.end);
   const answeredCount = fullAnswers.filter((value) => value !== undefined && value !== null).length;
   const fullResult = step === 'full-result' ? calculateFullResult(fullAnswers) : null;
+  const dominantTypeData = fullResult ? eneatypes[fullResult.dominantType] : null;
+  const dominantCenterKey = fullResult ? CENTER_TO_KEY[fullResult.dominantCenter.label] : null;
+  const dominantVisual = fullResult ? TYPE_VISUALS[fullResult.dominantType] : null;
+  const resultTableRows = fullResult ? getResultTableRows(dominantTypeData, fullResult.dominantCenter.label) : [];
+  const topAffinityScore = fullResult?.affinityTable?.[0]?.score || 1;
+  const modalWidthClass = step === 'full-result' ? 'max-w-6xl' : 'max-w-3xl';
   const motionClass = questionMotion === 'out'
     ? 'opacity-0 translate-y-5 md:translate-x-6'
     : questionMotion === 'in'
@@ -195,7 +241,7 @@ export default function TestEnneagramModal({
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={handleClose}></div>
-      <div className="relative bg-[#F2F0E9] w-full max-w-3xl rounded-[2.5rem] p-5 sm:p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
+      <div className={`relative bg-[#F2F0E9] w-full ${modalWidthClass} rounded-[2.5rem] p-5 sm:p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto`}>
         <button onClick={handleClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
@@ -407,94 +453,165 @@ export default function TestEnneagramModal({
         {step === 'full-result' && fullResult && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
-              <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center"><Activity className="text-[#00FF66]" size={22} /></div>
+              <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
+                <Activity className="text-[#00FF66]" size={22} />
+              </div>
               <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Lectura profunda</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">{eneatypes[fullResult.dominantType]?.type || `Eneatipo ${fullResult.dominantType}`}</h3>
-              <p className="text-[#CC5833] font-serif italic">{eneatypes[fullResult.dominantType]?.subtitle || 'Resultado dominante del test completo'}</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Resultado del test de eneagrama</h3>
+              <p className="text-[#CC5833] font-serif italic">135 preguntas · 10 bloques · afinidad real por eneatipo</p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-5 text-sm text-[#1A1A1A]">
-              <div className="grid md:grid-cols-3 gap-3">
-                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Tipo dominante</p>
-                  <p className="font-heading text-2xl">{fullResult.dominantType}</p>
-                  <p className="text-xs text-gray-600 mt-1">{eneatypes[fullResult.dominantType]?.subtitle}</p>
-                </div>
-                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Puntaje</p>
-                  <p className="font-heading text-2xl">{fullResult.scoresByType[fullResult.dominantType].toFixed(1)}</p>
-                  <p className="text-xs text-gray-600 mt-1">Escala adaptada: MUCHO=1 · POCO=0.5</p>
-                </div>
-                <div className="p-4 bg-[#F2F0E9] rounded-2xl border border-gray-200">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-1">Centro dominante</p>
-                  <p className="font-heading text-2xl">{fullResult.dominantCenter.label}</p>
-                  <p className="text-xs text-gray-600 mt-1">Puntaje {fullResult.dominantCenter.score.toFixed(1)}</p>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-gray-200 p-4 bg-[#FCFBF7]">
-                <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-2">Lectura orientativa de autoconocimiento</p>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {eneatypes[fullResult.dominantType]?.desc || 'Este resultado resume el patrón que más puntaje acumuló en tus respuestas.'}
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-gray-200 p-4">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-3">Tabla de afinidad</p>
-                  <div className="space-y-2">
-                    {fullResult.affinityTable.map((entry, index) => (
-                      <div key={entry.type} className={`flex items-center justify-between rounded-2xl px-3 py-3 border ${index === 0 ? 'border-[#CC5833]/30 bg-[#FFF7F1]' : 'border-gray-100 bg-white'}`}>
-                        <div>
-                          <p className="font-semibold text-[#1A1A1A]">Eneatipo {entry.type}</p>
-                          <p className="text-xs text-gray-500">{eneatypes[entry.type]?.subtitle || entry.center}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-heading text-xl text-[#1A1A1A]">{entry.score.toFixed(1)}</p>
-                          <p className="text-xs text-gray-500">MUCHO: {entry.muchos}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-gray-200 p-4 space-y-4">
-                  <div>
-                    <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-3">Centros o tríadas</p>
-                    <div className="space-y-2">
-                      {Object.values(fullResult.triads)
-                        .slice()
-                        .sort((a, b) => b.score - a.score)
-                        .map((triad) => (
-                          <div key={triad.key} className={`flex items-center justify-between rounded-2xl px-3 py-3 border ${triad.key === fullResult.dominantCenter.key ? 'border-[#2E4036]/25 bg-[#F4F7F5]' : 'border-gray-100 bg-white'}`}>
-                            <div>
-                              <p className="font-semibold text-[#1A1A1A]">{triad.label}</p>
-                              <p className="text-xs text-gray-500">Tipos {triad.members.join(' · ')}</p>
-                            </div>
-                            <p className="font-heading text-xl text-[#1A1A1A]">{triad.score.toFixed(1)}</p>
-                          </div>
-                        ))}
+            <div className="grid lg:grid-cols-[1.05fr_1.2fr] gap-5">
+              <div className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${dominantVisual?.glow} border border-white/50 shadow-[0_20px_60px_-30px_rgba(26,26,26,0.35)] p-6 md:p-7`}>
+                <div className="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-white/35 blur-2xl"></div>
+                <div className="absolute -left-8 bottom-0 h-28 w-28 rounded-full bg-black/5 blur-2xl"></div>
+                <div className="relative space-y-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#1A1A1A]/65">Resultado principal</p>
+                      <h4 className="font-heading text-3xl text-[#1A1A1A] mt-2">Tu eneatipo es el {fullResult.dominantType}</h4>
+                    </div>
+                    <div className="h-16 w-16 rounded-[1.5rem] bg-white/55 border border-white/50 flex items-center justify-center font-heading text-4xl text-[#1A1A1A] shadow-sm">
+                      {fullResult.dominantType}
                     </div>
                   </div>
 
-                  <div className="rounded-2xl bg-[#F2F0E9] border border-gray-200 p-4">
-                    <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-2">Motivación y miedo centrales</p>
-                    <p className="text-sm text-gray-700"><span className="font-semibold">Motivación:</span> {eneatypes[fullResult.dominantType]?.motivation}</p>
-                    <p className="text-sm text-gray-700 mt-2"><span className="font-semibold">Miedo central:</span> {eneatypes[fullResult.dominantType]?.fear}</p>
+                  <div>
+                    <p className="text-lg font-semibold text-[#1A1A1A]">{dominantTypeData?.type}</p>
+                    <p className="text-sm mt-1" style={{ color: dominantVisual?.accent }}>{dominantTypeData?.subtitle}</p>
                   </div>
 
-                  <div className="rounded-2xl bg-white border border-gray-200 p-4">
-                    <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036] mb-2">Cobertura del banco</p>
-                    <p className="text-sm text-gray-700">Preguntas respondidas: {answeredCount} de {FULL_STATEMENTS.length}.</p>
-                    <p className="text-sm text-gray-700 mt-2">Preguntas asignadas a este eneatipo: {FULL_TYPE_DISTRIBUTION[fullResult.dominantType]}.</p>
+                  <p className="max-w-md text-sm md:text-base leading-relaxed text-[#1A1A1A]/85">
+                    {dominantTypeData?.desc}
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl bg-white/55 border border-white/60 px-4 py-3">
+                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#1A1A1A]/55">Puntaje</p>
+                      <p className="font-heading text-2xl text-[#1A1A1A]">{fullResult.scoresByType[fullResult.dominantType].toFixed(1)}</p>
+                    </div>
+                    <div className="rounded-2xl bg-white/55 border border-white/60 px-4 py-3">
+                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#1A1A1A]/55">Centro dominante</p>
+                      <p className="font-heading text-2xl text-[#1A1A1A]">{fullResult.dominantCenter.label}</p>
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-[2rem] shadow-sm overflow-hidden">
+                <div className="bg-[#7FA9D8] px-5 py-4 border-b border-[#6F97C5]">
+                  <p className="font-heading text-lg text-white">Características del Eneatipo {fullResult.dominantType}</p>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {resultTableRows.map((row) => (
+                    <div key={row.label} className="grid md:grid-cols-[220px_1fr]">
+                      <div className="bg-[#F7F7F3] px-5 py-4 border-r border-gray-200">
+                        <p className="font-semibold text-[#1A1A1A]">{row.label}</p>
+                      </div>
+                      <div className="px-5 py-4">
+                        <p className="text-sm md:text-[15px] text-gray-700 leading-relaxed">{row.value}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={() => { const text = encodeURIComponent(`Ya respondí el test completo de 135 preguntas. Mi resultado dominante fue el Eneatipo ${fullResult.dominantType} y mi centro dominante fue ${fullResult.dominantCenter.label}.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); handleClose(); }} className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]">Compartir resultado</button>
-              <button onClick={() => { resetModal(); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100">Repetir lectura</button>
+            <div className="flex justify-center">
+              <button
+                onClick={() => { window.location.hash = '#eneatipos'; handleClose(); }}
+                className="inline-flex items-center justify-center gap-2 bg-[#7FA9D8] hover:bg-[#6F97C5] text-white px-6 py-3 rounded-full font-bold btn-magnetic shadow-sm"
+              >
+                Leer más sobre el Eneatipo {fullResult.dominantType}
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-[2rem] p-5 md:p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-heading text-2xl text-[#1A1A1A]">Afinidad por eneatipo</p>
+                  <p className="text-sm text-gray-600">Barras ordenadas de mayor a menor puntaje.</p>
+                </div>
+                <div className="rounded-full border border-gray-200 px-4 py-2 text-xs font-mono text-[#2E4036]">
+                  Dominante: {fullResult.dominantType}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {fullResult.affinityTable.map((entry, index) => {
+                  const width = Math.max((entry.score / topAffinityScore) * 100, 6);
+                  const isDominant = index === 0;
+
+                  return (
+                    <div key={entry.type} className={`grid grid-cols-[42px_1fr_54px] md:grid-cols-[56px_1fr_70px] items-center gap-3 rounded-2xl px-3 py-3 border ${isDominant ? 'border-[#CC5833]/30 bg-[#FFF7F1]' : 'border-gray-100 bg-[#FCFCFA]'}`}>
+                      <div className="font-heading text-2xl text-[#1A1A1A] text-center">{entry.type}</div>
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
+                          <span>{eneatypes[entry.type]?.subtitle || `Centro ${entry.center}`}</span>
+                          <span>{isDominant ? 'Dominante' : `Puesto ${index + 1}`}</span>
+                        </div>
+                        <div className="h-6 rounded-full bg-[#F1EFE8] overflow-hidden border border-[#E8E2D8]">
+                          <div
+                            className={`h-full rounded-full ${isDominant ? 'bg-gradient-to-r from-[#E86137] to-[#B64624]' : 'bg-gradient-to-r from-[#2E4036] to-[#708979]'}`}
+                            style={{ width: `${width}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-heading text-xl text-[#1A1A1A]">{entry.score.toFixed(1)}</p>
+                        <p className="text-[11px] text-gray-500">MUCHO {entry.muchos}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-[2rem] p-5 md:p-6 shadow-sm space-y-4">
+              <div>
+                <p className="font-heading text-2xl text-[#1A1A1A]">Tríadas o centros</p>
+                <p className="text-sm text-gray-600">Distribución global entre Visceral, Emocional y Mental.</p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-3">
+                {Object.values(fullResult.triads)
+                  .slice()
+                  .sort((a, b) => b.score - a.score)
+                  .map((triad) => {
+                    const isCenterWinner = triad.key === dominantCenterKey;
+                    return (
+                      <div key={triad.key} className={`rounded-[1.5rem] border p-4 ${isCenterWinner ? 'border-[#2E4036]/25 bg-[#F4F7F5]' : 'border-gray-200 bg-[#FCFCFA]'}`}>
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <p className="font-heading text-xl text-[#1A1A1A]">{triad.label}</p>
+                            <p className="text-xs text-gray-500 mt-1">Tipos {triad.members.join(' + ')}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-heading text-2xl text-[#1A1A1A]">{triad.score.toFixed(1)}</p>
+                            <p className="text-[11px] text-gray-500">{isCenterWinner ? 'Dominante' : 'Centro'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-3">
+              <button
+                onClick={() => window.print()}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#2E4036] text-white px-6 py-4 rounded-full font-bold btn-magnetic"
+              >
+                <Printer size={18} />
+                Imprimir resultado
+              </button>
+              <button
+                onClick={() => { const text = encodeURIComponent(`Ya respondí el test completo de 135 preguntas. Mi resultado dominante fue el Eneatipo ${fullResult.dominantType} y mi centro dominante fue ${fullResult.dominantCenter.label}.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); }}
+                className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]"
+              >
+                Compartir resultado
+              </button>
+              <button onClick={() => { resetModal(); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100">Volver a hacer el test</button>
             </div>
           </div>
         )}
