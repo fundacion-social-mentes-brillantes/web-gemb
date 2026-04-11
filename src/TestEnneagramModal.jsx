@@ -20,6 +20,8 @@ const HARMONIC_GROUPS = {
   competentes: { key: 'competentes', label: 'Competentes', members: [1, 3, 5] }
 };
 
+const EPSILON = 0.01;
+
 const TYPE_TO_CENTER = {
   1: 'Visceral',
   2: 'Emocional',
@@ -60,7 +62,7 @@ const RESULT_TABLE_LABELS = {
 };
 
 const sortTypesWithTieBreak = (a, b, triads, harmonics, muchosByType) => {
-  if (b.affinity !== a.affinity) return b.affinity - a.affinity;
+  if (Math.abs(b.affinity - a.affinity) > EPSILON) return b.affinity - a.affinity;
 
   const muchoDiff = (muchosByType[b.type] ?? 0) - (muchosByType[a.type] ?? 0);
   if (muchoDiff !== 0) return muchoDiff;
@@ -581,7 +583,7 @@ export default function TestEnneagramModal({
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="font-heading text-2xl text-[#1A1A1A]">Afinidad por eneatipo</p>
-                  <p className="text-sm text-gray-600">Barras ordenadas de mayor a menor puntaje.</p>
+                  <p className="text-sm text-gray-600">Barras ordenadas de mayor a menor afinidad.</p>
                 </div>
                 <div className="rounded-full border border-gray-200 px-4 py-2 text-xs font-mono text-[#2E4036]">
                   Dominante: {fullResult.dominantType}
