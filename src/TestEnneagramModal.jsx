@@ -4,8 +4,20 @@ import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfi
 
 const RESPONSE_SCORE_MAP = {
   2: 1,
-  1: 0.5,
+  1: 0.25,
   0: 0
+};
+
+const TRIAD_GROUPS = {
+  visceral: { key: 'visceral', label: 'Visceral', members: [8, 9, 1] },
+  emocional: { key: 'emocional', label: 'Emocional', members: [2, 3, 4] },
+  mental: { key: 'mental', label: 'Mental', members: [5, 6, 7] }
+};
+
+const HARMONIC_GROUPS = {
+  reactivos: { key: 'reactivos', label: 'Reactivos', members: [4, 6, 8] },
+  positivos: { key: 'positivos', label: 'Positivos', members: [2, 7, 9] },
+  competentes: { key: 'competentes', label: 'Competentes', members: [1, 3, 5] }
 };
 
 const TYPE_TO_CENTER = {
@@ -47,63 +59,97 @@ const RESULT_TABLE_LABELS = {
   weakness: 'Debilidad'
 };
 
-const sortTypesWithTieBreak = (a, b, triads, muchosByType) => {
-  if (b.score !== a.score) return b.score - a.score;
-
-  const centerDiff = (triads[b.center.toLowerCase()].score ?? 0) - (triads[a.center.toLowerCase()].score ?? 0);
-  if (centerDiff !== 0) return centerDiff;
+const sortTypesWithTieBreak = (a, b, triads, harmonics, muchosByType) => {
+  if (b.affinity !== a.affinity) return b.affinity - a.affinity;
 
   const muchoDiff = (muchosByType[b.type] ?? 0) - (muchosByType[a.type] ?? 0);
   if (muchoDiff !== 0) return muchoDiff;
+
+  const centerDiff = (triads[b.centerKey]?.score ?? 0) - (triads[a.centerKey]?.score ?? 0);
+  if (centerDiff !== 0) return centerDiff;
+
+  const harmonicDiff = (harmonics[b.harmonicKey]?.score ?? 0) - (harmonics[a.harmonicKey]?.score ?? 0);
+  if (harmonicDiff !== 0) return harmonicDiff;
 
   return a.type - b.type;
 };
 
 const calculateFullResult = (answers) => {
-  const scoresByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const weightedPointsByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const questionCountByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
   const muchosByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const pocosByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const nadasByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+
+  FULL_STATEMENTS.forEach((statement) => {
+    questionCountByType[statement.eneatype] += 1;
+  });
 
   FULL_STATEMENTS.forEach((statement, index) => {
     const answer = answers[index];
     if (answer === undefined || answer === null) return;
 
     const type = statement.eneatype;
-    scoresByType[type] += RESPONSE_SCORE_MAP[answer] ?? 0;
+    weightedPointsByType[type] += RESPONSE_SCORE_MAP[answer] ?? 0;
 
     if (answer === 2) {
       muchosByType[type] += 1;
+    } else if (answer === 1) {
+      pocosByType[type] += 1;
+    } else if (answer === 0) {
+      nadasByType[type] += 1;
     }
   });
 
-  const triads = {
-    visceral: {
-      key: 'visceral',
-      label: 'Visceral',
-      score: scoresByType[8] + scoresByType[9] + scoresByType[1],
-      members: [8, 9, 1]
-    },
-    emocional: {
-      key: 'emocional',
-      label: 'Emocional',
-      score: scoresByType[2] + scoresByType[3] + scoresByType[4],
-      members: [2, 3, 4]
-    },
-    mental: {
-      key: 'mental',
-      label: 'Mental',
-      score: scoresByType[5] + scoresByType[6] + scoresByType[7],
-      members: [5, 6, 7]
-    }
-  };
+  const affinityByType = Object.fromEntries(
+    Object.keys(weightedPointsByType).map((type) => {
+      const questionCount = questionCountByType[type] || 1;
+      return [type, (weightedPointsByType[type] / questionCount) * 100];
+    })
+  );
 
-  const affinityTable = Object.entries(scoresByType)
-    .map(([type, score]) => ({
+  const getGroupScore = (members) => members.reduce((sum, type) => sum + (affinityByType[type] ?? 0), 0) / members.length;
+
+  const triads = Object.fromEntries(
+    Object.entries(TRIAD_GROUPS).map(([key, group]) => [
+      key,
+      {
+        ...group,
+        score: getGroupScore(group.members)
+      }
+    ])
+  );
+
+  const harmonics = Object.fromEntries(
+    Object.entries(HARMONIC_GROUPS).map(([key, group]) => [
+      key,
+      {
+        ...group,
+        score: getGroupScore(group.members)
+      }
+    ])
+  );
+
+  const getHarmonicKeyForType = (type) =>
+    Object.values(HARMONIC_GROUPS).find((group) => group.members.includes(type))?.key;
+
+  const getCenterKeyForType = (type) =>
+    Object.values(TRIAD_GROUPS).find((group) => group.members.includes(type))?.key;
+
+  const affinityTable = Object.keys(affinityByType)
+    .map((type) => ({
       type: Number(type),
-      score,
+      affinity: affinityByType[type],
+      weightedPoints: weightedPointsByType[type],
+      questionCount: questionCountByType[type],
       muchos: muchosByType[type],
-      center: TYPE_TO_CENTER[type]
+      pocos: pocosByType[type],
+      nadas: nadasByType[type],
+      center: TYPE_TO_CENTER[type],
+      centerKey: getCenterKeyForType(Number(type)),
+      harmonicKey: getHarmonicKeyForType(Number(type))
     }))
-    .sort((a, b) => sortTypesWithTieBreak(a, b, triads, muchosByType));
+    .sort((a, b) => sortTypesWithTieBreak(a, b, triads, harmonics, muchosByType));
 
   const dominantCenter = Object.values(triads)
     .slice()
@@ -114,10 +160,15 @@ const calculateFullResult = (answers) => {
 
   return {
     dominantType: affinityTable[0]?.type ?? null,
-    scoresByType,
+    affinityByType,
+    weightedPointsByType,
+    questionCountByType,
     muchosByType,
+    pocosByType,
+    nadasByType,
     affinityTable,
     triads,
+    harmonics,
     dominantCenter
   };
 };
@@ -230,7 +281,6 @@ export default function TestEnneagramModal({
   const dominantCenterKey = fullResult ? CENTER_TO_KEY[fullResult.dominantCenter.label] : null;
   const dominantVisual = fullResult ? TYPE_VISUALS[fullResult.dominantType] : null;
   const resultTableRows = fullResult ? getResultTableRows(dominantTypeData, fullResult.dominantCenter.label) : [];
-  const topAffinityScore = fullResult?.affinityTable?.[0]?.score || 1;
   const modalWidthClass = step === 'full-result' ? 'max-w-6xl' : 'max-w-3xl';
   const motionClass = questionMotion === 'out'
     ? 'opacity-0 translate-y-5 md:translate-x-6'
@@ -487,8 +537,8 @@ export default function TestEnneagramModal({
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="rounded-2xl bg-white/55 border border-white/60 px-4 py-3">
-                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#1A1A1A]/55">Puntaje</p>
-                      <p className="font-heading text-2xl text-[#1A1A1A]">{fullResult.scoresByType[fullResult.dominantType].toFixed(1)}</p>
+                      <p className="font-mono text-[11px] uppercase tracking-widest text-[#1A1A1A]/55">Afinidad</p>
+                      <p className="font-heading text-2xl text-[#1A1A1A]">{fullResult.affinityByType[fullResult.dominantType].toFixed(1)}%</p>
                     </div>
                     <div className="rounded-2xl bg-white/55 border border-white/60 px-4 py-3">
                       <p className="font-mono text-[11px] uppercase tracking-widest text-[#1A1A1A]/55">Centro dominante</p>
@@ -540,7 +590,7 @@ export default function TestEnneagramModal({
 
               <div className="space-y-3">
                 {fullResult.affinityTable.map((entry, index) => {
-                  const width = Math.max((entry.score / topAffinityScore) * 100, 6);
+                  const width = Math.max(entry.affinity, 2);
                   const isDominant = index === 0;
 
                   return (
@@ -559,8 +609,8 @@ export default function TestEnneagramModal({
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-heading text-xl text-[#1A1A1A]">{entry.score.toFixed(1)}</p>
-                        <p className="text-[11px] text-gray-500">MUCHO {entry.muchos}</p>
+                        <p className="font-heading text-xl text-[#1A1A1A]">{entry.affinity.toFixed(1)}%</p>
+                        <p className="text-[11px] text-gray-500">Afinidad</p>
                       </div>
                     </div>
                   );
@@ -596,6 +646,41 @@ export default function TestEnneagramModal({
                   })}
               </div>
             </div>
+
+            <details className="bg-white border border-gray-200 rounded-[2rem] p-5 md:p-6 shadow-sm">
+              <summary className="cursor-pointer list-none font-heading text-xl text-[#1A1A1A] flex items-center justify-between gap-3">
+                Ver detalles del cálculo
+                <span className="text-xs font-mono text-[#2E4036] uppercase tracking-widest">Afinidad · respuestas · puntos</span>
+              </summary>
+              <div className="mt-5 overflow-x-auto">
+                <table className="w-full min-w-[720px] text-sm">
+                  <thead>
+                    <tr className="text-left border-b border-gray-200 text-gray-500">
+                      <th className="py-3 pr-4 font-semibold">Tipo</th>
+                      <th className="py-3 pr-4 font-semibold">Afinidad</th>
+                      <th className="py-3 pr-4 font-semibold">MUCHO</th>
+                      <th className="py-3 pr-4 font-semibold">POCO</th>
+                      <th className="py-3 pr-4 font-semibold">NADA</th>
+                      <th className="py-3 pr-4 font-semibold">Puntos</th>
+                      <th className="py-3 pr-4 font-semibold">Preguntas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fullResult.affinityTable.map((entry) => (
+                      <tr key={`detail-${entry.type}`} className="border-b border-gray-100 last:border-b-0">
+                        <td className="py-3 pr-4 font-semibold text-[#1A1A1A]">Eneatipo {entry.type}</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.affinity.toFixed(1)}%</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.muchos}</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.pocos}</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.nadas}</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.weightedPoints.toFixed(2)}</td>
+                        <td className="py-3 pr-4 text-gray-700">{entry.questionCount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
 
             <div className="flex flex-col lg:flex-row gap-3">
               <button
