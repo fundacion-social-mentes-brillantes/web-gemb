@@ -5,6 +5,7 @@ import {
   Clock, User, Target, ShieldCheck
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
+import TestInitialAssessmentModal from './TestInitialAssessmentModal';
 
 // Carga asíncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
@@ -152,7 +153,7 @@ const Navbar = ({ onOpenTest }) => {
                 onClick={onOpenTest}
                 className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${scrolled ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
-                Descubrir mi eneatipo
+                Comenzar evaluación
               </button>
               <button className="lg:hidden mt-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <X className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} />}
@@ -174,7 +175,7 @@ const Navbar = ({ onOpenTest }) => {
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
             className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
-            Descubrir mi eneatipo
+            Comenzar evaluación
           </button>
         </div>
       )}
@@ -216,7 +217,7 @@ const Hero = ({ onOpenTest }) => {
         <div className="max-w-4xl mt-auto">
           <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm mb-5">
             <span className="h-2 w-2 rounded-full bg-[#E2C17D]"></span>
-            Eneagrama para autoconocimiento y entrenamiento interior
+            Evaluación inicial y mapa de eneatipo
           </div>
 
           <h1 className="text-white leading-[1.02] mb-5 max-w-4xl">
@@ -246,7 +247,7 @@ const Hero = ({ onOpenTest }) => {
               onClick={onOpenTest}
               className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
             >
-              Descubrir mi eneatipo
+              Comenzar evaluación
               <ArrowRight size={18} />
             </button>
             <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
@@ -902,7 +903,7 @@ const Pricing = ({ onOpenTest }) => {
               onClick={onOpenTest}
               className="w-full py-4 rounded-full border border-[#2E4036] text-[#2E4036] font-bold btn-magnetic hover:bg-[#2E4036] hover:text-white transition-colors"
             >
-              Hacer el Test
+              Comenzar evaluación
             </button>
           </div>
 
@@ -1297,7 +1298,8 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
 
 export default function App() {
   const [gsapLoaded, setGsapLoaded] = useState(false);
-  const [isTestOpen, setTestOpen] = useState(false);
+  const [isInitialAssessmentOpen, setInitialAssessmentOpen] = useState(false);
+  const [isEnneagramOpen, setEnneagramOpen] = useState(false);
   const [isGuaranteeOpen, setGuaranteeOpen] = useState(false);
 
   useEffect(() => {
@@ -1323,10 +1325,10 @@ export default function App() {
       <GlobalStyles />
       <div className="noise-overlay"></div>
 
-      <Navbar onOpenTest={() => setTestOpen(true)} />
+      <Navbar onOpenTest={() => setInitialAssessmentOpen(true)} />
 
       <main>
-        <Hero onOpenTest={() => setTestOpen(true)} />
+        <Hero onOpenTest={() => setInitialAssessmentOpen(true)} />
         <FeaturesSection />
         <Manifesto />
         <StackedCards />
@@ -1334,15 +1336,21 @@ export default function App() {
         {/* Nueva sección: Sesión Guía Coach */}
         <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
 
-        <Pricing onOpenTest={() => setTestOpen(true)} />
+        <Pricing onOpenTest={() => setInitialAssessmentOpen(true)} />
       </main>
 
       <Footer />
 
       {/* Modales Inyectados */}
+      <TestInitialAssessmentModal
+        isOpen={isInitialAssessmentOpen}
+        onClose={() => setInitialAssessmentOpen(false)}
+        onOpenEnneagram={() => setEnneagramOpen(true)}
+        waNumber={WA_NUMBER}
+      />
       <EnhancedTestEnneagramModal
-        isOpen={isTestOpen}
-        onClose={() => setTestOpen(false)}
+        isOpen={isEnneagramOpen}
+        onClose={() => setEnneagramOpen(false)}
         quickGroups={QUICK_GROUPS}
         quickMatrix={QUICK_MATRIX}
         eneatypes={ENEATYPES}
@@ -1352,7 +1360,3 @@ export default function App() {
     </>
   );
 }
-
-
-
-
