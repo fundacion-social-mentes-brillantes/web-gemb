@@ -122,10 +122,10 @@ export default function TestInitialAssessmentModal({
                 <div className="relative max-w-2xl">
                   <div className="inline-flex items-center gap-2 rounded-full border border-[#2E4036]/10 bg-white/70 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-[#2E4036] mb-5">
                     <span className="h-2 w-2 rounded-full bg-[#CC5833]"></span>
-                    Evaluación de entrada
+                    Valoraci&oacute;n inicial de tu proceso
                   </div>
                   <h2 className="font-heading text-3xl md:text-5xl text-[#1A1A1A] leading-tight">
-                    Evaluación Inicial
+                    Valoraci&oacute;n inicial de tu proceso
                   </h2>
                   <p className="font-serif italic text-lg md:text-2xl text-[#CC5833] mt-3">
                     37 preguntas rápidas para identificar señales de alerta emocional y relacional.
