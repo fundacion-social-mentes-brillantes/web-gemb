@@ -153,7 +153,7 @@ const Navbar = ({ onOpenTest }) => {
                 onClick={onOpenTest}
                 className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${scrolled ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
-                Comenzar evaluación
+                Valoraci&oacute;n inicial de tu proceso
               </button>
               <button className="lg:hidden mt-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <X className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} />}
@@ -175,7 +175,7 @@ const Navbar = ({ onOpenTest }) => {
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
             className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
-            Comenzar evaluación
+            Valoraci&oacute;n inicial de tu proceso
           </button>
         </div>
       )}
@@ -217,7 +217,7 @@ const Hero = ({ onOpenTest }) => {
         <div className="max-w-4xl mt-auto">
           <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm mb-5">
             <span className="h-2 w-2 rounded-full bg-[#E2C17D]"></span>
-            Evaluación inicial y mapa de eneatipo
+            Valoraci&oacute;n inicial de tu proceso y mapa de eneatipo
           </div>
 
           <h1 className="text-white leading-[1.02] mb-5 max-w-4xl">
@@ -247,7 +247,7 @@ const Hero = ({ onOpenTest }) => {
               onClick={onOpenTest}
               className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
             >
-              Comenzar evaluación
+              Valoraci&oacute;n inicial de tu proceso
               <ArrowRight size={18} />
             </button>
             <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
@@ -903,7 +903,7 @@ const Pricing = ({ onOpenTest }) => {
               onClick={onOpenTest}
               className="w-full py-4 rounded-full border border-[#2E4036] text-[#2E4036] font-bold btn-magnetic hover:bg-[#2E4036] hover:text-white transition-colors"
             >
-              Comenzar evaluación
+              Valoraci&oacute;n inicial de tu proceso
             </button>
           </div>
 

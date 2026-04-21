@@ -131,7 +131,7 @@ export default function TestInitialAssessmentModal({
                     37 preguntas rápidas para identificar señales de alerta emocional y relacional.
                   </p>
                   <p className="text-sm md:text-base text-[#1A1A1A]/72 leading-relaxed mt-5 max-w-xl">
-                    Es una evaluación inicial breve, clara y humana. Responde una pregunta a la vez y al final verás un resultado orientativo con una salida directa para recibir apoyo.
+                    Es una lectura breve, clara y humana. Responde una pregunta a la vez y al final ver&aacute;s un resultado orientativo con una salida directa para recibir apoyo.
                   </p>
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function TestInitialAssessmentModal({
                 onClick={() => setStep('quiz')}
                 className="flex-1 bg-[#CC5833] text-white px-7 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(204,88,51,0.28)]"
               >
-                Comenzar evaluación
+                Comenzar tu proceso
               </button>
               <button
                 onClick={goToEnneagram}
@@ -194,7 +194,7 @@ export default function TestInitialAssessmentModal({
             </div>
 
             <div className={`rounded-[2rem] bg-white border border-gray-200 p-6 md:p-8 shadow-sm transition-all duration-300 ease-out ${motionClass}`}>
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#2E4036] mb-4">Evaluación Inicial</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#2E4036] mb-4">Valoraci&oacute;n inicial de tu proceso</p>
               <h3 className="font-heading text-[1.7rem] md:text-3xl leading-snug text-[#1A1A1A]">
                 {currentQuestion}
               </h3>
@@ -239,7 +239,7 @@ export default function TestInitialAssessmentModal({
         {step === 'result' && (
           <div className="space-y-6 animate-[fadeIn_0.35s_ease-out]">
             <div className="text-center">
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#CC5833] mb-3">Resultado de tu evaluación inicial</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#CC5833] mb-3">Resultado de tu proceso</p>
               <h2 className="font-heading text-3xl md:text-4xl text-[#1A1A1A]">Tu resultado</h2>
             </div>
 
@@ -256,7 +256,7 @@ export default function TestInitialAssessmentModal({
                     <p className="text-sm md:text-base text-[#1A1A1A]/72 leading-relaxed mt-2 max-w-2xl">
                       {result.isAlert
                         ? 'Estas respuestas sugieren que conviene mirar tu situación con honestidad y abrir espacio para recibir orientación.'
-                        : 'No superaste el umbral de alerta de esta evaluación inicial. El resultado es orientativo y, si lo deseas, también podemos ayudarte a mirar tu situación con más claridad.'}
+                        : 'No superaste el umbral de alerta de esta lectura. El resultado es orientativo y, si lo deseas, tambi&eacute;n podemos ayudarte a mirar tu situaci&oacute;n con m&aacute;s claridad.'}
                     </p>
                   </div>
                 </div>
