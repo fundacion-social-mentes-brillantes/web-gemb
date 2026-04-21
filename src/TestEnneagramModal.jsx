@@ -325,8 +325,18 @@ export default function TestEnneagramModal({
             .bg-white, .bg-\\[\\#FCFCFA\\], .bg-\\[\\#F7F7F3\\], .bg-\\[\\#F4F7F5\\], .bg-\\[\\#FFF7F1\\], .bg-\\[\\#F2F0E9\\], .bg-white\\/55 {
               background: #fff !important;
             }
-            .bg-gradient-to-br, .bg-gradient-to-r, .from-\\[\\#E86137\\], .to-\\[\\#B64624\\], .from-\\[\\#2E4036\\], .to-\\[\\#708979\\] {
+            .bg-gradient-to-br {
               background: #fff !important;
+            }
+            .bg-\\[\\#F1EFE8\\] {
+              background: #e5e7eb !important;
+            }
+            .bg-gradient-to-r,
+            .from-\\[\\#E86137\\],
+            .to-\\[\\#B64624\\],
+            .from-\\[\\#2E4036\\],
+            .to-\\[\\#708979\\] {
+              background: #4b5563 !important;
             }
             .text-white, .text-\\[\\#00FF66\\] { color: #1a1a1a !important; }
             .font-heading { font-weight: 700; }
@@ -336,7 +346,7 @@ export default function TestEnneagramModal({
             .text-xl { font-size: 18px !important; }
             .text-lg { font-size: 16px !important; }
             .text-sm, .text-\\[11px\\], .text-xs { font-size: 13px !important; }
-            .h-6, .absolute, svg { display: none !important; }
+            .absolute, svg { display: none !important; }
             .overflow-hidden, .overflow-x-auto { overflow: visible !important; }
             table { width: 100%; border-collapse: collapse; }
             th, td {
