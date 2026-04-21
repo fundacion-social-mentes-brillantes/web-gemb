@@ -27,8 +27,6 @@ export default function TestInitialAssessmentModal({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const totalQuestions = INITIAL_ASSESSMENT_QUESTIONS.length;
   const currentQuestion = INITIAL_ASSESSMENT_QUESTIONS[currentIndex];
   const progress = Math.round(((currentIndex + 1) / totalQuestions) * 100);
@@ -45,6 +43,8 @@ export default function TestInitialAssessmentModal({
       isAlert
     };
   }, [answers, totalQuestions]);
+
+  if (!isOpen) return null;
 
   const handleClose = () => {
     onClose();
