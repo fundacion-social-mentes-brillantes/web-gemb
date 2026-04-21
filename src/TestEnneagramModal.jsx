@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight } from 'lucide-react';
 import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
 
@@ -203,6 +203,7 @@ export default function TestEnneagramModal({
   const [answerFeedback, setAnswerFeedback] = useState('');
   const [questionMotion, setQuestionMotion] = useState('idle');
   const [isTransitioningQuestion, setIsTransitioningQuestion] = useState(false);
+  const printContentRef = useRef(null);
 
   useEffect(() => {
     if (!answerFeedback) return undefined;
@@ -272,6 +273,98 @@ export default function TestEnneagramModal({
     setStep('full-result');
     setQuestionMotion('idle');
     setIsTransitioningQuestion(false);
+  };
+
+  const handlePrintResult = () => {
+    if (!printContentRef.current) return;
+
+    const printWindow = window.open('', '_blank', 'width=900,height=1200');
+    if (!printWindow) return;
+
+    const printableHtml = printContentRef.current.innerHTML;
+
+    printWindow.document.open();
+    printWindow.document.write(`
+      <!doctype html>
+      <html lang="es">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Resultado del test de eneagrama</title>
+          <style>
+            @page { size: A4; margin: 16mm; }
+            * { box-sizing: border-box; }
+            html, body {
+              margin: 0;
+              padding: 0;
+              background: #fff;
+              color: #1a1a1a;
+              font-family: Arial, Helvetica, sans-serif;
+              line-height: 1.45;
+            }
+            body { padding: 0; }
+            .print-root { max-width: 960px; margin: 0 auto; }
+            .print-root > * {
+              margin-bottom: 20px;
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+            .grid,
+            .lg\\:grid-cols-\\[1\\.05fr_1\\.2fr\\],
+            .md\\:grid-cols-3,
+            .md\\:grid-cols-\\[220px_1fr\\] {
+              display: block !important;
+            }
+            .divide-y > * { border-top: 1px solid #e5e7eb; }
+            .divide-y > *:first-child { border-top: 0; }
+            .rounded-\\[2rem\\], .rounded-\\[1\\.5rem\\], .rounded-2xl, .rounded-3xl { border-radius: 18px !important; }
+            .shadow-sm, .shadow-lg, .shadow-2xl, .shadow-\\[0_20px_60px_-30px_rgba\\(26\\,26\\,26\\,0\\.35\\)\\] { box-shadow: none !important; }
+            .border, .border-gray-200, .border-gray-100, .border-white\\/50, .border-white\\/60, .border-\\[\\#2E4036\\]\\/25, .border-\\[\\#CC5833\\]\\/30 {
+              border: 1px solid #d1d5db !important;
+            }
+            .bg-white, .bg-\\[\\#FCFCFA\\], .bg-\\[\\#F7F7F3\\], .bg-\\[\\#F4F7F5\\], .bg-\\[\\#FFF7F1\\], .bg-\\[\\#F2F0E9\\], .bg-white\\/55 {
+              background: #fff !important;
+            }
+            .bg-gradient-to-br, .bg-gradient-to-r, .from-\\[\\#E86137\\], .to-\\[\\#B64624\\], .from-\\[\\#2E4036\\], .to-\\[\\#708979\\] {
+              background: #fff !important;
+            }
+            .text-white, .text-\\[\\#00FF66\\] { color: #1a1a1a !important; }
+            .font-heading { font-weight: 700; }
+            .font-mono { font-family: "Courier New", Courier, monospace; }
+            .text-3xl { font-size: 28px !important; }
+            .text-2xl { font-size: 22px !important; }
+            .text-xl { font-size: 18px !important; }
+            .text-lg { font-size: 16px !important; }
+            .text-sm, .text-\\[11px\\], .text-xs { font-size: 13px !important; }
+            .h-6, .absolute, svg { display: none !important; }
+            .overflow-hidden, .overflow-x-auto { overflow: visible !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td {
+              padding: 10px 8px;
+              border-bottom: 1px solid #e5e7eb;
+              text-align: left;
+              vertical-align: top;
+            }
+            @media print {
+              body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <main class="print-root">${printableHtml}</main>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+
+    window.setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }, 250);
   };
 
   const progression = Math.round(((fullIndex + 1) / FULL_STATEMENTS.length) * 100);
@@ -504,6 +597,7 @@ export default function TestEnneagramModal({
 
         {step === 'full-result' && fullResult && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
+            <div ref={printContentRef} className="space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
@@ -567,6 +661,8 @@ export default function TestEnneagramModal({
                   ))}
                 </div>
               </div>
+            </div>
+
             </div>
 
             <div className="flex justify-center">
@@ -686,7 +782,7 @@ export default function TestEnneagramModal({
 
             <div className="flex flex-col lg:flex-row gap-3">
               <button
-                onClick={() => window.print()}
+                onClick={handlePrintResult}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-[#2E4036] text-white px-6 py-4 rounded-full font-bold btn-magnetic"
               >
                 <Printer size={18} />
