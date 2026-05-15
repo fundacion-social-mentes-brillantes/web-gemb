@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight } from 'lucide-react';
+import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight, FileDown, Loader2 } from 'lucide-react';
 import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
 import LeadCaptureForm from './components/LeadCaptureForm';
+import EnneagramResultReport from './components/reports/EnneagramResultReport';
 import { completeTestResponse, createTestLead } from './services/testResponsesService';
+import { downloadPdfReport } from './utils/downloadPdfReport';
 
 const RESPONSE_SCORE_MAP = {
   2: 1,
@@ -271,6 +273,45 @@ const buildFullResultPayload = (fullResult, dominantTypeData) => ({
   }
 });
 
+const buildFullReportData = ({ fullResult, dominantTypeData, contact, generatedAt, eneatypes, waNumber }) => ({
+  mode: 'full',
+  personName: contact?.fullName || '',
+  generatedAt,
+  dominantType: fullResult.dominantType,
+  dominantTypeData,
+  dominantCenter: fullResult.dominantCenter,
+  dominantAffinity: fullResult.affinityByType?.[fullResult.dominantType],
+  affinityTable: fullResult.affinityTable,
+  triads: fullResult.triads,
+  harmonics: fullResult.harmonics,
+  typeCatalog: eneatypes,
+  waNumber
+});
+
+const buildQuickReportData = ({ quickResult, contact, generatedAt, eneatypes, waNumber }) => {
+  const centerLabel = TYPE_TO_CENTER[quickResult.typeId] || '';
+
+  return {
+    mode: 'quick',
+    personName: contact?.fullName || '',
+    generatedAt,
+    dominantType: quickResult.typeId,
+    dominantTypeData: quickResult.type,
+    dominantCenter: {
+      key: CENTER_TO_KEY[centerLabel],
+      label: centerLabel
+    },
+    affinityTable: [
+      {
+        type: quickResult.typeId,
+        center: centerLabel
+      }
+    ],
+    typeCatalog: eneatypes,
+    waNumber
+  };
+};
+
 export default function TestEnneagramModal({
   isOpen,
   onClose,
@@ -290,7 +331,10 @@ export default function TestEnneagramModal({
   const [selectedTestType, setSelectedTestType] = useState(null);
   const [pendingStartStep, setPendingStartStep] = useState(null);
   const [saveState, setSaveState] = useState({ isSaving: false, error: '' });
-  const printContentRef = useRef(null);
+  const [leadContact, setLeadContact] = useState(null);
+  const [resultGeneratedAt, setResultGeneratedAt] = useState(null);
+  const [pdfState, setPdfState] = useState({ isGenerating: false, error: '' });
+  const reportContentRef = useRef(null);
   const lastCompletionPayloadRef = useRef(null);
 
   useEffect(() => {
@@ -311,6 +355,9 @@ export default function TestEnneagramModal({
     setSelectedTestType(null);
     setPendingStartStep(null);
     setSaveState({ isSaving: false, error: '' });
+    setLeadContact(null);
+    setResultGeneratedAt(null);
+    setPdfState({ isGenerating: false, error: '' });
     lastCompletionPayloadRef.current = null;
   };
 
@@ -329,6 +376,8 @@ export default function TestEnneagramModal({
     setSelectedTestType(testType);
     setPendingStartStep(nextStep);
     setSaveState({ isSaving: false, error: '' });
+    setPdfState({ isGenerating: false, error: '' });
+    setResultGeneratedAt(null);
     setStep('lead');
   };
 
@@ -339,6 +388,7 @@ export default function TestEnneagramModal({
       testType: selectedTestType
     });
 
+    setLeadContact(contact);
     setResponseId(createdResponseId);
     setStep(pendingStartStep);
   };
@@ -371,6 +421,8 @@ export default function TestEnneagramModal({
 
     setQuickChoice(updatedChoice);
     setStep('quick-result');
+    setResultGeneratedAt(new Date().toISOString());
+    setPdfState({ isGenerating: false, error: '' });
 
     if (nextQuickResult) {
       persistCompletion({
@@ -418,6 +470,8 @@ export default function TestEnneagramModal({
     const completedDominantTypeData = eneatypes[completedFullResult.dominantType];
 
     setStep('full-result');
+    setResultGeneratedAt(new Date().toISOString());
+    setPdfState({ isGenerating: false, error: '' });
     setQuestionMotion('idle');
     setIsTransitioningQuestion(false);
     persistCompletion({
@@ -426,117 +480,72 @@ export default function TestEnneagramModal({
     });
   };
 
-  const handlePrintResult = () => {
-    if (!printContentRef.current) return;
+  const handleDownloadReport = async () => {
+    if (!reportContentRef.current || pdfState.isGenerating) return;
 
-    const printWindow = window.open('', '_blank', 'width=900,height=1200');
-    if (!printWindow) return;
+    setPdfState({ isGenerating: true, error: '' });
 
-    const printableHtml = printContentRef.current.innerHTML;
+    try {
+      await downloadPdfReport({
+        reportElement: reportContentRef.current,
+        fileName: 'resultado-eneagrama-gemb.pdf'
+      });
+      setPdfState({ isGenerating: false, error: '' });
+    } catch (err) {
+      console.error(err);
+      setPdfState({
+        isGenerating: false,
+        error: 'No pudimos generar el PDF. Intenta de nuevo.'
+      });
+    }
+  };
 
-    printWindow.document.open();
-    printWindow.document.write(`
-      <!doctype html>
-      <html lang="es">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Resultado del test de eneagrama</title>
-          <style>
-            @page { size: A4; margin: 16mm; }
-            * { box-sizing: border-box; }
-            html, body {
-              margin: 0;
-              padding: 0;
-              background: #fff;
-              color: #1a1a1a;
-              font-family: Arial, Helvetica, sans-serif;
-              line-height: 1.45;
-            }
-            body { padding: 0; }
-            .print-root { max-width: 960px; margin: 0 auto; }
-            .print-root > * {
-              margin-bottom: 20px;
-              break-inside: avoid;
-              page-break-inside: avoid;
-            }
-            .grid,
-            .lg\\:grid-cols-\\[1\\.05fr_1\\.2fr\\],
-            .md\\:grid-cols-3,
-            .md\\:grid-cols-\\[220px_1fr\\] {
-              display: block !important;
-            }
-            .divide-y > * { border-top: 1px solid #e5e7eb; }
-            .divide-y > *:first-child { border-top: 0; }
-            .rounded-\\[2rem\\], .rounded-\\[1\\.5rem\\], .rounded-2xl, .rounded-3xl { border-radius: 18px !important; }
-            .shadow-sm, .shadow-lg, .shadow-2xl, .shadow-\\[0_20px_60px_-30px_rgba\\(26\\,26\\,26\\,0\\.35\\)\\] { box-shadow: none !important; }
-            .border, .border-gray-200, .border-gray-100, .border-white\\/50, .border-white\\/60, .border-\\[\\#2E4036\\]\\/25, .border-\\[\\#CC5833\\]\\/30 {
-              border: 1px solid #d1d5db !important;
-            }
-            .bg-white, .bg-\\[\\#FCFCFA\\], .bg-\\[\\#F7F7F3\\], .bg-\\[\\#F4F7F5\\], .bg-\\[\\#FFF7F1\\], .bg-\\[\\#F2F0E9\\], .bg-white\\/55 {
-              background: #fff !important;
-            }
-            .bg-gradient-to-br {
-              background: #fff !important;
-            }
-            .bg-\\[\\#F1EFE8\\] {
-              background: #e5e7eb !important;
-            }
-            .bg-gradient-to-r,
-            .from-\\[\\#E86137\\],
-            .to-\\[\\#B64624\\],
-            .from-\\[\\#2E4036\\],
-            .to-\\[\\#708979\\] {
-              background: #4b5563 !important;
-            }
-            .text-white, .text-\\[\\#00FF66\\] { color: #1a1a1a !important; }
-            .font-heading { font-weight: 700; }
-            .font-mono { font-family: "Courier New", Courier, monospace; }
-            .text-3xl { font-size: 28px !important; }
-            .text-2xl { font-size: 22px !important; }
-            .text-xl { font-size: 18px !important; }
-            .text-lg { font-size: 16px !important; }
-            .text-sm, .text-\\[11px\\], .text-xs { font-size: 13px !important; }
-            .absolute, svg { display: none !important; }
-            .overflow-hidden, .overflow-x-auto { overflow: visible !important; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td {
-              padding: 10px 8px;
-              border-bottom: 1px solid #e5e7eb;
-              text-align: left;
-              vertical-align: top;
-            }
-            @media print {
-              body {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <main class="print-root">${printableHtml}</main>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+  const handlePrintReport = () => {
+    if (!reportContentRef.current) return;
+
+    const cleanup = () => {
+      document.body.classList.remove('printing-enneagram-report');
+      window.removeEventListener('afterprint', cleanup);
+    };
+
+    setPdfState({ isGenerating: false, error: '' });
+    document.body.classList.add('printing-enneagram-report');
+    window.addEventListener('afterprint', cleanup, { once: true });
 
     window.setTimeout(() => {
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close();
-    }, 250);
+      window.print();
+      window.setTimeout(cleanup, 1200);
+    }, 80);
   };
 
   const progression = Math.round(((fullIndex + 1) / FULL_STATEMENTS.length) * 100);
   const currentStatement = FULL_STATEMENTS[fullIndex];
   const currentBlock = FULL_BLOCKS.find((block) => currentStatement.order >= block.start && currentStatement.order <= block.end);
   const answeredCount = fullAnswers.filter((value) => value !== undefined && value !== null).length;
+  const currentQuickResult = quickResult();
   const fullResult = step === 'full-result' ? calculateFullResult(fullAnswers) : null;
   const dominantTypeData = fullResult ? eneatypes[fullResult.dominantType] : null;
   const dominantCenterKey = fullResult ? CENTER_TO_KEY[fullResult.dominantCenter.label] : null;
   const dominantVisual = fullResult ? TYPE_VISUALS[fullResult.dominantType] : null;
   const resultTableRows = fullResult ? getResultTableRows(dominantTypeData, fullResult.dominantCenter.label) : [];
+  const activeReportData = fullResult
+    ? buildFullReportData({
+        fullResult,
+        dominantTypeData,
+        contact: leadContact,
+        generatedAt: resultGeneratedAt,
+        eneatypes,
+        waNumber
+      })
+    : step === 'quick-result' && currentQuickResult
+      ? buildQuickReportData({
+          quickResult: currentQuickResult,
+          contact: leadContact,
+          generatedAt: resultGeneratedAt,
+          eneatypes,
+          waNumber
+        })
+      : null;
   const modalWidthClass = step === 'full-result' ? 'max-w-6xl' : 'max-w-3xl';
   const motionClass = questionMotion === 'out'
     ? 'opacity-0 translate-y-5 md:translate-x-6'
@@ -556,6 +565,34 @@ export default function TestEnneagramModal({
           </button>
         )}
       </div>
+    </div>
+  ) : null;
+  const reportActions = activeReportData ? (
+    <div className="space-y-3">
+      <div className="grid sm:grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={handleDownloadReport}
+          disabled={pdfState.isGenerating}
+          className="inline-flex items-center justify-center gap-2 bg-[#2E4036] text-white px-6 py-4 rounded-full font-bold btn-magnetic disabled:cursor-wait disabled:opacity-75"
+        >
+          {pdfState.isGenerating ? <Loader2 size={18} className="animate-spin" /> : <FileDown size={18} />}
+          {pdfState.isGenerating ? 'Preparando tu reporte...' : 'Descargar reporte PDF'}
+        </button>
+        <button
+          type="button"
+          onClick={handlePrintReport}
+          className="inline-flex items-center justify-center gap-2 border border-[#2E4036]/25 bg-white text-[#2E4036] px-6 py-4 rounded-full font-bold hover:bg-[#F4F7F5] transition-colors"
+        >
+          <Printer size={18} />
+          Imprimir reporte
+        </button>
+      </div>
+      {pdfState.error && (
+        <p className="rounded-2xl border border-[#CC5833]/25 bg-[#FFF3EE] px-4 py-3 text-sm text-[#7A3A25]">
+          {pdfState.error}
+        </p>
+      )}
     </div>
   ) : null;
 
@@ -669,38 +706,39 @@ export default function TestEnneagramModal({
           </div>
         )}
 
-        {step === 'quick-result' && quickResult() && (
+        {step === 'quick-result' && currentQuickResult && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
               </div>
               <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial de eneatipo</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {quickResult().code}</h3>
-              <p className="text-[#CC5833] font-serif italic">{quickResult().note}</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {currentQuickResult.code}</h3>
+              <p className="text-[#CC5833] font-serif italic">{currentQuickResult.note}</p>
             </div>
           </div>
         )}
 
-        {step === 'quick-result' && quickResult() && (
+        {step === 'quick-result' && currentQuickResult && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
             {saveStatusNotice}
             <p className="text-sm text-gray-500">Orientativo, no diagnóstico definitivo. Úsalo como punto de partida y valida con el test completo para una lectura más profunda.</p>
             <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
               <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
-              <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickResult().type.type}</h4>
-              <p className="text-[#CC5833] text-sm font-serif italic">{quickResult().type.subtitle}</p>
+              <h4 className="font-heading text-2xl text-[#1A1A1A]">{currentQuickResult.type.type}</h4>
+              <p className="text-[#CC5833] text-sm font-serif italic">{currentQuickResult.type.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
               <div className="bg-white border border-gray-100 rounded-2xl p-3">
                 <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivacion</p>
-                <p>{quickResult().type.motivation}</p>
+                <p>{currentQuickResult.type.motivation}</p>
               </div>
               <div className="bg-white border border-gray-100 rounded-2xl p-3">
                 <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Miedo central</p>
-                <p>{quickResult().type.fear}</p>
+                <p>{currentQuickResult.type.fear}</p>
               </div>
             </div>
+            {reportActions}
             <div className="flex flex-col sm:flex-row gap-3">
               <button onClick={() => handleTestStart('enneagram-full', 'full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
               <button onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rápido</button>
@@ -784,7 +822,7 @@ export default function TestEnneagramModal({
         {step === 'full-result' && fullResult && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
             {saveStatusNotice}
-            <div ref={printContentRef} className="space-y-6">
+            <div className="space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
@@ -967,14 +1005,9 @@ export default function TestEnneagramModal({
               </div>
             </details>
 
+            {reportActions}
+
             <div className="flex flex-col lg:flex-row gap-3">
-              <button
-                onClick={handlePrintResult}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-[#2E4036] text-white px-6 py-4 rounded-full font-bold btn-magnetic"
-              >
-                <Printer size={18} />
-                Imprimir resultado
-              </button>
               <button
                 onClick={() => { const text = encodeURIComponent(`Ya respondí el test completo de 135 preguntas. Mi resultado dominante fue el Eneatipo ${fullResult.dominantType} y mi centro dominante fue ${fullResult.dominantCenter.label}.`); window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank'); }}
                 className="flex-1 bg-[#25D366] text-white px-6 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(37,211,102,0.3)]"
@@ -986,6 +1019,12 @@ export default function TestEnneagramModal({
           </div>
         )}
       </div>
+
+      {activeReportData && (
+        <div ref={reportContentRef} className="enneagram-print-layer gemb-report-render-layer">
+          <EnneagramResultReport report={activeReportData} />
+        </div>
+      )}
     </div>
   );
 }
