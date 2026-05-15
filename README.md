@@ -79,7 +79,7 @@ Por ahora el panel admin solo permite el correo:
 fundacionsocial@gimnasioemocionalmb.com
 ```
 
-Ese usuario tambien debe tener un documento en `adminUsers/{uid}`.
+No se requiere crear documentos adicionales para administradores.
 
 ## Firestore
 
@@ -95,10 +95,9 @@ Reglas incluidas en `firestore.rules`:
 
 - Solo visitantes autenticados anonimamente pueden crear un lead valido de test.
 - El mismo UID que creo el lead puede completar el test una sola vez mientras el estado sea `in_progress`.
-- Solo el admin con Google, email `fundacionsocial@gimnasioemocionalmb.com` y documento `adminUsers/{uid}` puede leer respuestas.
+- Solo el admin con email `fundacionsocial@gimnasioemocionalmb.com` puede leer respuestas.
 - Solo ese admin puede actualizar seguimiento y notas despues.
 - Nadie puede borrar respuestas desde cliente.
-- `adminUsers` no se puede escribir desde cliente.
 
 Publica estas reglas desde Firebase Console o Firebase CLI antes de usar el panel en produccion.
 
@@ -106,34 +105,16 @@ Publica estas reglas desde Firebase Console o Firebase CLI antes de usar el pane
 firebase deploy --only firestore:rules --project gemb-web-tests
 ```
 
-## Crear el primer admin
+## Acceso admin
 
-1. Entra una vez al panel con Google:
+1. Entra al panel con Google:
 
 ```txt
 https://www.gimnasioemocionalmb.com/#admin
 ```
 
-2. Usa el correo `fundacionsocial@gimnasioemocionalmb.com`.
-3. Copia el UID del usuario en Firebase Authentication. El panel tambien lo muestra cuando la cuenta no esta autorizada.
-4. En Firestore crea:
-
-```txt
-coleccion: adminUsers
-documento: {UID}
-```
-
-Campos:
-
-```js
-{
-  role: "admin",
-  email: "fundacionsocial@gimnasioemocionalmb.com",
-  createdAt: new Date()
-}
-```
-
-5. Vuelve a entrar al panel con la misma cuenta Google.
+2. Usa exclusivamente el correo `fundacionsocial@gimnasioemocionalmb.com`.
+3. Cualquier otro correo vera el mensaje: `Esta cuenta no esta autorizada como administrador.`
 
 ## Probar guardado de respuestas
 
@@ -156,7 +137,7 @@ https://www.gimnasioemocionalmb.com/#admin
 Funciones:
 
 - Login privado con Google Auth.
-- Validacion contra `adminUsers/{uid}`.
+- Validacion por email admin unico.
 - Tabla de respuestas.
 - Filtros por test, alerta y estado de seguimiento.
 - Detalle con contacto, respuestas y resultado.
