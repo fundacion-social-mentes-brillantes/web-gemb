@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
+import AdminPanel from './components/AdminPanel';
 
 // Carga asíncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
@@ -19,6 +20,37 @@ const loadScript = (src) => new Promise((resolve, reject) => {
   script.onerror = reject;
   document.head.appendChild(script);
 });
+
+const createGsapFallback = () => {
+  const chain = {
+    from: () => chain,
+    to: () => chain
+  };
+
+  return {
+    context: (callback) => {
+      try {
+        callback?.();
+      } catch {
+        // Animations are optional; rendering should continue without GSAP.
+      }
+
+      return { revert: () => {} };
+    },
+    timeline: () => chain,
+    registerPlugin: () => {}
+  };
+};
+
+const ensureGsapRuntime = () => {
+  if (!window.gsap) {
+    window.gsap = createGsapFallback();
+  }
+
+  if (!window.ScrollTrigger) {
+    window.ScrollTrigger = {};
+  }
+};
 
 // --- ESTILOS GLOBALES Y FUENTES ---
 const GlobalStyles = () => (
@@ -268,9 +300,30 @@ const Hero = ({ onOpenTest }) => {
 
 // --- MICRO-FEATURES ---
 
+const ENEATYPE_CARDS = [
+  { title: "Eneatipo 1", insight: "El Perfeccionista / Reformador." },
+  { title: "Eneatipo 2", insight: "El Ayudador." },
+  { title: "Eneatipo 3", insight: "El Triunfador / Realizador." },
+  { title: "Eneatipo 4", insight: "El Individualista." },
+  { title: "Eneatipo 5", insight: "El Investigador." },
+  { title: "Eneatipo 6", insight: "El Leal." },
+  { title: "Eneatipo 7", insight: "El Entusiasta." },
+  { title: "Eneatipo 8", insight: "El Lider / Desafiador." },
+  { title: "Eneatipo 9", insight: "El Conciliador." }
+];
+
+const TELEMETRY_MESSAGES = [
+  "Analizando patron motivacional...",
+  "Detectando miedo central activado...",
+  "Identificando eneatipo dominante...",
+  "Cargando mapa de crecimiento...",
+  "Compilando protocolo de reduccion del ego..."
+];
+
 const FeatureDeck = () => {
   const [active, setActive] = useState(0);
-  const cards = [
+  const cards = ENEATYPE_CARDS;
+  /*
     { title: "Eneatipo 1", insight: "El Perfeccionista / Reformador." },
     { title: "Eneatipo 2", insight: "El Ayudador." },
     { title: "Eneatipo 3", insight: "El Triunfador / Realizador." },
@@ -280,14 +333,14 @@ const FeatureDeck = () => {
     { title: "Eneatipo 7", insight: "El Entusiasta." },
     { title: "Eneatipo 8", insight: "El Líder / Desafiador." },
     { title: "Eneatipo 9", insight: "El Conciliador." }
-  ];
+  */
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % cards.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [cards.length]);
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -333,13 +386,14 @@ const FeatureDeck = () => {
 };
 
 const FeatureTelemetry = () => {
-  const messages = [
+  const messages = TELEMETRY_MESSAGES;
+  /*
     "Analizando patrón motivacional...",
     "Detectando miedo central activado...",
     "Identificando eneatipo dominante...",
     "Cargando mapa de crecimiento...",
     "Compilando protocolo de reducción del ego..."
-  ];
+  */
   const [msgIdx, setMsgIdx] = useState(0);
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -355,12 +409,14 @@ const FeatureTelemetry = () => {
         timeout = setTimeout(() => setIsTyping(false), 2000);
       }
     } else {
-      setText("");
-      setMsgIdx((prev) => (prev + 1) % messages.length);
-      setIsTyping(true);
+      timeout = setTimeout(() => {
+        setText("");
+        setMsgIdx((prev) => (prev + 1) % messages.length);
+        setIsTyping(true);
+      }, 0);
     }
     return () => clearTimeout(timeout);
-  }, [text, isTyping, msgIdx]);
+  }, [text, isTyping, msgIdx, messages]);
 
   return (
     <div className="h-full bg-[#1A1A1A] text-[#F2F0E9] rounded-2xl p-6 flex flex-col font-mono text-sm relative overflow-hidden">
@@ -428,7 +484,7 @@ const FeatureAgenda = () => {
         setIsCopied(false);
         if (cursorRef.current) cursorRef.current.style.display = 'block';
       }, 6000);
-    } catch (err) {
+    } catch {
       const textArea = document.createElement("textarea");
       textArea.value = protocolText;
       document.body.appendChild(textArea);
@@ -1301,16 +1357,45 @@ export default function App() {
   const [isInitialAssessmentOpen, setInitialAssessmentOpen] = useState(false);
   const [isEnneagramOpen, setEnneagramOpen] = useState(false);
   const [isGuaranteeOpen, setGuaranteeOpen] = useState(false);
+  const [currentHash, setCurrentHash] = useState(() =>
+    typeof window !== 'undefined' ? window.location.hash : ''
+  );
+  const isAdminRoute = currentHash === '#admin';
 
   useEffect(() => {
+    const handleHashChange = () => setCurrentHash(window.location.hash);
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    if (isAdminRoute || gsapLoaded) return;
+
     const load = async () => {
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js');
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js');
-      window.gsap.registerPlugin(window.ScrollTrigger);
+      try {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js');
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js');
+        ensureGsapRuntime();
+        window.gsap.registerPlugin(window.ScrollTrigger);
+      } catch {
+        ensureGsapRuntime();
+      }
+
       setGsapLoaded(true);
     };
     load();
-  }, []);
+  }, [isAdminRoute, gsapLoaded]);
+
+  if (isAdminRoute) {
+    return (
+      <>
+        <GlobalStyles />
+        <div className="noise-overlay"></div>
+        <AdminPanel />
+      </>
+    );
+  }
 
   if (!gsapLoaded) {
     return (

@@ -1,9 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { X, ArrowLeft, CheckCircle2, AlertTriangle, HeartHandshake } from 'lucide-react';
 import { INITIAL_ASSESSMENT_QUESTIONS, INITIAL_ASSESSMENT_OPTIONS } from './initialAssessmentConfig';
+import LeadCaptureForm from './components/LeadCaptureForm';
+import { completeTestResponse, createTestLead } from './services/testResponsesService';
 
 const ALERT_MESSAGE = "Si respondió afirmativamente a más de 3 preguntas, va en camino de tener serios problemas. Si contestó 4, usted necesita ayuda.";
 const CLOSING_MESSAGE = "Podemos apoyarle, pero solo usted puede elegir.";
+
+const calculateInitialAssessmentResult = (answerValues, totalQuestions) => {
+  const yesCount = answerValues.filter((value) => value === 1).length;
+  const noCount = answerValues.filter((value) => value === 0).length;
+
+  return {
+    yesCount,
+    noCount,
+    totalQuestions,
+    isAlert: yesCount >= 4
+  };
+};
+
+const buildInitialAnswersPayload = (answerValues) =>
+  answerValues.map((value, index) => ({
+    questionId: index + 1,
+    question: INITIAL_ASSESSMENT_QUESTIONS[index],
+    answer: value,
+    label: value === 1 ? 'Si' : 'No'
+  }));
 
 export default function TestInitialAssessmentModal({
   isOpen,
@@ -16,6 +38,9 @@ export default function TestInitialAssessmentModal({
   const [answers, setAnswers] = useState([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [motion, setMotion] = useState('idle');
+  const [responseId, setResponseId] = useState(null);
+  const [isSavingCompletion, setIsSavingCompletion] = useState(false);
+  const [completionError, setCompletionError] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
@@ -24,6 +49,9 @@ export default function TestInitialAssessmentModal({
       setAnswers([]);
       setIsTransitioning(false);
       setMotion('idle');
+      setResponseId(null);
+      setIsSavingCompletion(false);
+      setCompletionError('');
     }
   }, [isOpen]);
 
@@ -32,16 +60,7 @@ export default function TestInitialAssessmentModal({
   const progress = Math.round(((currentIndex + 1) / totalQuestions) * 100);
 
   const result = useMemo(() => {
-    const yesCount = answers.filter((value) => value === 1).length;
-    const noCount = answers.filter((value) => value === 0).length;
-    const isAlert = yesCount >= 4;
-
-    return {
-      yesCount,
-      noCount,
-      totalQuestions,
-      isAlert
-    };
+    return calculateInitialAssessmentResult(answers, totalQuestions);
   }, [answers, totalQuestions]);
 
   if (!isOpen) return null;
@@ -53,6 +72,17 @@ export default function TestInitialAssessmentModal({
   const goToEnneagram = () => {
     onClose();
     onOpenEnneagram();
+  };
+
+  const handleLeadSubmit = async ({ contact, consent }) => {
+    const createdResponseId = await createTestLead({
+      contact,
+      consent,
+      testType: 'initial-assessment'
+    });
+
+    setResponseId(createdResponseId);
+    setStep('quiz');
   };
 
   const moveToQuestion = (nextIndex) => {
@@ -69,6 +99,25 @@ export default function TestInitialAssessmentModal({
     }, 220);
   };
 
+  const saveCompletedAssessment = async (answerValues, resultPayload) => {
+    setIsSavingCompletion(true);
+    setCompletionError('');
+
+    try {
+      await completeTestResponse(responseId, {
+        answers: buildInitialAnswersPayload(answerValues),
+        result: resultPayload
+      });
+    } catch (err) {
+      setCompletionError(
+        err?.message ||
+          'No pudimos guardar el resultado. Puedes reintentar sin perder tus respuestas.'
+      );
+    } finally {
+      setIsSavingCompletion(false);
+    }
+  };
+
   const handleAnswer = (value) => {
     if (isTransitioning) return;
 
@@ -81,7 +130,9 @@ export default function TestInitialAssessmentModal({
       return;
     }
 
+    const finalResult = calculateInitialAssessmentResult(updated, totalQuestions);
     setStep('result');
+    saveCompletedAssessment(updated, finalResult);
   };
 
   const handleRestart = () => {
@@ -90,6 +141,14 @@ export default function TestInitialAssessmentModal({
     setAnswers([]);
     setIsTransitioning(false);
     setMotion('idle');
+    setResponseId(null);
+    setIsSavingCompletion(false);
+    setCompletionError('');
+  };
+
+  const retrySaveCompletedAssessment = () => {
+    if (!responseId || answers.length < totalQuestions) return;
+    saveCompletedAssessment(answers, result);
   };
 
   const handleWhatsApp = () => {
@@ -166,7 +225,7 @@ export default function TestInitialAssessmentModal({
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => setStep('quiz')}
+                onClick={() => setStep('lead')}
                 className="flex-1 bg-[#CC5833] text-white px-7 py-4 rounded-full font-bold btn-magnetic shadow-[0_0_20px_rgba(204,88,51,0.28)]"
               >
                 Comenzar tu proceso
@@ -179,6 +238,15 @@ export default function TestInitialAssessmentModal({
               </button>
             </div>
           </div>
+        )}
+
+        {step === 'lead' && (
+          <LeadCaptureForm
+            title="Tus datos antes de empezar"
+            description="Guardaremos tus respuestas para que el equipo pueda revisar tu resultado y darte seguimiento por WhatsApp si lo solicitas."
+            submitLabel="Guardar datos y comenzar"
+            onSubmit={handleLeadSubmit}
+          />
         )}
 
         {step === 'quiz' && (
@@ -242,6 +310,26 @@ export default function TestInitialAssessmentModal({
               <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#CC5833] mb-3">Resultado de tu proceso</p>
               <h2 className="font-heading text-3xl md:text-4xl text-[#1A1A1A]">Tu resultado</h2>
             </div>
+
+            {(isSavingCompletion || completionError) && (
+              <div className={`rounded-2xl border px-4 py-3 text-sm ${completionError ? 'border-[#CC5833]/25 bg-[#FFF3EE] text-[#7A3A25]' : 'border-[#2E4036]/15 bg-[#F4F7F5] text-[#2E4036]'}`}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <p>
+                    {isSavingCompletion
+                      ? 'Guardando tu resultado...'
+                      : completionError}
+                  </p>
+                  {completionError && (
+                    <button
+                      onClick={retrySaveCompletedAssessment}
+                      className="rounded-full bg-[#2E4036] px-4 py-2 text-xs font-bold text-white"
+                    >
+                      Reintentar guardado
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className={`rounded-[2.25rem] border p-6 md:p-8 shadow-sm ${result.isAlert ? 'bg-[linear-gradient(135deg,#FFF3EE_0%,#FFF9F6_55%,#FFFFFF_100%)] border-[#CC5833]/20' : 'bg-[linear-gradient(135deg,#F5F7F3_0%,#FCFCFA_60%,#FFFFFF_100%)] border-[#2E4036]/12'}`}>
               <div className="flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">

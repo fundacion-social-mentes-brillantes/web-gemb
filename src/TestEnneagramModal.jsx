@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight } from 'lucide-react';
 import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
+import LeadCaptureForm from './components/LeadCaptureForm';
+import { completeTestResponse, createTestLead } from './services/testResponsesService';
 
 const RESPONSE_SCORE_MAP = {
   2: 1,
@@ -188,6 +190,87 @@ const getResultTableRows = (typeData, centerLabel) => {
   ];
 };
 
+const getQuickResultForChoice = (choice, quickMatrix, eneatypes) => {
+  if (!choice.first || !choice.second) return null;
+
+  const code = `${choice.first}${choice.second}`;
+  const combo = quickMatrix[code];
+  if (!combo) return null;
+
+  return {
+    code,
+    typeId: combo.typeId,
+    label: combo.label,
+    note: combo.note,
+    type: eneatypes[combo.typeId]
+  };
+};
+
+const buildQuickAnswersPayload = (choice, quickGroups) => {
+  const firstOption = quickGroups.first.find((option) => option.code === choice.first);
+  const secondOption = quickGroups.second.find((option) => option.code === choice.second);
+
+  return [
+    {
+      group: 'first',
+      code: firstOption?.code || choice.first,
+      title: firstOption?.title || '',
+      description: firstOption?.desc || ''
+    },
+    {
+      group: 'second',
+      code: secondOption?.code || choice.second,
+      title: secondOption?.title || '',
+      description: secondOption?.desc || ''
+    }
+  ];
+};
+
+const buildQuickResultPayload = (quickResult) => ({
+  combination: quickResult.code,
+  suggestedType: quickResult.typeId,
+  suggestedLabel: quickResult.label,
+  note: quickResult.note,
+  result: quickResult.type?.type || '',
+  subtitle: quickResult.type?.subtitle || '',
+  motivation: quickResult.type?.motivation || '',
+  fear: quickResult.type?.fear || ''
+});
+
+const buildFullAnswersPayload = (answerValues) =>
+  FULL_STATEMENTS.map((statement, index) => {
+    const answer = answerValues[index];
+    const option = FULL_RESPONSE_OPTIONS.find((item) => item.value === answer);
+
+    return {
+      questionId: statement.id,
+      order: statement.order,
+      block: statement.block,
+      eneatype: statement.eneatype,
+      question: statement.text,
+      answer,
+      label: option?.label || ''
+    };
+  });
+
+const buildFullResultPayload = (fullResult, dominantTypeData) => ({
+  dominantType: fullResult.dominantType,
+  dominantTypeTitle: dominantTypeData?.type || '',
+  dominantTypeSubtitle: dominantTypeData?.subtitle || '',
+  dominantCenter: fullResult.dominantCenter,
+  affinityTable: fullResult.affinityTable,
+  triads: fullResult.triads,
+  harmonics: fullResult.harmonics,
+  calculationDetails: {
+    affinityByType: fullResult.affinityByType,
+    weightedPointsByType: fullResult.weightedPointsByType,
+    questionCountByType: fullResult.questionCountByType,
+    muchosByType: fullResult.muchosByType,
+    pocosByType: fullResult.pocosByType,
+    nadasByType: fullResult.nadasByType
+  }
+});
+
 export default function TestEnneagramModal({
   isOpen,
   onClose,
@@ -203,7 +286,12 @@ export default function TestEnneagramModal({
   const [answerFeedback, setAnswerFeedback] = useState('');
   const [questionMotion, setQuestionMotion] = useState('idle');
   const [isTransitioningQuestion, setIsTransitioningQuestion] = useState(false);
+  const [responseId, setResponseId] = useState(null);
+  const [selectedTestType, setSelectedTestType] = useState(null);
+  const [pendingStartStep, setPendingStartStep] = useState(null);
+  const [saveState, setSaveState] = useState({ isSaving: false, error: '' });
   const printContentRef = useRef(null);
+  const lastCompletionPayloadRef = useRef(null);
 
   useEffect(() => {
     if (!answerFeedback) return undefined;
@@ -219,6 +307,11 @@ export default function TestEnneagramModal({
     setAnswerFeedback('');
     setQuestionMotion('idle');
     setIsTransitioningQuestion(false);
+    setResponseId(null);
+    setSelectedTestType(null);
+    setPendingStartStep(null);
+    setSaveState({ isSaving: false, error: '' });
+    lastCompletionPayloadRef.current = null;
   };
 
   const handleClose = () => {
@@ -229,11 +322,62 @@ export default function TestEnneagramModal({
   if (!isOpen) return null;
 
   const quickResult = () => {
-    if (!quickChoice.first || !quickChoice.second) return null;
-    const code = `${quickChoice.first}${quickChoice.second}`;
-    const combo = quickMatrix[code];
-    if (!combo) return null;
-    return { code, label: combo.label, note: combo.note, type: eneatypes[combo.typeId] };
+    return getQuickResultForChoice(quickChoice, quickMatrix, eneatypes);
+  };
+
+  const handleTestStart = (testType, nextStep) => {
+    setSelectedTestType(testType);
+    setPendingStartStep(nextStep);
+    setSaveState({ isSaving: false, error: '' });
+    setStep('lead');
+  };
+
+  const handleLeadSubmit = async ({ contact, consent }) => {
+    const createdResponseId = await createTestLead({
+      contact,
+      consent,
+      testType: selectedTestType
+    });
+
+    setResponseId(createdResponseId);
+    setStep(pendingStartStep);
+  };
+
+  const persistCompletion = async (payload) => {
+    lastCompletionPayloadRef.current = payload;
+    setSaveState({ isSaving: true, error: '' });
+
+    try {
+      await completeTestResponse(responseId, payload);
+      setSaveState({ isSaving: false, error: '' });
+    } catch (err) {
+      setSaveState({
+        isSaving: false,
+        error:
+          err?.message ||
+          'No pudimos guardar el resultado. Puedes reintentar sin perder tus respuestas.'
+      });
+    }
+  };
+
+  const retryPersistCompletion = () => {
+    if (!lastCompletionPayloadRef.current) return;
+    persistCompletion(lastCompletionPayloadRef.current);
+  };
+
+  const handleQuickSecondSelect = (code) => {
+    const updatedChoice = { ...quickChoice, second: code };
+    const nextQuickResult = getQuickResultForChoice(updatedChoice, quickMatrix, eneatypes);
+
+    setQuickChoice(updatedChoice);
+    setStep('quick-result');
+
+    if (nextQuickResult) {
+      persistCompletion({
+        answers: buildQuickAnswersPayload(updatedChoice, quickGroups),
+        result: buildQuickResultPayload(nextQuickResult)
+      });
+    }
   };
 
   const maybeVibrate = () => {
@@ -270,9 +414,16 @@ export default function TestEnneagramModal({
       return;
     }
 
+    const completedFullResult = calculateFullResult(updated);
+    const completedDominantTypeData = eneatypes[completedFullResult.dominantType];
+
     setStep('full-result');
     setQuestionMotion('idle');
     setIsTransitioningQuestion(false);
+    persistCompletion({
+      answers: buildFullAnswersPayload(updated),
+      result: buildFullResultPayload(completedFullResult, completedDominantTypeData)
+    });
   };
 
   const handlePrintResult = () => {
@@ -392,6 +543,21 @@ export default function TestEnneagramModal({
     : questionMotion === 'in'
       ? 'opacity-100 translate-y-0 md:translate-x-0'
       : 'opacity-100 translate-y-0';
+  const saveStatusNotice = (saveState.isSaving || saveState.error) ? (
+    <div className={`rounded-2xl border px-4 py-3 text-sm ${saveState.error ? 'border-[#CC5833]/25 bg-[#FFF3EE] text-[#7A3A25]' : 'border-[#2E4036]/15 bg-[#F4F7F5] text-[#2E4036]'}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <p>{saveState.isSaving ? 'Guardando tu resultado...' : saveState.error}</p>
+        {saveState.error && (
+          <button
+            onClick={retryPersistCompletion}
+            className="rounded-full bg-[#2E4036] px-4 py-2 text-xs font-bold text-white"
+          >
+            Reintentar guardado
+          </button>
+        )}
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
@@ -430,7 +596,7 @@ export default function TestEnneagramModal({
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Orientativo, no diagnóstico definitivo.</li>
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Sirve como punto de partida para pasar al test completo.</li>
               </ul>
-              <button onClick={() => setStep('quick-first')} className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
+              <button onClick={() => handleTestStart('enneagram-quick', 'quick-first')} className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
                 Hacer test rápido
               </button>
             </div>
@@ -448,11 +614,20 @@ export default function TestEnneagramModal({
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Respuestas: MUCHO, POCO, NADA.</li>
                 <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#E2C17D] mt-0.5" /> Resultado real por eneatipo y centro dominante.</li>
               </ul>
-              <button onClick={() => setStep('full-intro')} className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
+              <button onClick={() => handleTestStart('enneagram-full', 'full-intro')} className="mt-auto bg-[#CC5833] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
                 Hacer test completo
               </button>
             </div>
           </div>
+        )}
+
+        {step === 'lead' && (
+          <LeadCaptureForm
+            title="Tus datos antes del test"
+            description="Guardaremos tu resultado de eneagrama para que el equipo pueda revisarlo con contexto y seguimiento."
+            submitLabel="Guardar datos y continuar"
+            onSubmit={handleLeadSubmit}
+          />
         )}
 
         {step === 'quick-first' && (
@@ -482,7 +657,7 @@ export default function TestEnneagramModal({
             <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
             <div className="space-y-3">
               {quickGroups.second.map(opt => (
-                <button key={opt.code} onClick={() => { setQuickChoice({ ...quickChoice, second: opt.code }); setStep('quick-result'); }} className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all">
+                <button key={opt.code} onClick={() => handleQuickSecondSelect(opt.code)} className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-9 h-9 rounded-xl bg-[#2E4036]/10 text-[#2E4036] font-bold flex items-center justify-center">{opt.code}</span>
                     <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
@@ -509,6 +684,7 @@ export default function TestEnneagramModal({
 
         {step === 'quick-result' && quickResult() && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
+            {saveStatusNotice}
             <p className="text-sm text-gray-500">Orientativo, no diagnóstico definitivo. Úsalo como punto de partida y valida con el test completo para una lectura más profunda.</p>
             <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
               <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
@@ -526,7 +702,7 @@ export default function TestEnneagramModal({
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={() => setStep('full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
+              <button onClick={() => handleTestStart('enneagram-full', 'full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
               <button onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rápido</button>
             </div>
           </div>
@@ -607,6 +783,7 @@ export default function TestEnneagramModal({
 
         {step === 'full-result' && fullResult && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
+            {saveStatusNotice}
             <div ref={printContentRef} className="space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">

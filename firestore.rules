@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid));
+    }
+
+    function isValidTestType() {
+      return request.resource.data.testType in [
+        'initial-assessment',
+        'enneagram-quick',
+        'enneagram-full'
+      ];
+    }
+
+    function isValidLeadCreate() {
+      return request.resource.data.keys().hasOnly([
+          'testType',
+          'testVersion',
+          'contact',
+          'consent',
+          'answers',
+          'result',
+          'source',
+          'followUp',
+          'createdAt',
+          'completedAt'
+        ]) &&
+        isValidTestType() &&
+        request.resource.data.testVersion == '2026-05-14' &&
+        request.resource.data.contact.keys().hasOnly([
+          'fullName',
+          'whatsapp',
+          'email',
+          'city'
+        ]) &&
+        request.resource.data.contact.fullName is string &&
+        request.resource.data.contact.fullName.size() >= 2 &&
+        request.resource.data.contact.fullName.size() <= 140 &&
+        request.resource.data.contact.whatsapp is string &&
+        request.resource.data.contact.whatsapp.size() >= 8 &&
+        request.resource.data.contact.whatsapp.size() <= 40 &&
+        request.resource.data.contact.email is string &&
+        request.resource.data.contact.email.size() <= 180 &&
+        request.resource.data.contact.city is string &&
+        request.resource.data.contact.city.size() <= 120 &&
+        request.resource.data.consent.keys().hasOnly([
+          'privacyAccepted',
+          'sensitiveDataAccepted',
+          'acceptedAt',
+          'consentTextVersion'
+        ]) &&
+        request.resource.data.consent.privacyAccepted == true &&
+        request.resource.data.consent.sensitiveDataAccepted == true &&
+        request.resource.data.consent.acceptedAt == request.time &&
+        request.resource.data.consent.consentTextVersion == '2026-05-14' &&
+        request.resource.data.answers is list &&
+        request.resource.data.answers.size() == 0 &&
+        request.resource.data.result is map &&
+        request.resource.data.followUp.keys().hasOnly([
+          'status',
+          'contacted',
+          'notes'
+        ]) &&
+        request.resource.data.followUp.status == 'in_progress' &&
+        request.resource.data.followUp.contacted == false &&
+        request.resource.data.followUp.notes == '' &&
+        request.resource.data.source.keys().hasOnly([
+          'page',
+          'path',
+          'hash',
+          'referrer',
+          'utmSource',
+          'utmMedium',
+          'utmCampaign'
+        ]) &&
+        request.resource.data.source.page == 'web-gemb' &&
+        request.resource.data.source.path is string &&
+        request.resource.data.source.hash is string &&
+        request.resource.data.source.referrer is string &&
+        request.resource.data.source.utmSource is string &&
+        request.resource.data.source.utmMedium is string &&
+        request.resource.data.source.utmCampaign is string &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.completedAt == null;
+    }
+
+    match /testResponses/{docId} {
+      allow create: if isValidLeadCreate();
+      allow read, update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /adminUsers/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

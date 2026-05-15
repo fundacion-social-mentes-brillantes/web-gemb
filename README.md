@@ -1,89 +1,164 @@
 # web-gemb
 
-Sitio web oficial de **Gimnasio Emocional Mentes Brillantes (GEMB)**.  
-🌐 [gimnasioemocionalmb.com](https://gimnasioemocionalmb.com/)
+Sitio oficial de **Gimnasio Emocional Mentes Brillantes (GEMB)**, construido con React + Vite + Tailwind y publicado en Vercel desde GitHub.
 
----
+Produccion: https://www.gimnasioemocionalmb.com/
 
-## Descripción
+## Stack
 
-Este repositorio contiene el sitio web oficial de GEMB, construido con **React + Vite** y publicado automáticamente en **Vercel** desde la rama `main`.
-
-GEMB es un Gimnasio Emocional: un espacio para entrenar el carácter, desintoxicar el Ego y recablear patrones emocionales con práctica guiada, liderado por Alexandra Ortega.
-
----
-
-## Tecnologías
-
-| Tecnología | Uso |
+| Tecnologia | Uso |
 |---|---|
 | React | Interfaz de usuario |
-| Vite | Bundler y servidor de desarrollo |
-| Tailwind CSS | Estilos y diseño responsive |
-| Vercel | Hosting y despliegue automático |
+| Vite | Build y servidor local |
+| Tailwind CSS | Estilos responsive |
+| Firebase | Firestore, Auth con Google y Analytics opcional |
+| Vercel | Hosting y despliegue automatico |
 
----
-
-## Cómo correr el proyecto en local
+## Instalar y correr local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre `http://localhost:5173` en tu navegador.
+Abre `http://localhost:5173`.
 
----
+## Scripts
 
-## Scripts disponibles
-
-| Comando | Descripción |
+| Comando | Descripcion |
 |---|---|
-| `npm run dev` | Servidor de desarrollo local |
-| `npm run build` | Empaqueta el sitio para producción (genera `/dist`) |
-| `npm run preview` | Vista previa del build de producción |
-| `npm run lint` | Linter de código |
+| `npm run dev` | Servidor local de desarrollo |
+| `npm run build` | Build de produccion en `dist/` |
+| `npm run preview` | Vista previa del build |
+| `npm run lint` | Revision de lint |
 
----
+## Configurar Firebase local
 
-## Flujo de trabajo
+1. Copia `.env.example` como `.env.local`.
+2. Completa los valores reales del proyecto Firebase `gemb-web-tests`.
+3. No subas `.env.local` a GitHub. El `.gitignore` ya excluye archivos `*.local`.
 
-1. Se trabaja en local con `npm run dev`
-2. Se revisa visualmente en `http://localhost:5173`
-3. Se hace commit y push a `main` en GitHub
-4. Vercel detecta el push y publica automáticamente en producción
+Variables requeridas:
 
----
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_MEASUREMENT_ID=
+```
 
-## Archivos importantes
+`VITE_FIREBASE_MEASUREMENT_ID` es opcional para Analytics. El codigo solo carga Analytics en navegador cuando esa variable existe.
 
-| Archivo | Descripción |
-|---|---|
-| `src/App.jsx` | Componente principal — toda la lógica y UI del sitio |
-| `public/logo-gemb.png` | Logo oficial de la marca |
-| `public/robots.txt` | Instrucciones para motores de búsqueda |
-| `public/sitemap.xml` | Mapa del sitio para indexación SEO |
-| `public/googlebd4867860e3b5091.html` | Archivo de verificación de Google Search Console |
+## Configurar variables en Vercel
 
----
+En Vercel, entra al proyecto y agrega estas variables en **Settings > Environment Variables**:
 
-## SEO
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`
+- `VITE_FIREBASE_MEASUREMENT_ID`
 
-El sitio ya tiene SEO técnico básico implementado en `index.html`:
+Luego redeploya el proyecto para que Vercel compile con las variables.
 
-- ✅ `<title>` con nombre de marca y keyword principal
-- ✅ Meta description con descripción de servicio
-- ✅ Etiqueta `canonical` apuntando a `https://gimnasioemocionalmb.com/`
-- ✅ Open Graph completo (título, descripción, imagen) para compartir en redes
-- ✅ Twitter Card configurada
-- ✅ `robots.txt` permitiendo indexación completa
-- ✅ `sitemap.xml` enviado a Google Search Console
-- ✅ Favicon con el logo de la marca
+## Firestore
 
----
+La coleccion principal es:
 
-## Notas
+```txt
+testResponses
+```
 
-- No volver a reemplazar este README por el template genérico de Vite.
-- Mantener este archivo actualizado si se agregan páginas, rutas o cambios estructurales importantes.
-- El sitio es una SPA (Single Page Application) — todo vive en `App.jsx`.
+Cada test crea primero un lead en estado `in_progress` y, al finalizar, guarda respuestas y resultado con estado `new`.
+
+Reglas incluidas en `firestore.rules`:
+
+- Cualquier visitante puede crear un lead valido de test.
+- Solo usuarios autorizados en `adminUsers/{uid}` pueden leer y actualizar respuestas.
+- Nadie puede borrar respuestas desde cliente.
+- `adminUsers` no se puede escribir desde cliente.
+
+Publica estas reglas desde Firebase Console o Firebase CLI antes de usar el panel en produccion.
+
+## Crear el primer admin
+
+1. Entra una vez al panel con Google:
+
+```txt
+https://www.gimnasioemocionalmb.com/#admin
+```
+
+2. Copia el UID del usuario en Firebase Authentication. El panel tambien lo muestra cuando la cuenta no esta autorizada.
+3. En Firestore crea:
+
+```txt
+coleccion: adminUsers
+documento: {UID}
+```
+
+Campos:
+
+```js
+{
+  role: "admin",
+  email: "correo-del-admin",
+  createdAt: new Date()
+}
+```
+
+4. Vuelve a entrar al panel con la misma cuenta Google.
+
+## Probar guardado de respuestas
+
+1. Configura `.env.local` o las variables en Vercel.
+2. Corre `npm run dev`.
+3. Abre la landing y haz la **Valoracion inicial**.
+4. Antes de responder, completa nombre, WhatsApp y consentimientos.
+5. Finaliza el test y revisa en Firestore la coleccion `testResponses`.
+6. Repite con **Eneagrama rapido** y **Eneagrama completo**.
+7. Entra a `/#admin` con un admin autorizado y confirma que se ven filtros, detalle, notas y exportacion CSV.
+
+## Panel admin
+
+URL de produccion:
+
+```txt
+https://www.gimnasioemocionalmb.com/#admin
+```
+
+Funciones:
+
+- Login privado con Google Auth.
+- Validacion contra `adminUsers/{uid}`.
+- Tabla de respuestas.
+- Filtros por test, alerta y estado de seguimiento.
+- Detalle con contacto, respuestas y resultado.
+- Notas internas y estado de seguimiento.
+- Boton para abrir WhatsApp.
+- Exportacion CSV.
+
+## App Check
+
+App Check no esta implementado en este MVP. Se recomienda activarlo despues en Firebase para reducir abuso de creacion de documentos desde clientes no autorizados.
+
+## Deploy
+
+Flujo normal:
+
+```bash
+npm run build
+git add .
+git commit -m "feat: add Firebase test responses and admin panel"
+git push
+```
+
+El push a GitHub activa el deploy automatico en Vercel. Si la CLI de Vercel esta autenticada, tambien se puede ejecutar:
+
+```bash
+vercel --prod
+```
