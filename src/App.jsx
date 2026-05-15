@@ -38,7 +38,10 @@ const createGsapFallback = () => {
       return { revert: () => {} };
     },
     timeline: () => chain,
-    registerPlugin: () => {}
+    registerPlugin: () => {},
+    utils: {
+      toArray: () => []
+    }
   };
 };
 
@@ -49,6 +52,10 @@ const ensureGsapRuntime = () => {
 
   if (!window.ScrollTrigger) {
     window.ScrollTrigger = {};
+  }
+
+  if (typeof window.ScrollTrigger.create !== 'function') {
+    window.ScrollTrigger.create = () => ({ kill: () => {} });
   }
 };
 
@@ -166,7 +173,7 @@ const Navbar = ({ onOpenTest }) => {
             </div>
 
             {/* CENTRO: Enlaces */}
-            <div className={`w-2/4 hidden md:flex justify-center gap-6 lg:gap-8 text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
+            <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
               <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
               <a href="#eneatipos" className="hover:opacity-70 transition-opacity">Eneatipos</a>
               <a href="#archivo" className="hover:opacity-70 transition-opacity">Archivo</a>
@@ -177,6 +184,17 @@ const Navbar = ({ onOpenTest }) => {
               </a>
 
               <a href="#planes" className="hover:opacity-70 transition-opacity">Planes</a>
+              <a
+                href="/#admin"
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
+                  scrolled
+                    ? 'border-[#2E4036]/20 text-[#2E4036] hover:border-[#2E4036] hover:bg-[#2E4036] hover:text-white'
+                    : 'border-white/35 text-white/90 hover:bg-white/12 hover:text-white backdrop-blur-sm'
+                }`}
+              >
+                <ShieldCheck size={13} />
+                Ingresar
+              </a>
             </div>
 
             {/* DERECHA: Botón CTA */}
@@ -203,6 +221,14 @@ const Navbar = ({ onOpenTest }) => {
           <a href="#archivo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Archivo</a>
           <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> Sesión Coach</a>
           <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Planes</a>
+          <a
+            href="/#admin"
+            onClick={() => setMobileMenuOpen(false)}
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white/85 hover:bg-white/10 transition-colors"
+          >
+            <ShieldCheck size={17} />
+            Ingresar
+          </a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
             className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
@@ -1030,10 +1056,11 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-4">
-            <div className="flex gap-8 font-medium text-sm text-gray-300">
+            <div className="flex flex-wrap gap-x-8 gap-y-3 font-medium text-sm text-gray-300 md:justify-end">
               <a href="#metodo" className="hover:text-white transition-colors">Método</a>
               <a href="#archivo" className="hover:text-white transition-colors">Archivo</a>
               <a href="#planes" className="hover:text-white transition-colors">Planes</a>
+              <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
             </div>
             <div className="flex items-center gap-2 mt-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <div className="w-2 h-2 rounded-full bg-[#00FF66] animate-pulse"></div>
