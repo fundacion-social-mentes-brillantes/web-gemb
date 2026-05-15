@@ -66,6 +66,21 @@ En Vercel, entra al proyecto y agrega estas variables en **Settings > Environmen
 
 Luego redeploya el proyecto para que Vercel compile con las variables.
 
+## Firebase Authentication
+
+En Firebase Authentication deben estar habilitados estos proveedores:
+
+- **Anonymous** para visitantes que responden tests. El sitio firma al visitante de forma anonima antes de crear el lead y guarda `createdByUid`.
+- **Google** para administradores del panel privado.
+
+Por ahora el panel admin solo permite el correo:
+
+```txt
+fundacionsocial@gimnasioemocionalmb.com
+```
+
+Ese usuario tambien debe tener un documento en `adminUsers/{uid}`.
+
 ## Firestore
 
 La coleccion principal es:
@@ -74,16 +89,22 @@ La coleccion principal es:
 testResponses
 ```
 
-Cada test crea primero un lead en estado `in_progress` y, al finalizar, guarda respuestas y resultado con estado `new`.
+Cada test crea primero un lead en estado `in_progress` con el UID anonimo del visitante. Al finalizar, el mismo UID puede actualizar solo ese documento para guardar respuestas y resultado con estado `new`.
 
 Reglas incluidas en `firestore.rules`:
 
-- Cualquier visitante puede crear un lead valido de test.
-- Solo usuarios autorizados en `adminUsers/{uid}` pueden leer y actualizar respuestas.
+- Solo visitantes autenticados anonimamente pueden crear un lead valido de test.
+- El mismo UID que creo el lead puede completar el test una sola vez mientras el estado sea `in_progress`.
+- Solo el admin con Google, email `fundacionsocial@gimnasioemocionalmb.com` y documento `adminUsers/{uid}` puede leer respuestas.
+- Solo ese admin puede actualizar seguimiento y notas despues.
 - Nadie puede borrar respuestas desde cliente.
 - `adminUsers` no se puede escribir desde cliente.
 
 Publica estas reglas desde Firebase Console o Firebase CLI antes de usar el panel en produccion.
+
+```bash
+firebase deploy --only firestore:rules --project gemb-web-tests
+```
 
 ## Crear el primer admin
 
@@ -93,8 +114,9 @@ Publica estas reglas desde Firebase Console o Firebase CLI antes de usar el pane
 https://www.gimnasioemocionalmb.com/#admin
 ```
 
-2. Copia el UID del usuario en Firebase Authentication. El panel tambien lo muestra cuando la cuenta no esta autorizada.
-3. En Firestore crea:
+2. Usa el correo `fundacionsocial@gimnasioemocionalmb.com`.
+3. Copia el UID del usuario en Firebase Authentication. El panel tambien lo muestra cuando la cuenta no esta autorizada.
+4. En Firestore crea:
 
 ```txt
 coleccion: adminUsers
@@ -106,12 +128,12 @@ Campos:
 ```js
 {
   role: "admin",
-  email: "correo-del-admin",
+  email: "fundacionsocial@gimnasioemocionalmb.com",
   createdAt: new Date()
 }
 ```
 
-4. Vuelve a entrar al panel con la misma cuenta Google.
+5. Vuelve a entrar al panel con la misma cuenta Google.
 
 ## Probar guardado de respuestas
 

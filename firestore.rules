@@ -1,23 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAdmin() {
+    function isAllowedAdminIdentity() {
       return request.auth != null &&
+        request.auth.token.email == 'fundacionsocial@gimnasioemocionalmb.com' &&
+        request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    function isAdmin() {
+      return isAllowedAdminIdentity() &&
         exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid));
     }
 
-    function isValidTestType() {
-      return request.resource.data.testType in [
+    function isValidTestType(testType) {
+      return testType in [
         'initial-assessment',
         'enneagram-quick',
         'enneagram-full'
       ];
     }
 
+    function isValidFollowUpStatus(status) {
+      return status in [
+        'new',
+        'contacted',
+        'scheduled',
+        'in_process',
+        'in_progress',
+        'closed'
+      ];
+    }
+
     function isValidLeadCreate() {
-      return request.resource.data.keys().hasOnly([
+      return request.auth != null &&
+        request.resource.data.keys().hasOnly([
           'testType',
           'testVersion',
+          'createdByUid',
           'contact',
           'consent',
           'answers',
@@ -27,8 +46,9 @@ service cloud.firestore {
           'createdAt',
           'completedAt'
         ]) &&
-        isValidTestType() &&
+        isValidTestType(request.resource.data.testType) &&
         request.resource.data.testVersion == '2026-05-14' &&
+        request.resource.data.createdByUid == request.auth.uid &&
         request.resource.data.contact.keys().hasOnly([
           'fullName',
           'whatsapp',
@@ -86,14 +106,61 @@ service cloud.firestore {
         request.resource.data.completedAt == null;
     }
 
+    function isOwnerCompletionUpdate() {
+      return request.auth != null &&
+        resource.data.createdByUid == request.auth.uid &&
+        resource.data.followUp.status == 'in_progress' &&
+        resource.data.completedAt == null &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'answers',
+          'result',
+          'completedAt',
+          'followUp'
+        ]) &&
+        request.resource.data.createdByUid == resource.data.createdByUid &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.contact == resource.data.contact &&
+        request.resource.data.consent == resource.data.consent &&
+        request.resource.data.source == resource.data.source &&
+        request.resource.data.testType == resource.data.testType &&
+        request.resource.data.testVersion == resource.data.testVersion &&
+        request.resource.data.answers is list &&
+        request.resource.data.answers.size() > 0 &&
+        request.resource.data.result is map &&
+        request.resource.data.completedAt == request.time &&
+        request.resource.data.followUp.diff(resource.data.followUp).affectedKeys().hasOnly([
+          'status'
+        ]) &&
+        request.resource.data.followUp.status == 'new' &&
+        request.resource.data.followUp.contacted == resource.data.followUp.contacted &&
+        request.resource.data.followUp.notes == resource.data.followUp.notes;
+    }
+
+    function isAdminFollowUpUpdate() {
+      return isAdmin() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'followUp'
+        ]) &&
+        request.resource.data.followUp.diff(resource.data.followUp).affectedKeys().hasOnly([
+          'status',
+          'contacted',
+          'notes'
+        ]) &&
+        isValidFollowUpStatus(request.resource.data.followUp.status) &&
+        request.resource.data.followUp.contacted is bool &&
+        request.resource.data.followUp.notes is string &&
+        request.resource.data.followUp.notes.size() <= 5000;
+    }
+
     match /testResponses/{docId} {
       allow create: if isValidLeadCreate();
-      allow read, update: if isAdmin();
+      allow read: if isAdmin();
+      allow update: if isOwnerCompletionUpdate() || isAdminFollowUpUpdate();
       allow delete: if false;
     }
 
     match /adminUsers/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
+      allow read: if isAllowedAdminIdentity() && request.auth.uid == uid;
       allow write: if false;
     }
 

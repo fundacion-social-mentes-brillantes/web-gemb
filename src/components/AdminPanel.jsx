@@ -50,6 +50,20 @@ const FILTERS = [
   { key: 'closed', label: 'Cerrados' }
 ];
 
+const ADMIN_EMAIL = 'fundacionsocial@gimnasioemocionalmb.com';
+const UNAUTHORIZED_ADMIN_MESSAGE = 'Esta cuenta no está autorizada como administrador.';
+
+const isAllowedAdminUser = (user) => {
+  if (!user || user.isAnonymous) return false;
+
+  const emailMatches = user.email?.toLowerCase() === ADMIN_EMAIL;
+  const signedInWithGoogle = user.providerData.some(
+    (provider) => provider.providerId === GoogleAuthProvider.PROVIDER_ID
+  );
+
+  return emailMatches && signedInWithGoogle;
+};
+
 const toDate = (value) => {
   if (!value) return null;
   if (typeof value.toDate === 'function') return value.toDate();
@@ -229,12 +243,20 @@ export default function AdminPanel() {
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setAuthLoading(true);
-      setAuthUser(user);
+      setAuthUser(null);
       setAuthError('');
       setIsAuthorized(false);
       setResponses([]);
 
-      if (!user) {
+      if (!user || user.isAnonymous) {
+        setAuthLoading(false);
+        return;
+      }
+
+      setAuthUser(user);
+
+      if (!isAllowedAdminUser(user)) {
+        setAuthError(UNAUTHORIZED_ADMIN_MESSAGE);
         setAuthLoading(false);
         return;
       }
@@ -245,7 +267,7 @@ export default function AdminPanel() {
         if (adminSnapshot.exists()) {
           setIsAuthorized(true);
         } else {
-          setAuthError('Tu cuenta no esta autorizada como administrador.');
+          setAuthError(UNAUTHORIZED_ADMIN_MESSAGE);
         }
       } catch (err) {
         setAuthError(err?.message || 'No pudimos validar el administrador.');
@@ -266,8 +288,13 @@ export default function AdminPanel() {
   const handleSignIn = async () => {
     setAuthError('');
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
 
     try {
+      if (auth.currentUser?.isAnonymous) {
+        await signOut(auth);
+      }
+
       await signInWithPopup(auth, provider);
     } catch (err) {
       setAuthError(err?.message || 'No pudimos iniciar sesion con Google.');
@@ -357,11 +384,13 @@ export default function AdminPanel() {
             <AlertCircle size={26} />
           </div>
           <h1 className="font-heading text-3xl text-[#1A1A1A] mb-3">
-            Tu cuenta no est&aacute; autorizada como administrador.
+            {authError || UNAUTHORIZED_ADMIN_MESSAGE}
           </h1>
           <p className="text-sm text-[#1A1A1A]/65 mb-2">{authUser.email}</p>
           <p className="font-mono text-xs text-[#2E4036] break-all mb-6">UID: {authUser.uid}</p>
-          {authError && <p className="text-sm text-[#7A3A25] mb-6">{authError}</p>}
+          {authError && authError !== UNAUTHORIZED_ADMIN_MESSAGE && (
+            <p className="text-sm text-[#7A3A25] mb-6">{authError}</p>
+          )}
           <button
             onClick={handleSignOut}
             className="rounded-full border border-[#2E4036]/20 px-5 py-3 font-bold text-[#2E4036] hover:bg-[#F2F0E9]"

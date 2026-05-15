@@ -8,7 +8,8 @@ import {
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { signInAnonymously } from 'firebase/auth';
+import { auth, db } from '../lib/firebase';
 
 export const TEST_RESPONSES_COLLECTION = 'testResponses';
 export const TEST_VERSION = '2026-05-14';
@@ -26,6 +27,19 @@ const ensureDb = () => {
   }
 
   return db;
+};
+
+export const ensureAnonymousUser = async () => {
+  if (!auth) {
+    throw new Error('Firebase Auth no esta configurado. Revisa las variables de entorno.');
+  }
+
+  if (auth.currentUser) {
+    return auth.currentUser;
+  }
+
+  const credential = await signInAnonymously(auth);
+  return credential.user;
 };
 
 const cleanText = (value) => String(value || '').trim();
@@ -68,11 +82,13 @@ export const createTestLead = async ({ contact, consent, testType, source }) => 
     throw new Error('Tipo de test no soportado.');
   }
 
+  const user = await ensureAnonymousUser();
   const normalizedContact = normalizeContact(contact);
 
   const docRef = await addDoc(collection(ensureDb(), TEST_RESPONSES_COLLECTION), {
     testType,
     testVersion: TEST_VERSION,
+    createdByUid: user.uid,
     contact: normalizedContact,
     consent: {
       privacyAccepted: Boolean(consent?.privacyAccepted),
@@ -102,6 +118,8 @@ export const completeTestResponse = async (responseId, { answers, result }) => {
   if (!responseId) {
     throw new Error('No se encontro el registro del test.');
   }
+
+  await ensureAnonymousUser();
 
   await updateDoc(doc(ensureDb(), TEST_RESPONSES_COLLECTION, responseId), {
     answers: Array.isArray(answers) ? answers : [],
