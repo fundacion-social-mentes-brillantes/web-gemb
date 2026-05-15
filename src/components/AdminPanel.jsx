@@ -56,12 +56,7 @@ const UNAUTHORIZED_ADMIN_MESSAGE = 'Esta cuenta no está autorizada como adminis
 const isAllowedAdminUser = (user) => {
   if (!user || user.isAnonymous) return false;
 
-  const emailMatches = user.email?.toLowerCase() === ADMIN_EMAIL;
-  const signedInWithGoogle = user.providerData.some(
-    (provider) => provider.providerId === GoogleAuthProvider.PROVIDER_ID
-  );
-
-  return emailMatches && signedInWithGoogle;
+  return user.email?.toLowerCase() === ADMIN_EMAIL;
 };
 
 const toDate = (value) => {
@@ -169,6 +164,7 @@ export default function AdminPanel() {
   const [authUser, setAuthUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState('');
+  const [authFailureReason, setAuthFailureReason] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [responses, setResponses] = useState([]);
   const [responsesLoading, setResponsesLoading] = useState(false);
@@ -245,6 +241,7 @@ export default function AdminPanel() {
       setAuthLoading(true);
       setAuthUser(null);
       setAuthError('');
+      setAuthFailureReason('');
       setIsAuthorized(false);
       setResponses([]);
 
@@ -257,6 +254,7 @@ export default function AdminPanel() {
 
       if (!isAllowedAdminUser(user)) {
         setAuthError(UNAUTHORIZED_ADMIN_MESSAGE);
+        setAuthFailureReason('email incorrecto');
         setAuthLoading(false);
         return;
       }
@@ -268,9 +266,11 @@ export default function AdminPanel() {
           setIsAuthorized(true);
         } else {
           setAuthError(UNAUTHORIZED_ADMIN_MESSAGE);
+          setAuthFailureReason('documento admin no existe');
         }
       } catch (err) {
         setAuthError(err?.message || 'No pudimos validar el administrador.');
+        setAuthFailureReason('error de permisos');
       } finally {
         setAuthLoading(false);
       }
@@ -287,6 +287,7 @@ export default function AdminPanel() {
 
   const handleSignIn = async () => {
     setAuthError('');
+    setAuthFailureReason('');
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -384,10 +385,19 @@ export default function AdminPanel() {
             <AlertCircle size={26} />
           </div>
           <h1 className="font-heading text-3xl text-[#1A1A1A] mb-3">
-            {authError || UNAUTHORIZED_ADMIN_MESSAGE}
+            {UNAUTHORIZED_ADMIN_MESSAGE}
           </h1>
-          <p className="text-sm text-[#1A1A1A]/65 mb-2">{authUser.email}</p>
-          <p className="font-mono text-xs text-[#2E4036] break-all mb-6">UID: {authUser.uid}</p>
+          <div className="mb-6 space-y-2 rounded-2xl bg-[#F7F4ED] p-4 text-sm">
+            <p className="text-[#1A1A1A]/75">
+              Email detectado: <span className="font-semibold">{authUser.email || 'Sin email'}</span>
+            </p>
+            <p className="font-mono text-xs text-[#2E4036] break-all">
+              UID detectado: {authUser.uid}
+            </p>
+            <p className="text-[#7A3A25]">
+              Raz&oacute;n del fallo: {authFailureReason || 'validacion no autorizada'}
+            </p>
+          </div>
           {authError && authError !== UNAUTHORIZED_ADMIN_MESSAGE && (
             <p className="text-sm text-[#7A3A25] mb-6">{authError}</p>
           )}
