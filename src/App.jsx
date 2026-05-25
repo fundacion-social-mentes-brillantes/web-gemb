@@ -1097,11 +1097,11 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
             <div className="absolute bottom-[-35%] left-[-15%] w-[60%] h-[80%] bg-gradient-to-tr from-[#E2C17D]/10 to-transparent blur-3xl rounded-full"></div>
           </div>
 
-          <div className="absolute top-0 left-8 md:left-14 -translate-y-1/2 bg-[#CC5833] text-white text-[10px] md:text-xs font-bold px-5 py-2 rounded-full tracking-widest uppercase shadow-[0_5px_15px_rgba(204,88,51,0.4)] flex items-center gap-2 z-20">
-            <Star size={14} className="fill-current" /> Servicio principal · 1:1
-          </div>
+          <div className="flex-1 relative z-10 w-full">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full bg-[#CC5833] px-5 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_22px_rgba(204,88,51,0.32)]">
+              <Star size={14} className="fill-current" /> Servicio principal · 1:1
+            </div>
 
-          <div className="flex-1 relative z-10 w-full mt-6 md:mt-2">
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#F2F0E9] mb-3 leading-tight">
               Sesión Coach
               <span className="block text-[#E2C17D] font-serif italic font-normal text-3xl md:text-4xl mt-1">con Alexandra Ortega</span>
@@ -1298,7 +1298,8 @@ const Pricing = ({ onOpenTest }) => {
                 }`}
               >
                 {isFeatured && (
-                  <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#CC5833] text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">
+                  <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-[#CC5833] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(204,88,51,0.28)]">
+                    <Star size={13} className="fill-current" />
                     Recomendado
                   </div>
                 )}
