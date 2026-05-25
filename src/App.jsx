@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass
+  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
@@ -153,12 +153,50 @@ const Navbar = ({ onOpenTest }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!dropdownOpen) return undefined;
+
+    const handleOutsideClick = (event) => {
+      if (!dropdownRef.current?.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [dropdownOpen]);
+
+  const focusFirstProcessLink = () => {
+    window.setTimeout(() => {
+      dropdownRef.current?.querySelector('[role="menuitem"]')?.focus();
+    }, 0);
+  };
+
+  const handleProcessButtonKeyDown = (event) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setDropdownOpen(true);
+      focusFirstProcessLink();
+    }
+  };
 
   return (
     <>
@@ -178,35 +216,45 @@ const Navbar = ({ onOpenTest }) => {
               <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
-              <a href="#sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
+              <a href="#sesion-coach-detalle" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
                 <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
 
               {/* Dropdown "Procesos" */}
-              <div
-                className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
+              <div className="relative" ref={dropdownRef}>
                 <button
-                  className={`flex items-center gap-1 hover:opacity-70 transition-opacity outline-none ${scrolled ? 'py-1' : 'pt-0.5'}`}
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={dropdownOpen}
+                  aria-controls="procesos-menu"
+                  onClick={() => setDropdownOpen((open) => !open)}
+                  onKeyDown={handleProcessButtonKeyDown}
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#E2C17D] ${
+                    scrolled
+                      ? 'text-[#2E4036] hover:bg-[#2E4036]/5'
+                      : 'text-white/90 hover:bg-white/10 backdrop-blur-sm'
+                  }`}
                 >
                   Procesos <ChevronDown size={13} className={`transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {dropdownOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white text-[#1A1A1A] rounded-2xl p-2 shadow-xl border border-gray-100 min-w-[240px] flex flex-col gap-1 z-50 animate-[fadeIn_0.2s_ease-out]">
-                    <a href="#sesion-coach" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
-                      <Star size={12} className="text-[#CC5833] fill-[#CC5833]" /> Sesión Coach
+                  <div
+                    id="procesos-menu"
+                    role="menu"
+                    aria-label="Procesos principales"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white text-[#1A1A1A] rounded-2xl p-2 shadow-2xl border border-[#2E4036]/10 min-w-[280px] flex flex-col gap-1 z-50 animate-[fadeIn_0.2s_ease-out]"
+                  >
+                    <a href="#sesion-coach" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                      <Star size={14} className="text-[#CC5833] fill-[#CC5833]" /> Sesión Coach
                     </a>
-                    <a href="#sala-ego" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
-                      <Activity size={12} className="text-[#CC5833]" /> Sala del Ego
+                    <a href="#sala-ego" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                      <Activity size={14} className="text-[#CC5833]" /> Sala del Ego
                     </a>
-                    <a href="#entrega-pasos" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
-                      <Compass size={12} className="text-[#2E4036]" /> Entrega de Pasos
+                    <a href="#entrega-pasos" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                      <Compass size={14} className="text-[#2E4036]" /> Entrega de Pasos
                     </a>
-                    <a href="#curso-milagros" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
-                      <BookOpen size={12} className="text-[#E2C17D]" /> Curso de Milagros
+                    <a href="#curso-milagros" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                      <BookOpen size={14} className="text-[#E2C17D]" /> Curso de Milagros
                     </a>
                   </div>
                 )}
@@ -234,7 +282,16 @@ const Navbar = ({ onOpenTest }) => {
               >
                 Valoraci&oacute;n inicial de tu proceso
               </button>
-              <button className="lg:hidden mt-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <button
+                type="button"
+                aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                aria-expanded={mobileMenuOpen}
+                className="lg:hidden mt-2 rounded-full p-2 focus-visible:ring-2 focus-visible:ring-[#E2C17D]"
+                onClick={() => {
+                  setDropdownOpen(false);
+                  setMobileMenuOpen((open) => !open);
+                }}
+              >
                 {mobileMenuOpen ? <X className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} />}
               </button>
             </div>
@@ -244,24 +301,29 @@ const Navbar = ({ onOpenTest }) => {
 
       {/* Menú Móvil */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-5 p-6 overflow-y-auto">
-          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading">Método</a>
-          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={16} className="fill-current text-[#CC5833]" /> Sesión Coach</a>
-          <a href="#sala-ego" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
-          <a href="#entrega-pasos" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><Compass size={16} className="text-[#2E4036]" /> Entrega de Pasos</a>
-          <a href="#curso-milagros" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
-          <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading">Planes</a>
+        <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-6 overflow-y-auto">
+          <div className="w-full max-w-sm rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center shadow-2xl">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#E2C17D] mb-5">Navegación</p>
+            <div className="flex flex-col items-stretch gap-3">
+              <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Método</a>
+              <a href="#sesion-coach-detalle" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading text-[#E2C17D] flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Star size={16} className="fill-current text-[#CC5833]" /> Sesión Coach</a>
+              <a href="#sala-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
+              <a href="#entrega-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
+              <a href="#curso-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
+              <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
+            </div>
+          </div>
           <a
             href="/#admin"
             onClick={() => setMobileMenuOpen(false)}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white/85 hover:bg-white/10 transition-colors"
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white/85 hover:bg-white/10 transition-colors"
           >
             <ShieldCheck size={15} />
             Ingresar
           </a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
-            className="bg-[#CC5833] text-white px-7 py-3.5 rounded-full font-semibold mt-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
+            className="bg-[#CC5833] text-white px-7 py-3.5 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
             Valoraci&oacute;n inicial de tu proceso
           </button>
@@ -290,64 +352,79 @@ const Hero = ({ onOpenTest }) => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pb-24 md:pb-32 pt-48">
+    <section ref={containerRef} className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pb-20 md:pb-28 pt-44">
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?q=80&w=2070&auto=format&fit=crop"
-          alt="Atmospheric Forest"
+          alt="Bosque sereno al amanecer"
           className="w-full h-full object-cover object-center scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2E4036] via-[#2E4036]/60 to-transparent"></div>
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#2E4036]/80 to-[#1A1A1A]/20"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_72%,rgba(226,193,125,0.24),transparent_34%),radial-gradient(circle_at_78%_34%,rgba(204,88,51,0.18),transparent_28%)]"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-end h-full">
-        <div className="max-w-4xl mt-auto">
-          <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm mb-5">
-            <span className="h-2 w-2 rounded-full bg-[#E2C17D]"></span>
-            Valoraci&oacute;n inicial de tu proceso y mapa de eneatipo
-          </div>
+        <div className="grid lg:grid-cols-[1.08fr_0.72fr] gap-10 lg:gap-16 items-end">
+          <div className="max-w-4xl">
+            <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/85 backdrop-blur-sm mb-6">
+              <Sparkles size={14} className="text-[#E2C17D]" />
+              Valoración inicial + mapa de entrenamiento
+            </div>
 
-          <h1 className="text-white leading-[1.02] mb-5 max-w-4xl">
-            <span className="hero-elem block font-heading font-bold text-[2.7rem] sm:text-6xl md:text-7xl tracking-tight">
-              Esto no es terapia.
-            </span>
-            <span className="hero-elem block font-serif italic text-[2.95rem] sm:text-[4.6rem] md:text-[5.3rem] text-[#F2F0E9] mt-1 md:mt-2">
-              Es entrenamiento para grandes resultados.
-            </span>
-          </h1>
+            <h1 className="text-white leading-[1.02] mb-6 max-w-5xl">
+              <span className="hero-elem block font-heading font-bold text-[2.85rem] sm:text-6xl md:text-7xl tracking-tight">
+                Esto no es terapia.
+              </span>
+              <span className="hero-elem block font-serif italic text-[2.8rem] sm:text-[4.4rem] md:text-[5.2rem] text-[#F2F0E9] mt-1 md:mt-2">
+                Es entrenamiento emocional.
+              </span>
+            </h1>
 
-          <p className="hero-elem text-[#E2C17D] text-xl md:text-2xl font-serif italic mb-5 max-w-2xl">
-            Tu mundo interior crea tu mundo exterior.
-          </p>
-
-          <div className="hero-elem max-w-3xl space-y-4 mb-8">
-            <p className="text-[#F2F0E9]/90 text-base md:text-lg font-light leading-relaxed">
-              Si quieres cambiar los frutos, primero debes cambiar las raíces; si quieres cambiar lo visible, primero debes cambiar lo invisible con tu entrenamiento.
+            <p className="hero-elem text-[#E2C17D] text-xl md:text-2xl font-serif italic mb-5 max-w-2xl">
+              Transforma tu mundo interior y tus resultados.
             </p>
-            <p className="text-[#F2F0E9]/[0.82] text-base md:text-lg leading-relaxed">
-              Haz el test y descubre el eneatipo que identifica la máscara de ego que sabotea tu vida, tus relaciones, tus finanzas y tu salud.
+
+            <div className="hero-elem max-w-3xl space-y-4 mb-8">
+              <p className="text-[#F2F0E9]/92 text-base md:text-xl font-light leading-relaxed">
+                GEMB une conciencia, oración, meditación, 12 Pasos, Un Curso de Milagros, Eneagrama y acompañamiento para que dejes de reaccionar desde el ego y empieces a entrenar desde la paz.
+              </p>
+              <p className="text-[#F2F0E9]/[0.78] text-sm md:text-base leading-relaxed">
+                Si quieres cambiar los frutos, primero debes cambiar las raíces: la forma en que piensas, eliges, amas, pones límites y sostienes tus decisiones.
+              </p>
+            </div>
+
+            <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-8">
+              <button
+                onClick={onOpenTest}
+                className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_26px_rgba(204,88,51,0.35)]"
+              >
+                Valoración inicial de tu proceso
+                <ArrowRight size={18} />
+              </button>
+              <a href="#procesos" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
+                Ver procesos
+              </a>
+            </div>
+          </div>
+
+          <div className="hero-elem hidden lg:block rounded-[2rem] border border-white/15 bg-black/20 p-6 backdrop-blur-md shadow-2xl">
+            <p className="font-mono text-[11px] text-[#E2C17D] tracking-[0.18em] uppercase mb-5">
+              Método integral GEMB
+            </p>
+            <div className="space-y-4">
+              {["Diagnóstico emocional", "Entrenamiento espiritual", "Seguimiento y práctica"].map((item, index) => (
+                <div key={item} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E2C17D] text-sm font-bold text-[#1A1A1A]">
+                    {index + 1}
+                  </span>
+                  <span className="text-sm font-medium text-[#F2F0E9]">{item}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-xs leading-relaxed text-[#F2F0E9]/65">
+              Guiado por Alexandra Ortega: claridad, práctica y dirección para volver al centro.
             </p>
           </div>
-
-          <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-8">
-            <button
-              onClick={onOpenTest}
-              className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
-            >
-              Valoraci&oacute;n inicial de tu proceso
-              <ArrowRight size={18} />
-            </button>
-            <a href="#metodo" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
-              Ver el Método
-            </a>
-          </div>
-
-          <div className="hero-elem max-w-3xl rounded-[1.75rem] border border-white/15 bg-black/15 px-5 py-4 backdrop-blur-sm">
-            <p className="font-mono text-[11px] md:text-xs text-[#F2F0E9]/70 tracking-[0.16em] uppercase">
-            Guiado por Alexandra Ortega · Método integral: Vipassana + 12 Pasos + PNL + UCDM + Eneagrama + Sala de Reducción del Ego
-          </p>
-        </div>
         </div>
       </div>
     </section>
@@ -616,18 +693,80 @@ const FeatureAgenda = () => {
 };
 
 const FeaturesSection = () => {
+  const methodSteps = [
+    {
+      title: "Mirar con verdad",
+      text: "Identificamos el patrón emocional y espiritual que dirige tus decisiones cuando estás en miedo, control o culpa.",
+      icon: <ScanLine size={22} />
+    },
+    {
+      title: "Practicar a diario",
+      text: "Entrenamos oración, meditación, límites, 12 Pasos, UCDM y acciones simples que sostienen un cambio real.",
+      icon: <Activity size={22} />
+    },
+    {
+      title: "Volver al centro",
+      text: "Acompañamos tu proceso para que no dependas de motivación: aprendes a elegir desde paz, claridad y responsabilidad.",
+      icon: <Compass size={22} />
+    }
+  ];
+
+  const methodPillars = [
+    "Conciencia",
+    "Oración",
+    "Meditación",
+    "12 Pasos",
+    "Un Curso de Milagros",
+    "Sala del Ego",
+    "Eneagrama",
+    "Acompañamiento"
+  ];
+
   return (
-    <section id="metodo" className="py-24 md:py-32 px-6 md:px-12 bg-[#F2F0E9] relative">
+    <section id="metodo" className="py-24 md:py-32 px-6 md:px-12 bg-[#F2F0E9] relative overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#E2C17D]/70 to-transparent"></div>
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16 md:mb-24">
-          <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] max-w-2xl leading-tight">
-            Herramientas diseñadas para <span className="text-[#2E4036]">descifrar</span> tu patrón y entrenar desde la raíz.
-          </h2>
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-end mb-16 md:mb-20">
+          <div>
+            <span className="font-mono text-xs font-bold text-[#CC5833] tracking-[0.22em] uppercase mb-4 block">
+              El Método
+            </span>
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] max-w-3xl leading-tight">
+              Una ruta espiritual y práctica para entrenar tu mundo interior.
+            </h2>
+          </div>
+          <div className="space-y-5">
+            <p className="text-[#1A1A1A]/70 text-base md:text-lg leading-relaxed">
+              GEMB no te llena de teoría. Te ayuda a mirar tu ego con honestidad, ordenar tus emociones y practicar una forma distinta de responder a la vida.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {methodPillars.map((pillar) => (
+                <span key={pillar} className="rounded-full border border-[#2E4036]/15 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#2E4036]">
+                  {pillar}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-16">
+          {methodSteps.map((step, index) => (
+            <div key={step.title} className="bg-white border border-[#2E4036]/10 p-7 rounded-[2rem] shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-11 h-11 rounded-2xl bg-[#2E4036] text-[#E2C17D] flex items-center justify-center">
+                  {step.icon}
+                </div>
+                <span className="font-mono text-xs text-[#CC5833] font-bold">0{index + 1}</span>
+              </div>
+              <h3 className="font-heading text-2xl font-bold text-[#1A1A1A] mb-3">{step.title}</h3>
+              <p className="text-sm leading-relaxed text-[#1A1A1A]/65">{step.text}</p>
+            </div>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Panel 1 */}
-          <div className="bg-white radius-huge p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col h-[420px]">
+          <div className="bg-white radius-huge p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col min-h-[420px]">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="font-heading font-bold text-xl">Mapa de Eneatipos</h3>
               <ScanLine className="text-[#CC5833]" size={24} />
@@ -636,14 +775,14 @@ const FeaturesSection = () => {
           </div>
 
           {/* Panel 2 */}
-          <div className="bg-[#1A1A1A] radius-huge p-2 shadow-xl h-[420px]">
+          <div className="bg-[#1A1A1A] radius-huge p-2 shadow-xl min-h-[420px]">
             <div className="h-full w-full rounded-[2rem] overflow-hidden">
               <FeatureTelemetry />
             </div>
           </div>
 
           {/* Panel 3 */}
-          <div className="bg-[#F2F0E9] border-2 border-[#2E4036]/10 radius-huge p-8 md:p-10 flex flex-col h-[420px]">
+          <div className="bg-[#F2F0E9] border-2 border-[#2E4036]/10 radius-huge p-8 md:p-10 flex flex-col min-h-[420px]">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="font-heading font-bold text-xl">Agenda / Protocolo</h3>
               <Settings2 className="text-[#2E4036]" size={24} />
@@ -824,109 +963,107 @@ const NuestrosProcesosSection = () => {
 
   const procesos = [
     {
-      id: "sesion-coach-card",
-      hashId: "sesion-coach",
+      id: "sesion-coach",
       title: "Sesión Coach",
       subtitle: "Dirección privada 1:1",
-      text: "Una sesión privada para mirar tu historia con honestidad, ordenar tu mundo emocional y recibir dirección para tu proceso interior.",
-      cta: "Quiero información por WhatsApp",
+      text: "Acompañamiento personalizado para mirar tu historia con honestidad, ordenar tu mundo emocional y recibir dirección concreta para tu proceso interior.",
+      cta: "Agendar información por WhatsApp",
       message: "Hola, quiero más información sobre la Sesión Coach de Gimnasio Emocional Mentes Brillantes.",
-      icon: <User className="text-[#E2C17D]" size={32} />,
-      bg: "bg-white/[0.04]",
-      border: "border-white/10"
+      icon: <User className="text-[#E2C17D]" size={30} />,
+      accent: "from-[#E2C17D]/25 to-transparent"
     },
     {
       id: "sala-ego",
-      hashId: "sala-ego",
       title: "Sala de Reducción del Ego",
-      subtitle: "Entrenamiento grupal en vivo",
-      text: "Un espacio de práctica donde aprendemos a reconocer el ego, soltar el control, escuchar la guía interior y transformar la reacción en conciencia.",
+      subtitle: "Práctica grupal en vivo",
+      text: "Un espacio profundo para reconocer la voz que controla, suelta o ataca; y entrenar una respuesta más consciente, humilde y amorosa.",
       cta: "Preguntar por la Sala del Ego",
       message: "Hola, quiero más información sobre la Sala de Reducción del Ego.",
-      icon: <Activity className="text-[#CC5833] animate-[pulse_2s_infinite]" size={32} />,
-      bg: "bg-white/[0.04]",
-      border: "border-white/10"
+      icon: <Activity className="text-[#CC5833]" size={30} />,
+      accent: "from-[#CC5833]/25 to-transparent"
     },
     {
       id: "entrega-pasos",
-      hashId: "entrega-pasos",
       title: "Entrega de Pasos",
-      subtitle: "Libertad y responsabilidad",
-      text: "Un camino de honestidad, reparación interior y entrega, donde cada paso abre una nueva forma de vivir con más paz, responsabilidad y libertad.",
+      subtitle: "Honestidad y reparación",
+      text: "Una ruta de entrega, inventario y responsabilidad para dejar de cargar solo/a, reparar desde el alma y vivir con más libertad.",
       cta: "Quiero saber sobre los pasos",
       message: "Hola, quiero más información sobre la Entrega de Pasos.",
-      icon: <Compass className="text-[#00FF66]" size={32} />,
-      bg: "bg-white/[0.04]",
-      border: "border-white/10"
+      icon: <Compass className="text-[#E2C17D]" size={30} />,
+      accent: "from-[#2E4036]/60 to-transparent"
     },
     {
       id: "curso-milagros",
-      hashId: "curso-milagros",
       title: "Un Curso de Milagros",
-      subtitle: "Entrenamiento mental anual",
-      text: "Cada año abrimos un recorrido de estudio y práctica de Un Curso de Milagros: un entrenamiento de la mente para elegir de nuevo, sanar la percepción y volver al amor.",
-      cta: "Quiero información del Curso de Milagros",
+      subtitle: "Entrenamiento de la mente",
+      text: "Un recorrido de estudio y práctica para sanar la percepción, elegir de nuevo y volver al amor como disciplina diaria.",
+      cta: "Información del Curso de Milagros",
       message: "Hola, quiero más información sobre Un Curso de Milagros.",
-      icon: <BookOpen className="text-white" size={32} />,
-      bg: "bg-white/[0.04]",
-      border: "border-white/10"
+      icon: <BookOpen className="text-[#F2F0E9]" size={30} />,
+      accent: "from-white/15 to-transparent"
     }
   ];
 
   return (
     <section id="procesos" className="py-24 md:py-32 px-6 md:px-12 bg-[#2E4036] relative overflow-hidden text-white z-10">
-      {/* Glow background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[80%] bg-gradient-to-br from-[#CC5833]/15 via-transparent to-transparent blur-3xl rounded-full"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[80%] bg-gradient-to-tl from-[#E2C17D]/10 via-transparent to-transparent blur-3xl rounded-full"></div>
-      </div>
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_10%,rgba(226,193,125,0.18),transparent_28%),radial-gradient(circle_at_90%_80%,rgba(204,88,51,0.18),transparent_30%)]"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16 md:mb-24">
-          <span className="font-mono text-xs text-[#E2C17D] font-bold tracking-widest uppercase mb-3 block">
-            Entrenamiento Integral
-          </span>
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
-            Nuestros Procesos Principales
-          </h2>
-          <p className="text-[#F2F0E9]/80 font-serif italic text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Estructuras diseñadas para descifrar tu ego y entrenar tu mente hacia la paz interior.
+        <div className="grid lg:grid-cols-[0.78fr_1.22fr] gap-10 lg:gap-16 mb-14 md:mb-20 items-end">
+          <div>
+            <span className="font-mono text-xs text-[#E2C17D] font-bold tracking-widest uppercase mb-4 block">
+              Procesos fuertes
+            </span>
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
+              Nuestros Procesos Principales
+            </h2>
+          </div>
+          <p className="text-[#F2F0E9]/78 font-serif italic text-xl md:text-2xl leading-relaxed max-w-3xl">
+            Elige el punto de entrada que tu vida necesita hoy: claridad privada, práctica grupal, entrega profunda o entrenamiento espiritual de la mente.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-7">
           {procesos.map((proceso) => (
-            <div
+            <article
               key={proceso.id}
-              id={proceso.hashId}
-              className="rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between transition-all duration-500 hover:-translate-y-2 group bg-[#1A1A1A]/40 border border-white/10 hover:border-[#E2C17D]/40 shadow-xl backdrop-blur-sm"
+              id={proceso.id}
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#1A1A1A]/45 p-7 md:p-8 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#E2C17D]/50"
             >
-              <div>
-                <div className="mb-6 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-[#E2C17D]/35 transition-colors">
-                  {proceso.icon}
+              <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${proceso.accent} opacity-80 pointer-events-none`}></div>
+              <div className="relative flex min-h-[360px] flex-col">
+                <div className="mb-7 flex items-center justify-between">
+                  <div className="w-14 h-14 bg-white/[0.07] rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-[#E2C17D]/40 transition-colors">
+                    {proceso.icon}
+                  </div>
+                  <a href={`#${proceso.id}`} aria-label={`Ir a ${proceso.title}`} className="font-mono text-[10px] text-white/45 hover:text-[#E2C17D] transition-colors">
+                    #{proceso.id}
+                  </a>
                 </div>
 
-                <span className="font-mono text-[10px] text-[#E2C17D] tracking-widest uppercase block mb-1">
+                <span className="font-mono text-[10px] text-[#E2C17D] tracking-widest uppercase block mb-2">
                   {proceso.subtitle}
                 </span>
 
-                <h3 className="font-heading font-bold text-xl md:text-2xl mb-4 group-hover:text-[#E2C17D] transition-colors">
+                <h3 className="font-heading font-bold text-2xl mb-4 group-hover:text-[#E2C17D] transition-colors">
                   {proceso.title}
                 </h3>
 
-                <p className="text-[#F2F0E9]/75 text-sm leading-relaxed mb-8 font-light">
+                <p className="text-[#F2F0E9]/76 text-sm leading-relaxed font-light mb-8">
                   {proceso.text}
                 </p>
-              </div>
 
-              <button
-                onClick={() => handleWA(proceso.message)}
-                className="w-full py-4 rounded-full border border-white/20 group-hover:border-transparent group-hover:bg-[#CC5833] text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 group-hover:shadow-[0_8px_25px_rgba(204,88,51,0.35)]"
-              >
-                <MessageCircle size={14} className="fill-current text-white" />
-                {proceso.cta}
-              </button>
-            </div>
+                <button
+                  type="button"
+                  aria-label={`${proceso.cta}: ${proceso.title}`}
+                  onClick={() => handleWA(proceso.message)}
+                  className="mt-auto w-full py-4 rounded-full border border-white/20 group-hover:border-transparent group-hover:bg-[#CC5833] text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 group-hover:shadow-[0_8px_25px_rgba(204,88,51,0.35)]"
+                >
+                  <MessageCircle size={14} className="text-white" />
+                  {proceso.cta}
+                </button>
+              </div>
+            </article>
           ))}
         </div>
       </div>
@@ -937,50 +1074,47 @@ const NuestrosProcesosSection = () => {
 // --- NUEVA SECCIÓN: COACH SESSION (VERSIÓN PREMIUM & PERSUASIVA) ---
 
 const painPoints = [
-  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'El patrón del Ayudador te está agotando. Desactivaremos esa necesidad de rescatar para que recuperes tu energía vital.' },
-  { id: 'limites', label: 'Me cuesta poner límites', response: 'El miedo al rechazo te domina hoy. Trazaremos una línea clara y te daré el guion exacto para decir NO sin culpa.' },
-  { id: 'mente', label: 'Mi mente no se apaga', response: 'Exceso de futuro y control. Implementaremos un protocolo guiado para bajar el ruido mental y volver a tu centro.' }
+  { id: 'cargado', label: 'Me siento cargado/a por todos', response: 'Vamos a mirar dónde confundiste amor con rescate, y entrenar una forma de servir sin perderte a ti.' },
+  { id: 'limites', label: 'Me cuesta poner límites', response: 'Ordenaremos el miedo al rechazo, definiremos una línea clara y practicaremos cómo sostenerla sin culpa.' },
+  { id: 'mente', label: 'Mi mente no se apaga', response: 'Bajaremos el ruido del control con una práctica concreta para volver al cuerpo, la oración y la acción correcta.' }
 ];
 
 const CoachSessionSection = ({ onOpenGuarantee }) => {
   const [selectedPain, setSelectedPain] = useState(null);
 
   const handleWA = () => {
-    const text = encodeURIComponent("Hola, quiero agendar una Sesión Guía Coach con Alexandra Ortega. Estoy listo/a para entrenar. ¿Qué disponibilidad hay esta semana?");
+    const text = encodeURIComponent("Hola, quiero agendar una Sesión Coach con Alexandra Ortega. Quiero información para iniciar mi proceso en Gimnasio Emocional Mentes Brillantes.");
     window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
   };
 
   return (
-    <section id="sesion-coach" className="pt-24 pb-12 md:pt-32 md:pb-16 px-6 md:px-12 bg-[#F2F0E9] relative z-10">
+    <section id="sesion-coach-detalle" className="pt-24 pb-12 md:pt-32 md:pb-16 px-6 md:px-12 bg-[#F2F0E9] relative z-10">
       <div className="max-w-6xl mx-auto">
-        <div className="bg-[#1A1A1A] radius-huge p-8 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.15)] relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-center border border-[#2E4036]/20">
+        <div className="bg-[#1A1A1A] radius-huge p-8 md:p-14 shadow-[0_24px_70px_rgba(0,0,0,0.18)] relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-center border border-[#2E4036]/20 overflow-hidden">
 
-          {/* Tapykue oñemoĩva ipype (Glow background) */}
           <div className="absolute inset-0 radius-huge overflow-hidden pointer-events-none">
-            <div className="absolute top-[-40%] right-[-10%] w-[70%] h-[140%] bg-gradient-to-bl from-[#CC5833]/10 via-[#2E4036]/20 to-transparent blur-3xl rounded-full"></div>
+            <div className="absolute top-[-40%] right-[-10%] w-[70%] h-[140%] bg-gradient-to-bl from-[#CC5833]/14 via-[#2E4036]/25 to-transparent blur-3xl rounded-full"></div>
+            <div className="absolute bottom-[-35%] left-[-15%] w-[60%] h-[80%] bg-gradient-to-tr from-[#E2C17D]/10 to-transparent blur-3xl rounded-full"></div>
           </div>
 
-          {/* Jekuaa porã (Badge Recomendado) */}
           <div className="absolute top-0 left-8 md:left-14 -translate-y-1/2 bg-[#CC5833] text-white text-[10px] md:text-xs font-bold px-5 py-2 rounded-full tracking-widest uppercase shadow-[0_5px_15px_rgba(204,88,51,0.4)] flex items-center gap-2 z-20">
-            <Star size={14} className="fill-current" /> Ruta Rápida · 1:1
+            <Star size={14} className="fill-current" /> Servicio principal · 1:1
           </div>
 
-          {/* Columna Izquierda: Copy persuasivo e Interacción */}
           <div className="flex-1 relative z-10 w-full mt-6 md:mt-2">
             <h2 className="font-heading font-bold text-4xl md:text-5xl text-[#F2F0E9] mb-3 leading-tight">
-              Sesión Guía Coach
+              Sesión Coach
               <span className="block text-[#E2C17D] font-serif italic font-normal text-3xl md:text-4xl mt-1">con Alexandra Ortega</span>
             </h2>
 
             <p className="text-lg md:text-xl text-white/90 font-light mb-6">
-              Ve directo a la raíz. En 45 minutos desactivamos el patrón que hoy te sabotea y trazamos tu ruta de acción clara.
+              Acompañamiento personalizado para ordenar lo que sientes, mirar el patrón que se repite y salir con una dirección práctica para tu vida real.
             </p>
 
-            {/* Contadores Minimalistas */}
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
                 <Clock size={14} className="text-[#CC5833]" />
-                <span className="text-xs text-white/80 font-mono">45 min</span>
+                <span className="text-xs text-white/80 font-mono">Sesión privada</span>
               </div>
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
                 <User size={14} className="text-[#CC5833]" />
@@ -988,15 +1122,14 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               </div>
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
                 <Target size={14} className="text-[#CC5833]" />
-                <span className="text-xs text-white/80 font-mono">Protocolo Práctico</span>
+                <span className="text-xs text-white/80 font-mono">Seguimiento claro</span>
               </div>
             </div>
 
             <p className="text-[#E2C17D] font-serif italic text-xl md:text-2xl mb-8 border-l-2 border-[#E2C17D]/30 pl-4">
-              "No te dejo con motivación. Te dejo con un plan."
+              "No buscamos que entiendas más. Buscamos que practiques distinto."
             </p>
 
-            {/* Mini Interacción */}
             <div className="bg-[#2a2a2a]/50 p-6 rounded-3xl border border-white/5 mb-8">
               <p className="text-white font-medium mb-4 text-sm flex items-center gap-2">
                 <Activity size={16} className="text-[#00FF66]" /> Selecciona tu mayor reto hoy:
@@ -1026,13 +1159,13 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               )}
             </div>
 
-            {/* CTA y Fricción Cero */}
             <div className="relative">
               <button
+                type="button"
                 onClick={handleWA}
                 className="w-full md:w-auto px-8 py-4 rounded-full bg-[#E2C17D] text-[#1A1A1A] font-bold btn-magnetic shadow-[0_0_20px_rgba(226,193,125,0.2)] flex justify-center items-center gap-3 border border-transparent hover:bg-white transition-colors"
               >
-                {selectedPain ? 'Quiero mi Sesión (WhatsApp)' : 'Agendar Sesión (WhatsApp)'}
+                {selectedPain ? 'Quiero mi Sesión Coach' : 'Agendar información por WhatsApp'}
                 <ArrowRight size={18} />
               </button>
 
@@ -1041,11 +1174,10 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                   <AlertCircle size={10} /> Cupos limitados por semana
                 </p>
                 <p className="text-xs text-white/40 mt-1">
-                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos → te enviamos horarios → confirmas tu cupo.
+                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos, te enviamos horarios y confirmas tu cupo.
                 </p>
               </div>
 
-              {/* Sello Premium de Garantía Actualizado */}
               <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-md shadow-lg group hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 rounded-full bg-[#2E4036]/50 border border-[#00FF66]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(0,255,102,0.1)]">
                   <ShieldCheck size={24} className="text-[#00FF66]" />
@@ -1061,18 +1193,17 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
             </div>
           </div>
 
-          {/* Columna Derecha: "Sales con" (Entregables) */}
           <div className="w-full lg:w-[45%] relative z-10 bg-white/[0.03] p-8 md:p-10 rounded-[2rem] border border-white/10 backdrop-blur-md shadow-2xl">
             <h3 className="font-heading font-bold text-2xl text-white mb-6 flex items-center gap-2">
-              Sales con:
+              Sales con una ruta:
             </h3>
 
             <ul className="space-y-6">
               {[
-                "Diagnóstico claro del patrón (Eneatipo) que hoy te bloquea o agota.",
-                "Protocolo de entrenamiento 7 días (límites, calma y acción).",
-                "Ruta recomendada exacta para no perder el tiempo buscando qué hacer.",
-                "Acceso directo a las herramientas del Gimnasio Emocional (12 Pasos, Meditación, etc)."
+                "Lectura clara del patrón emocional que hoy te bloquea, agota o repite la misma historia.",
+                "Primer protocolo de entrenamiento: límites, calma, oración, acción y seguimiento.",
+                "Ruta recomendada según tu caso: Sala del Ego, pasos, UCDM, prácticas o acompañamiento.",
+                "Una forma más honesta de medir avance: decisiones, paz, coherencia y práctica diaria."
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4 group">
                   <div className="w-7 h-7 rounded-full bg-[#2E4036] flex items-center justify-center shrink-0 mt-0.5 border border-[#00FF66]/30 group-hover:bg-[#CC5833] transition-colors duration-300">
@@ -1087,7 +1218,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
 
             <div className="mt-8 pt-6 border-t border-white/10">
               <p className="text-sm text-[#E2C17D] italic font-serif opacity-80 text-center">
-                Un encuentro diseñado para darte claridad inmediata.
+                Un encuentro diseñado para darte claridad, dirección y una práctica que puedas sostener.
               </p>
             </div>
           </div>
@@ -1107,82 +1238,103 @@ const Pricing = ({ onOpenTest }) => {
     window.open(`https://wa.me/${WA_NUMBER}?text=${encoded}`, '_blank');
   };
 
+  const plans = [
+    {
+      title: "Diagnóstico",
+      subtitle: "Tu punto de partida",
+      description: "Ideal si necesitas claridad antes de elegir un proceso.",
+      items: ["Valoración inicial", "Mapa de patrón emocional", "Ruta recomendada"],
+      action: onOpenTest,
+      button: "Valoración inicial de tu proceso",
+      tone: "light"
+    },
+    {
+      title: "Acceso Total",
+      subtitle: "7 días dentro del método",
+      description: "Una entrada guiada para probar prácticas, sala y entrenamiento real.",
+      items: ["Sala de Reducción del Ego", "Prácticas guiadas", "Protocolos de límites", "Entrada sin compromiso largo"],
+      action: () => handleWA("Hola, quiero activar Acceso Total · 7 Días."),
+      button: "Activar 7 días por WhatsApp",
+      tone: "featured"
+    },
+    {
+      title: "Atleta Emocional",
+      subtitle: "Proceso de transformación",
+      description: "Para quien quiere seguimiento, profundidad y una ruta sostenida.",
+      items: ["Mentoría de Pasos", "Acompañamiento y seguimiento", "Kits de Transformación", "Protocolo personal"],
+      action: () => handleWA("Hola, quiero reservar una llamada para el plan Atleta Emocional."),
+      button: "Reservar llamada",
+      tone: "light"
+    }
+  ];
+
   return (
-    <section id="planes" className="pb-24 pt-12 md:pb-32 md:pt-16 px-6 md:px-12 bg-[#F2F0E9]">
+    <section id="planes" className="pb-24 pt-16 md:pb-32 md:pt-24 px-6 md:px-12 bg-[#F2F0E9] relative overflow-hidden">
+      <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-[#2E4036]/10 to-transparent"></div>
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 md:mb-24">
-          <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
+        <div className="text-center mb-14 md:mb-20">
+          <span className="font-mono text-xs font-bold text-[#CC5833] tracking-[0.22em] uppercase mb-4 block">
+            Planes
+          </span>
+          <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-5">
             Elige tu nivel de entrenamiento.
           </h2>
-          <p className="text-[#1A1A1A]/60 font-serif italic text-xl">Sin atajos. Solo práctica.</p>
+          <p className="text-[#1A1A1A]/62 font-serif italic text-xl max-w-2xl mx-auto">
+            Puedes empezar con claridad, entrar al método por unos días o comprometerte con una transformación más profunda.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          {/* Plan 1 */}
-          <div className="bg-white radius-huge p-8 md:p-10 border border-gray-200 shadow-sm flex flex-col h-full">
-            <h3 className="font-heading font-bold text-2xl text-[#1A1A1A] mb-2">Diagnóstico</h3>
-            <p className="text-gray-500 mb-8 text-sm">Tu punto de partida.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 items-stretch">
+          {plans.map((plan) => {
+            const isFeatured = plan.tone === 'featured';
 
-            <ul className="space-y-4 mb-10 flex-1">
-              {["Test del Eneagrama (Gratis)", "Resultado + insight claro", "Ruta recomendada (próximo paso)"].map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                  <CheckCircle2 size={18} className="text-[#2E4036] shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={onOpenTest}
-              className="w-full py-4 rounded-full border border-[#2E4036] text-[#2E4036] font-bold btn-magnetic hover:bg-[#2E4036] hover:text-white transition-colors"
-            >
-              Valoraci&oacute;n inicial de tu proceso
-            </button>
-          </div>
+            return (
+              <article
+                key={plan.title}
+                className={`relative flex h-full flex-col rounded-[2rem] p-8 md:p-10 border shadow-xl ${
+                  isFeatured
+                    ? 'bg-[#2E4036] text-white border-[#E2C17D]/30 lg:-translate-y-4'
+                    : 'bg-white text-[#1A1A1A] border-[#2E4036]/10'
+                }`}
+              >
+                {isFeatured && (
+                  <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#CC5833] text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">
+                    Recomendado
+                  </div>
+                )}
 
-          {/* Plan 2 - Destacado */}
-          <div className="bg-[#2E4036] radius-huge p-8 md:p-12 shadow-2xl flex flex-col h-[105%] relative z-10 text-white transform md:-translate-y-4">
-            <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#CC5833] text-xs font-bold px-4 py-1 rounded-full tracking-widest uppercase">
-              Recomendado
-            </div>
-            <h3 className="font-heading font-bold text-3xl mb-2">Acceso Total · 7 Días</h3>
-            <p className="text-[#F2F0E9]/70 mb-8 font-serif italic">Prueba el método desde dentro.</p>
+                <p className={`font-mono text-[10px] uppercase tracking-[0.2em] mb-3 ${isFeatured ? 'text-[#E2C17D]' : 'text-[#CC5833]'}`}>
+                  {plan.subtitle}
+                </p>
+                <h3 className="font-heading font-bold text-3xl mb-4">{plan.title}</h3>
+                <p className={`text-sm leading-relaxed mb-8 ${isFeatured ? 'text-[#F2F0E9]/72' : 'text-[#1A1A1A]/62'}`}>
+                  {plan.description}
+                </p>
 
-            <ul className="space-y-5 mb-10 flex-1">
-              {["Sala de Reducción del Ego", "Prácticas guiadas (meditación/oración)", "Protocolos de límites y amor propio", "Entrada al método sin compromiso largo"].map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[#F2F0E9]">
-                  <CheckCircle2 size={20} className="text-[#CC5833] shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={() => handleWA("Hola, quiero activar Acceso Total · 7 Días.")}
-              className="w-full py-5 rounded-full bg-[#CC5833] text-white font-bold btn-magnetic text-lg shadow-[0_0_20px_rgba(204,88,51,0.4)] flex justify-center items-center gap-2"
-            >
-              <MessageCircle size={20} /> Activar 7 Días
-            </button>
-          </div>
+                <ul className="space-y-4 mb-10 flex-1">
+                  {plan.items.map((item) => (
+                    <li key={item} className={`flex items-start gap-3 text-sm ${isFeatured ? 'text-[#F2F0E9]' : 'text-[#1A1A1A]/82'}`}>
+                      <CheckCircle2 size={18} className={`${isFeatured ? 'text-[#E2C17D]' : 'text-[#2E4036]'} shrink-0 mt-0.5`} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
 
-          {/* Plan 3 */}
-          <div className="bg-white radius-huge p-8 md:p-10 border border-gray-200 shadow-sm flex flex-col h-full">
-            <h3 className="font-heading font-bold text-2xl text-[#1A1A1A] mb-2">Atleta Emocional</h3>
-            <p className="text-gray-500 mb-8 text-sm">Compromiso total con el proceso.</p>
-
-            <ul className="space-y-4 mb-10 flex-1">
-              {["Mentoría de Pasos", "Acompañamiento y seguimiento", "Kits de Transformación (emocional/vida)", "Diseño de protocolo personal"].map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-[#1A1A1A]">
-                  <CheckCircle2 size={18} className="text-[#2E4036] shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={() => handleWA("Hola, quiero reservar una llamada para el plan Atleta Emocional.")}
-              className="w-full py-4 rounded-full border border-[#2E4036] text-[#2E4036] font-bold btn-magnetic hover:bg-[#2E4036] hover:text-white transition-colors flex justify-center items-center gap-2"
-            >
-              Reservar Llamada
-            </button>
-          </div>
+                <button
+                  type="button"
+                  onClick={plan.action}
+                  className={`w-full py-4 rounded-full font-bold btn-magnetic transition-colors flex justify-center items-center gap-2 ${
+                    isFeatured
+                      ? 'bg-[#CC5833] text-white shadow-[0_0_22px_rgba(204,88,51,0.35)] hover:bg-[#b84d2d]'
+                      : 'border border-[#2E4036] text-[#2E4036] hover:bg-[#2E4036] hover:text-white'
+                  }`}
+                >
+                  {isFeatured && <MessageCircle size={18} />}
+                  {plan.button}
+                </button>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1192,37 +1344,52 @@ const Pricing = ({ onOpenTest }) => {
 // --- FOOTER ---
 
 const Footer = () => {
+  const handleWA = () => {
+    const text = encodeURIComponent("Hola, quiero información sobre Gimnasio Emocional Mentes Brillantes.");
+    window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+  };
+
   return (
-    <footer className="bg-[#1A1A1A] text-[#F2F0E9] pt-24 pb-12 px-6 md:px-12 rounded-t-[3rem] md:rounded-t-[5rem] mt-[-2rem] relative z-20">
+    <footer className="bg-[#1A1A1A] text-[#F2F0E9] pt-24 pb-12 px-6 md:px-12 rounded-t-[3rem] md:rounded-t-[5rem] mt-[-2rem] relative z-20 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_18%_18%,rgba(226,193,125,0.10),transparent_28%),radial-gradient(circle_at_84%_72%,rgba(204,88,51,0.12),transparent_30%)]"></div>
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-10">
+        <div className="relative flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-10">
           <div>
             <div className="mb-6">
               <GoldenLogoLockup scrolled={false} inFooter={true} />
             </div>
-            <p className="font-serif italic text-gray-400 text-lg max-w-sm mt-4">
-              Gimnasio Emocional Mentes Brillantes. Entrenando la paz interior, un día a la vez.
+            <p className="font-serif italic text-gray-300 text-xl max-w-md mt-4 leading-relaxed">
+              Gimnasio Emocional Mentes Brillantes. Entrenamos la paz interior para que tus decisiones, relaciones y resultados nazcan desde otro lugar.
             </p>
+            <button
+              type="button"
+              onClick={handleWA}
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-bold text-white btn-magnetic"
+            >
+              <MessageCircle size={18} />
+              Escribir por WhatsApp
+            </button>
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-4">
             <div className="flex flex-wrap gap-x-8 gap-y-3 font-medium text-sm text-gray-300 md:justify-end">
               <a href="#metodo" className="hover:text-white transition-colors">Método</a>
-              <a href="#archivo" className="hover:text-white transition-colors">Archivo</a>
+              <a href="#procesos" className="hover:text-white transition-colors">Procesos</a>
+              <a href="#sesion-coach-detalle" className="hover:text-white transition-colors">Sesión Coach</a>
               <a href="#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
             </div>
             <div className="flex items-center gap-2 mt-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <div className="w-2 h-2 rounded-full bg-[#00FF66] animate-pulse"></div>
-              <span className="font-mono text-xs text-gray-400">Sistema Operativo · Activo</span>
+              <span className="font-mono text-xs text-gray-400">Sistema emocional · Activo</span>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
+        <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
           <p>© {new Date().getFullYear()} GEMB. Todos los derechos reservados.</p>
           <p className="max-w-xl text-center md:text-right">
-            Bienestar y entrenamiento emocional. Si estás en crisis o necesitas atención clínica inmediata, busca ayuda profesional en tu país.
+            Marca final: vuelve al centro, entrena tu mente y elige de nuevo. Si estás en crisis o necesitas atención clínica inmediata, busca ayuda profesional en tu país.
           </p>
         </div>
       </div>
