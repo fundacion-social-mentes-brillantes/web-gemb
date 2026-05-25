@@ -1,0 +1,36 @@
+{
+  "rewrites": [
+    {
+      "source": "/curso-de-milagros",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/curso-de-milagros/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sala-reduccion-ego",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sala-reduccion-ego/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/entrega-de-pasos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/entrega-de-pasos/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sesion-coach",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sesion-coach/",
+      "destination": "/index.html"
+    }
+  ]
+}

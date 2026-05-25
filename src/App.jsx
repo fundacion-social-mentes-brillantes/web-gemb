@@ -130,6 +130,317 @@ const GlobalStyles = () => (
 );
 
 const WA_NUMBER = "573112602355";
+const SITE_URL = "https://www.gimnasioemocionalmb.com";
+
+const HOME_SEO = {
+  title: "Gimnasio Emocional Mentes Brillantes | Entrenamiento emocional",
+  description: "GEMB es un espacio de conciencia, espiritualidad, transformación emocional, networking y entrenamiento interior para transformar tu mundo interior y tus resultados de vida.",
+  url: `${SITE_URL}/`,
+  image: `${SITE_URL}/logo-gemb.png`,
+  structuredData: {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Gimnasio Emocional Mentes Brillantes",
+    alternateName: "GEMB",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo-gemb.png`,
+    sameAs: [SITE_URL],
+    description: "Espacio de formación, acompañamiento y entrenamiento emocional y espiritual."
+  }
+};
+
+const ADMIN_SEO = {
+  title: "Panel privado | Gimnasio Emocional Mentes Brillantes",
+  description: "Acceso privado al panel administrativo de Gimnasio Emocional Mentes Brillantes.",
+  url: `${SITE_URL}/#admin`,
+  image: `${SITE_URL}/logo-gemb.png`,
+  robots: "noindex, nofollow"
+};
+
+const PROCESS_PAGES = [
+  {
+    path: "/curso-de-milagros",
+    icon: BookOpen,
+    label: "Curso de Milagros",
+    eyebrow: "Estudio espiritual y práctica diaria",
+    title: "Un Curso de Milagros en Colombia | Gimnasio Emocional Mentes Brillantes",
+    description: "Estudia y practica Un Curso de Milagros con Gimnasio Emocional Mentes Brillantes. Un recorrido espiritual para sanar la percepción, elegir de nuevo y volver al amor.",
+    h1: "Un Curso de Milagros: un entrenamiento de la mente para volver al amor",
+    lead: "Cada año abrimos un recorrido de estudio y práctica de Un Curso de Milagros para observar la mente, sanar la percepción, soltar el juicio y elegir de nuevo desde el amor.",
+    quote: "No buscamos memorizar ideas espirituales; buscamos entrenar una mirada más limpia, amorosa y responsable en la vida diaria.",
+    keywords: ["Un Curso de Milagros", "Curso de Milagros Colombia", "estudio espiritual", "despertar de conciencia"],
+    whatsappMessage: "Hola, quiero información sobre el recorrido de Un Curso de Milagros en Gimnasio Emocional Mentes Brillantes.",
+    sections: [
+      {
+        title: "Qué es este recorrido",
+        body: "Es un espacio de estudio, práctica y acompañamiento espiritual donde usamos las enseñanzas de Un Curso de Milagros como entrenamiento de la mente. La intención es aprender a mirar las situaciones desde menos miedo, menos culpa y más amor.",
+        bullets: ["Lectura y comprensión guiada", "Práctica interior aplicada a la vida cotidiana", "Observación del juicio, la culpa y la defensa", "Elección consciente de una percepción más amorosa"]
+      },
+      {
+        title: "Como lo vivimos en GEMB",
+        body: "Dentro de Gimnasio Emocional Mentes Brillantes lo vivimos como una disciplina espiritual acompañada. Integramos conversación honesta, silencio, oración, práctica emocional y ejemplos reales para que la teoría baje a decisiones concretas.",
+        bullets: ["Encuentros de estudio y reflexión", "Prácticas para elegir de nuevo", "Acompañamiento desde una mirada humana y espiritual", "Lenguaje claro para personas que están comenzando"]
+      },
+      {
+        title: "Para quien es",
+        body: "Es para personas que sienten el llamado a sanar su percepción, revisar sus reacciones, dejar de vivir desde la culpa o el ataque y cultivar una relación más serena con Dios, consigo mismas y con los demás.",
+        bullets: ["Quienes buscan un grupo de estudio espiritual", "Personas en proceso de despertar de conciencia", "Quienes quieren unir espiritualidad con práctica emocional", "Personas nuevas o con experiencia previa en UCDM"]
+      },
+      {
+        title: "Qué puedes esperar",
+        body: "Puedes esperar profundidad, constancia y una invitación a practicar. No es un espacio para discutir quién tiene la razón, sino para mirar dónde la mente se separa del amor y entrenar una respuesta diferente.",
+        bullets: ["Mayor claridad sobre tus pensamientos", "Herramientas para soltar juicio y culpa", "Un lenguaje amoroso para volver al centro", "Comunidad de práctica y acompañamiento"]
+      }
+    ],
+    practice: "Durante siete días, observa un juicio recurrente y escribe: qué creo que está pasando, qué miedo hay debajo y cómo podría elegir mirar esto desde el amor.",
+    disclaimer: "Este espacio no representa a la organización oficial de Un Curso de Milagros; es un grupo de estudio, práctica y acompañamiento espiritual desarrollado dentro de Gimnasio Emocional Mentes Brillantes.",
+    faq: [
+      ["¿Necesito experiencia previa?", "No. Puedes llegar sin experiencia. El recorrido está pensado para estudiar, preguntar y practicar paso a paso."],
+      ["¿Es un curso religioso?", "No se presenta como una religión. Es un camino espiritual de entrenamiento de la mente, vivido con respeto por el proceso de cada persona."],
+      ["¿Cuándo inicia?", "Abrimos recorridos por ciclos. Lo mejor es escribir por WhatsApp para recibir fechas, horarios y modalidad vigente."],
+      ["¿Es presencial o virtual?", "La modalidad puede variar según el ciclo. Te confirmamos los encuentros disponibles cuando solicitas información."],
+      ["¿Cómo pido información?", "Puedes escribir por WhatsApp desde esta página y pedir detalles del próximo recorrido de Un Curso de Milagros."]
+    ]
+  },
+  {
+    path: "/sala-reduccion-ego",
+    icon: Activity,
+    label: "Sala de Reducción del Ego",
+    eyebrow: "Practica grupal de conciencia",
+    title: "Sala de Reducción del Ego | Gimnasio Emocional Mentes Brillantes",
+    description: "Participa en la Sala de Reducción del Ego de Gimnasio Emocional Mentes Brillantes, un espacio de entrenamiento emocional y espiritual para reconocer el ego, rendir el control y volver a la conciencia.",
+    h1: "Sala de Reducción del Ego: un espacio para reconocer, rendir y transformar",
+    lead: "La Sala de Reducción del Ego es un espacio de entrenamiento emocional y espiritual donde aprendemos a observar las reacciones que nacen del miedo, el control, el juicio o la necesidad de tener la razón.",
+    quote: "En lugar de pelear con el ego, aprendemos a reconocerlo, rendirlo y volver a una mirada más consciente, amorosa y responsable.",
+    keywords: ["Sala de Reducción del Ego", "reducción del ego", "entrenamiento emocional", "conciencia emocional"],
+    whatsappMessage: "Hola, quiero información sobre la Sala de Reducción del Ego de Gimnasio Emocional Mentes Brillantes.",
+    sections: [
+      {
+        title: "Qué es la Sala de Reducción del Ego",
+        body: "Es un espacio grupal, profundo y humano para entrenar la observación interior. Miramos las formas del ego sin vergüenza y sin dramatizar: control, defensa, orgullo, culpa, miedo, victimismo, juicio y reacción automática.",
+        bullets: ["Reconocer el impulso antes de actuar", "Rendir el control desde la honestidad", "Practicar serenidad y responsabilidad", "Volver a la esencia real sin castigo"]
+      },
+      {
+        title: "Qué trabajamos en la sala",
+        body: "Trabajamos situaciones reales de la vida: conversaciones difíciles, límites, heridas, comparación, necesidad de aprobación, enojo, culpa o deseo de tener siempre la razón. La sala convierte la reacción en material de conciencia.",
+        bullets: ["Control y necesidad de razón", "Juicio, ataque y defensa", "Culpa, miedo y orgullo espiritual", "Entrega, oración y poder superior"]
+      },
+      {
+        title: "Para quien es",
+        body: "Es para personas que quieren crecer con honestidad, practicar humildad emocional y salir del piloto automático. No necesitas saber nombrar todo lo que sientes; basta con llegar con disposición a mirar.",
+        bullets: ["Personas nuevas en GEMB", "Quienes repiten conflictos o reacciones", "Quienes desean entrenar conciencia emocional", "Quienes buscan una práctica espiritual aterrizada"]
+      },
+      {
+        title: "Qué pasa en una sesión",
+        body: "La experiencia combina apertura, compartir consciente, escucha, dirección, práctica interior y cierre. El ambiente cuida la dignidad de cada persona y no se plantea como terapia clínica.",
+        bullets: ["Se abre un tema de trabajo", "Se comparte desde la experiencia", "Se observa el patrón del ego", "Se cierra con práctica, serenidad y dirección"]
+      }
+    ],
+    practice: "Antes de reaccionar, respira y nombra en voz baja: ¿estoy defendiendo, controlando o queriendo tener la razón? Esa pausa ya abre una puerta.",
+    faq: [
+      ["¿Qué significa reducir el ego?", "Significa observar sus mecanismos de miedo, defensa y control para dejar de obedecerlos automáticamente."],
+      ["¿Es terapia?", "No. Es un espacio de formación, acompañamiento y entrenamiento emocional/espiritual. No reemplaza atención clínica cuando se necesita."],
+      ["¿Puedo asistir si soy nuevo?", "Sí. La sala está pensada para recibir personas nuevas con orientación clara y un ambiente cuidado."],
+      ["¿Qué se hace en una sala?", "Se trabaja un tema, se comparte con honestidad, se reconoce el patrón y se practica una forma más consciente de responder."],
+      ["¿Cómo pido información?", "Puedes escribir por WhatsApp desde esta página y pedir fechas, modalidad y condiciones de participación."]
+    ]
+  },
+  {
+    path: "/entrega-de-pasos",
+    icon: Compass,
+    label: "Entrega de Pasos",
+    eyebrow: "Escritura, honestidad y reparacion",
+    title: "Entrega de Pasos | Proceso emocional y espiritual GEMB",
+    description: "La Entrega de Pasos en Gimnasio Emocional Mentes Brillantes es un proceso de escritura, honestidad y reparación interior para ordenar la historia personal y avanzar con más paz.",
+    h1: "Entrega de Pasos: escribir, reconocer y soltar lo que ya no necesitas cargar",
+    lead: "La Entrega de Pasos es un camino de escritura, honestidad y reparacion interior. A traves de los pasos, la persona deja de cargar sola su historia y empieza a ordenar lo vivido.",
+    quote: "Escribir no cambia el pasado, pero puede cambiar la forma en que lo cargas, lo comprendes y eliges avanzar.",
+    keywords: ["Entrega de Pasos", "12 pasos", "recuperación emocional", "reparación interior"],
+    whatsappMessage: "Hola, quiero información sobre la Entrega de Pasos en Gimnasio Emocional Mentes Brillantes.",
+    sections: [
+      {
+        title: "Qué es la Entrega de Pasos",
+        body: "Es un proceso acompañado de escritura, reconocimiento y entrega interior, inspirado en caminos de recuperación emocional y espiritual. No se trata de exponerte ni de forzarte, sino de ordenar tu historia con verdad y cuidado.",
+        bullets: ["Mirar patrones emocionales", "Reconocer heridas y decisiones antiguas", "Soltar cargas que ya no necesitas llevar", "Abrir espacio para responsabilidad y libertad"]
+      },
+      {
+        title: "Por que escribir ayuda a sanar",
+        body: "La escritura permite sacar del cuerpo y de la mente aquello que se repite en silencio. Cuando una persona escribe con guía, puede ver conexiones, nombrar dolores y dejar de vivir gobernada por historias incompletas.",
+        bullets: ["Ordena lo vivido", "Reduce confusion interna", "Muestra patrones repetidos", "Ayuda a preparar reparaciones posibles"]
+      },
+      {
+        title: "Cómo se acompaña el proceso",
+        body: "El acompañamiento ofrece dirección, preguntas, tiempos y contención. La persona avanza paso a paso, sin prisa artificial, con respeto por su historia y por el momento emocional en el que se encuentra.",
+        bullets: ["Orientación para escribir", "Revisión de patrones y aprendizajes", "Cuidado de la confidencialidad", "Enfoque en responsabilidad, paz y reparación"]
+      },
+      {
+        title: "Para quien es",
+        body: "Es para quienes sienten que cargan historias, culpas, duelos, resentimientos o ciclos que necesitan ser mirados con honestidad para avanzar con más libertad.",
+        bullets: ["Personas que quieren ordenar su historia", "Quienes buscan recuperación emocional", "Quienes desean reparar vínculos desde la conciencia", "Quienes necesitan una ruta profunda y acompañada"]
+      }
+    ],
+    practice: "Escribe una línea diaria durante una semana: hoy reconozco que ya no quiero cargar solo/a con... Luego observa qué emoción aparece.",
+    faq: [
+      ["¿Debo tener experiencia previa?", "No. El proceso puede iniciar desde cero, con guía para comprender qué se escribe y cómo avanzar."],
+      ["¿Qué son los pasos?", "Son una ruta de honestidad, reconocimiento, entrega y reparación interior que ayuda a ordenar la historia personal."],
+      ["¿Tengo que compartir mi historia?", "No se fuerza a nadie. El proceso cuida el ritmo personal y se comparte lo necesario dentro del acompañamiento."],
+      ["¿Es confidencial?", "Sí. La confidencialidad y el respeto por la historia de cada persona son parte esencial del proceso."],
+      ["¿Cómo inicio?", "Puedes escribir por WhatsApp para recibir orientación sobre el primer encuentro y la forma de comenzar."]
+    ]
+  },
+  {
+    path: "/sesion-coach",
+    icon: User,
+    label: "Sesión Coach",
+    eyebrow: "Puerta de entrada al proceso GEMB",
+    title: "Sesión Coach Emocional | Gimnasio Emocional Mentes Brillantes",
+    description: "Agenda una Sesión Coach con Gimnasio Emocional Mentes Brillantes para mirar tu historia, ordenar tu mundo interior y recibir guía en tu proceso emocional.",
+    h1: "Sesión Coach: una guía privada para ordenar tu mundo interior",
+    lead: "La Sesión Coach es un espacio privado de guía emocional donde miramos tu historia con honestidad, identificamos patrones que se repiten y ordenamos el mundo interior.",
+    quote: "La claridad no llega solo por pensar más; llega cuando miras tu historia con dirección, honestidad y una práctica que puedas sostener.",
+    keywords: ["sesión coach emocional", "coach emocional", "guía emocional", "Alexandra Ortega"],
+    whatsappMessage: "Hola, quiero agendar una Sesión Coach con Gimnasio Emocional Mentes Brillantes.",
+    sections: [
+      {
+        title: "Qué es una Sesión Coach",
+        body: "Es la puerta principal de Gimnasio Emocional Mentes Brillantes: un encuentro privado para mirar lo que estás viviendo, ordenar tu mundo interior y recibir una ruta de avance. Puede ser guiada por Alexandra Ortega o por coaches formados en la técnica GEMB.",
+        bullets: ["Lectura honesta de tu momento actual", "Identificación de patrones emocionales", "Dirección para tomar decisiones con más conciencia", "Primer mapa de proceso y práctica"]
+      },
+      {
+        title: "Qué puedes trabajar",
+        body: "Puedes trabajar relaciones, límites, duelos, cansancio emocional, culpa, miedo, repetición de conflictos, falta de dirección, dependencia emocional o dificultad para sostener cambios.",
+        bullets: ["Historia personal y patrones repetidos", "Orden emocional y espiritual", "Límites, decisiones y coherencia", "Ruta hacia sala, pasos, UCDM o seguimiento"]
+      },
+      {
+        title: "Como se vive una sesion",
+        body: "La sesión combina escucha, preguntas precisas, lectura del patrón y orientación práctica. No prometemos curas ni resultados médicos; ofrecemos una guía clara para que puedas entrenar una forma diferente de responder.",
+        bullets: ["Conversacion privada y cuidada", "Claridad sobre el patron principal", "Practicas para la vida real", "Siguiente paso sugerido dentro de GEMB"]
+      },
+      {
+        title: "Para quien es",
+        body: "Es para personas que necesitan ordenar lo que sienten y quieren iniciar un proceso serio, humano y espiritual. También es ideal si no sabes por dónde empezar dentro de GEMB.",
+        bullets: ["Quienes buscan guía emocional", "Personas que repiten ciclos y quieren claridad", "Quienes necesitan un primer mapa de proceso", "Personas que desean acompañamiento sin enfoque clínico"]
+      }
+    ],
+    practice: "Antes de la sesión, escribe tres situaciones que se repiten en tu vida y que ya no quieres seguir resolviendo desde la misma reacción.",
+    faq: [
+      ["¿Es terapia psicológica?", "No. Es una guía emocional y espiritual de entrenamiento interior. No reemplaza atención psicológica, médica o psiquiátrica cuando sea necesaria."],
+      ["¿Quién guía la sesión?", "Puede guiarla Alexandra Ortega o un miembro del equipo de coaches formados en la técnica GEMB."],
+      ["¿Cuánto dura?", "La duración se confirma al agendar, según la modalidad disponible y el tipo de acompañamiento."],
+      ["¿Puedo tomarla online?", "Sí, cuando hay modalidad virtual disponible. Te confirmamos opciones y horarios por WhatsApp."],
+      ["¿Cómo agendo?", "Escribe por WhatsApp desde esta página y solicita disponibilidad para tu Sesión Coach."]
+    ]
+  }
+];
+
+const PROCESS_PAGE_BY_PATH = PROCESS_PAGES.reduce((pages, page) => {
+  pages[page.path] = page;
+  return pages;
+}, {});
+
+const normalizePath = (path) => {
+  const cleanPath = path.replace(/\/+$/, "");
+  return cleanPath || "/";
+};
+
+const setMetaTag = ({ name, property, content }) => {
+  const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+  let tag = document.head.querySelector(selector);
+
+  if (!tag) {
+    tag = document.createElement("meta");
+    if (name) tag.setAttribute("name", name);
+    if (property) tag.setAttribute("property", property);
+    document.head.appendChild(tag);
+  }
+
+  tag.setAttribute("content", content);
+};
+
+const setCanonical = (href) => {
+  let link = document.head.querySelector('link[rel="canonical"]');
+
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
+  }
+
+  link.setAttribute("href", href);
+};
+
+const getProcessStructuredData = (page) => [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: page.label,
+    serviceType: "Entrenamiento emocional y espiritual",
+    url: `${SITE_URL}${page.path}`,
+    description: page.description,
+    provider: {
+      "@type": "Organization",
+      name: "Gimnasio Emocional Mentes Brillantes",
+      url: SITE_URL
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Colombia"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: page.faq.map(([question, answer]) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: answer
+      }
+    }))
+  }
+];
+
+const useSeoMeta = (seo) => {
+  const structuredDataJson = seo?.structuredData ? JSON.stringify(seo.structuredData) : "";
+
+  useEffect(() => {
+    if (!seo || typeof document === "undefined") return;
+
+    document.documentElement.lang = "es-CO";
+    document.title = seo.title;
+    setCanonical(seo.url);
+    setMetaTag({ name: "description", content: seo.description });
+    setMetaTag({ name: "author", content: "Gimnasio Emocional Mentes Brillantes" });
+    setMetaTag({ name: "robots", content: seo.robots || "index, follow" });
+    setMetaTag({ property: "og:type", content: "website" });
+    setMetaTag({ property: "og:url", content: seo.url });
+    setMetaTag({ property: "og:title", content: seo.title });
+    setMetaTag({ property: "og:description", content: seo.description });
+    setMetaTag({ property: "og:image", content: seo.image || `${SITE_URL}/logo-gemb.png` });
+    setMetaTag({ property: "og:locale", content: "es_CO" });
+    setMetaTag({ property: "og:site_name", content: "Gimnasio Emocional Mentes Brillantes" });
+    setMetaTag({ name: "twitter:card", content: "summary_large_image" });
+    setMetaTag({ name: "twitter:title", content: seo.title });
+    setMetaTag({ name: "twitter:description", content: seo.description });
+    setMetaTag({ name: "twitter:image", content: seo.image || `${SITE_URL}/logo-gemb.png` });
+
+    let jsonLd = document.head.querySelector("#gemb-jsonld");
+
+    if (structuredDataJson) {
+      if (!jsonLd) {
+        jsonLd = document.createElement("script");
+        jsonLd.id = "gemb-jsonld";
+        jsonLd.type = "application/ld+json";
+        document.head.appendChild(jsonLd);
+      }
+
+      jsonLd.textContent = structuredDataJson;
+    } else if (jsonLd) {
+      jsonLd.remove();
+    }
+  }, [seo, structuredDataJson]);
+};
 
 // --- COMPONENTES ---
 
@@ -206,17 +517,17 @@ const Navbar = ({ onOpenTest }) => {
 
             {/* IZQUIERDA: Logo Apilado */}
             <div className="w-[45%] md:w-1/4 flex justify-start">
-              <a href="#" className="inline-block">
+              <a href="/" className="inline-block">
                 <GoldenLogoLockup scrolled={scrolled} />
               </a>
             </div>
 
             {/* CENTRO: Enlaces */}
             <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
-              <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
+              <a href="/#metodo" className="hover:opacity-70 transition-opacity">Método</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
-              <a href="#sesion-coach-detalle" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
+              <a href="/sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
                 <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
 
@@ -244,23 +555,23 @@ const Navbar = ({ onOpenTest }) => {
                     aria-label="Procesos principales"
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white text-[#1A1A1A] rounded-2xl p-2 shadow-2xl border border-[#2E4036]/10 min-w-[280px] flex flex-col gap-1 z-50 animate-[fadeIn_0.2s_ease-out]"
                   >
-                    <a href="#sesion-coach" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                    <a href="/sesion-coach" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
                       <Star size={14} className="text-[#CC5833] fill-[#CC5833]" /> Sesión Coach
                     </a>
-                    <a href="#sala-ego" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                    <a href="/sala-reduccion-ego" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
                       <Activity size={14} className="text-[#CC5833]" /> Sala del Ego
                     </a>
-                    <a href="#entrega-pasos" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                    <a href="/entrega-de-pasos" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
                       <Compass size={14} className="text-[#2E4036]" /> Entrega de Pasos
                     </a>
-                    <a href="#curso-milagros" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
+                    <a href="/curso-de-milagros" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
                       <BookOpen size={14} className="text-[#E2C17D]" /> Curso de Milagros
                     </a>
                   </div>
                 )}
               </div>
 
-              <a href="#planes" className="hover:opacity-70 transition-opacity">Planes</a>
+              <a href="/#planes" className="hover:opacity-70 transition-opacity">Planes</a>
               <a
                 href="/#admin"
                 className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
@@ -305,12 +616,12 @@ const Navbar = ({ onOpenTest }) => {
           <div className="w-full max-w-sm rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-center shadow-2xl">
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#E2C17D] mb-5">Navegación</p>
             <div className="flex flex-col items-stretch gap-3">
-              <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Método</a>
-              <a href="#sesion-coach-detalle" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading text-[#E2C17D] flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Star size={16} className="fill-current text-[#CC5833]" /> Sesión Coach</a>
-              <a href="#sala-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
-              <a href="#entrega-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
-              <a href="#curso-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
-              <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
+              <a href="/#metodo" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Método</a>
+              <a href="/sesion-coach" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading text-[#E2C17D] flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Star size={16} className="fill-current text-[#CC5833]" /> Sesión Coach</a>
+              <a href="/sala-reduccion-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
+              <a href="/entrega-de-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
+              <a href="/curso-de-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
+              <a href="/#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
             </div>
           </div>
           <a
@@ -964,6 +1275,7 @@ const NuestrosProcesosSection = () => {
   const procesos = [
     {
       id: "sesion-coach",
+      route: "/sesion-coach",
       title: "Sesión Coach",
       subtitle: "Dirección privada 1:1",
       text: "Acompañamiento personalizado para mirar tu historia con honestidad, ordenar tu mundo emocional y recibir dirección concreta para tu proceso interior.",
@@ -974,6 +1286,7 @@ const NuestrosProcesosSection = () => {
     },
     {
       id: "sala-ego",
+      route: "/sala-reduccion-ego",
       title: "Sala de Reducción del Ego",
       subtitle: "Práctica grupal en vivo",
       text: "Un espacio profundo para reconocer la voz que controla, suelta o ataca; y entrenar una respuesta más consciente, humilde y amorosa.",
@@ -984,6 +1297,7 @@ const NuestrosProcesosSection = () => {
     },
     {
       id: "entrega-pasos",
+      route: "/entrega-de-pasos",
       title: "Entrega de Pasos",
       subtitle: "Honestidad y reparación",
       text: "Una ruta de entrega, inventario y responsabilidad para dejar de cargar solo/a, reparar desde el alma y vivir con más libertad.",
@@ -994,6 +1308,7 @@ const NuestrosProcesosSection = () => {
     },
     {
       id: "curso-milagros",
+      route: "/curso-de-milagros",
       title: "Un Curso de Milagros",
       subtitle: "Entrenamiento de la mente",
       text: "Un recorrido de estudio y práctica para sanar la percepción, elegir de nuevo y volver al amor como disciplina diaria.",
@@ -1036,8 +1351,8 @@ const NuestrosProcesosSection = () => {
                   <div className="w-14 h-14 bg-white/[0.07] rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-[#E2C17D]/40 transition-colors">
                     {proceso.icon}
                   </div>
-                  <a href={`#${proceso.id}`} aria-label={`Ir a ${proceso.title}`} className="font-mono text-[10px] text-white/45 hover:text-[#E2C17D] transition-colors">
-                    #{proceso.id}
+                  <a href={proceso.route} aria-label={`Conocer ${proceso.title}`} className="font-mono text-[10px] text-white/45 hover:text-[#E2C17D] transition-colors">
+                    Ver ruta
                   </a>
                 </div>
 
@@ -1052,6 +1367,14 @@ const NuestrosProcesosSection = () => {
                 <p className="text-[#F2F0E9]/76 text-sm leading-relaxed font-light mb-8">
                   {proceso.text}
                 </p>
+
+                <a
+                  href={proceso.route}
+                  className="mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#E2C17D] transition-colors hover:text-white"
+                >
+                  Conocer proceso
+                  <ArrowRight size={14} />
+                </a>
 
                 <button
                   type="button"
@@ -1374,10 +1697,10 @@ const Footer = () => {
 
           <div className="flex flex-col items-start md:items-end gap-4">
             <div className="flex flex-wrap gap-x-8 gap-y-3 font-medium text-sm text-gray-300 md:justify-end">
-              <a href="#metodo" className="hover:text-white transition-colors">Método</a>
-              <a href="#procesos" className="hover:text-white transition-colors">Procesos</a>
-              <a href="#sesion-coach-detalle" className="hover:text-white transition-colors">Sesión Coach</a>
-              <a href="#planes" className="hover:text-white transition-colors">Planes</a>
+              <a href="/#metodo" className="hover:text-white transition-colors">Método</a>
+              <a href="/#procesos" className="hover:text-white transition-colors">Procesos</a>
+              <a href="/sesion-coach" className="hover:text-white transition-colors">Sesión Coach</a>
+              <a href="/#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
             </div>
             <div className="flex items-center gap-2 mt-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
@@ -1395,6 +1718,250 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+  );
+};
+
+const ProcessPage = ({ page, onOpenTest }) => {
+  const Icon = page.icon;
+  const relatedPages = PROCESS_PAGES.filter((processPage) => processPage.path !== page.path);
+
+  const handleWA = () => {
+    const text = encodeURIComponent(page.whatsappMessage);
+    window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+  };
+
+  return (
+    <>
+      <GlobalStyles />
+      <div className="noise-overlay"></div>
+      <Navbar onOpenTest={onOpenTest} />
+
+      <main className="bg-[#F2F0E9] text-[#1A1A1A]">
+        <section className="relative min-h-[92dvh] overflow-hidden bg-[#1A1A1A] px-6 pb-20 pt-44 text-white md:px-12 md:pb-24">
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(46,64,54,0.96),rgba(26,26,26,0.98)_48%,rgba(204,88,51,0.42))]"></div>
+          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+
+          <div className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.72fr] lg:items-end">
+            <div>
+              <a href="/" className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.15] bg-white/[0.08] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F2F0E9] transition-colors hover:bg-white/[0.12]">
+                &larr; Volver al inicio
+              </a>
+
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E2C17D]/25 bg-[#E2C17D]/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#E2C17D]">
+                <Icon size={15} />
+                {page.eyebrow}
+              </div>
+
+              <h1 className="max-w-5xl font-heading text-[2.55rem] font-bold leading-[1.02] tracking-tight text-white sm:text-5xl md:text-6xl">
+                {page.h1}
+              </h1>
+
+              <p className="mt-7 max-w-3xl text-lg leading-relaxed text-[#F2F0E9]/[0.88] md:text-xl">
+                {page.lead}
+              </p>
+
+              <p className="mt-6 max-w-3xl border-l-2 border-[#E2C17D]/[0.45] pl-5 font-serif text-2xl italic leading-snug text-[#E2C17D]">
+                {page.quote}
+              </p>
+
+              <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={handleWA}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-bold text-white shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
+                >
+                  <MessageCircle size={18} />
+                  Pedir información por WhatsApp
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenTest}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#F2F0E9]/30 px-7 py-4 text-sm font-bold text-[#F2F0E9] transition-colors hover:bg-white/10"
+                >
+                  Valoración inicial de tu proceso
+                  <ArrowRight size={18} />
+                </button>
+              </div>
+            </div>
+
+            <aside className="rounded-[2rem] border border-white/[0.12] bg-white/[0.055] p-7 shadow-2xl backdrop-blur-md md:p-8">
+              <img
+                src="/logo-gemb.png"
+                alt="Gimnasio Emocional Mentes Brillantes"
+                className="mb-8 h-24 w-auto object-contain"
+              />
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#E2C17D]">
+                Tu mapa emocional
+              </p>
+              <h2 className="mt-3 font-heading text-2xl font-bold text-white">
+                Un proceso dentro de GEMB
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-[#F2F0E9]/[0.72]">
+                Conciencia, espiritualidad, entrenamiento emocional, práctica interior y acompañamiento para transformar la forma en que miras, eliges y respondes.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-2">
+                {page.keywords.map((keyword) => (
+                  <span key={keyword} className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1.5 text-[11px] font-medium text-[#F2F0E9]/[0.78]">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="px-6 py-20 md:px-12 md:py-28">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.76fr_1.24fr]">
+            <div className="lg:sticky lg:top-32 lg:self-start">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+                Lectura del proceso
+              </span>
+              <h2 className="mt-4 font-heading text-4xl font-bold leading-tight text-[#2E4036] md:text-5xl">
+                Qué vive una persona en este camino
+              </h2>
+              <p className="mt-5 font-serif text-xl italic leading-relaxed text-[#1A1A1A]/70">
+                Cada proceso tiene una puerta distinta, pero todos entrenan lo mismo: volver al centro, asumir responsabilidad y elegir desde una conciencia más amplia.
+              </p>
+            </div>
+
+            <div className="grid gap-6">
+              {page.sections.map((section) => (
+                <article key={section.title} className="rounded-[2rem] border border-[#2E4036]/10 bg-white p-7 shadow-[0_18px_45px_rgba(46,64,54,0.08)] md:p-9">
+                  <h3 className="font-heading text-2xl font-bold text-[#1A1A1A]">
+                    {section.title}
+                  </h3>
+                  <p className="mt-4 leading-relaxed text-[#1A1A1A]/72">
+                    {section.body}
+                  </p>
+                  <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {section.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-3 text-sm leading-relaxed text-[#1A1A1A]/[0.80]">
+                        <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[#2E4036]" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[#2E4036] px-6 py-16 text-white md:px-12 md:py-20">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
+            <div>
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#E2C17D]">
+                Recomendación de práctica
+              </span>
+              <h2 className="mt-4 font-heading text-3xl font-bold md:text-4xl">
+                Una acción pequeña para empezar hoy
+              </h2>
+              <p className="mt-5 text-lg leading-relaxed text-[#F2F0E9]/[0.82]">
+                {page.practice}
+              </p>
+            </div>
+            <div className="rounded-[2rem] border border-white/10 bg-[#1A1A1A]/40 p-7 md:p-8">
+              <h3 className="font-heading text-2xl font-bold text-[#E2C17D]">
+                Siguiente paso sugerido
+              </h3>
+              <p className="mt-4 leading-relaxed text-[#F2F0E9]/[0.78]">
+                Si sientes que este proceso conversa con tu momento actual, pide orientación. El equipo GEMB puede ayudarte a elegir entre Sesión Coach, Sala de Reducción del Ego, Entrega de Pasos o Un Curso de Milagros.
+              </p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={handleWA}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#CC5833] px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#b84d2d]"
+                >
+                  <MessageCircle size={17} />
+                  Hablar con GEMB
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenTest}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white/10"
+                >
+                  Hacer valoración inicial
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {page.disclaimer && (
+          <section className="px-6 pt-14 md:px-12">
+            <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#CC5833]/[0.18] bg-[#CC5833]/[0.08] p-6 text-sm leading-relaxed text-[#1A1A1A]/70 md:p-7">
+              <strong className="text-[#CC5833]">Nota sobre este espacio:</strong> {page.disclaimer}
+            </div>
+          </section>
+        )}
+
+        <section className="px-6 py-20 md:px-12 md:py-28">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-10 max-w-3xl">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+                Preguntas frecuentes
+              </span>
+              <h2 className="mt-4 font-heading text-4xl font-bold text-[#2E4036]">
+                Dudas comunes antes de empezar
+              </h2>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {page.faq.map(([question, answer]) => (
+                <article key={question} className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-6 shadow-[0_16px_36px_rgba(46,64,54,0.07)]">
+                  <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">
+                    {question}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#1A1A1A]/[0.68]">
+                    {answer}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="px-6 pb-24 md:px-12 md:pb-32">
+          <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#2E4036]/10 bg-white p-7 shadow-[0_18px_50px_rgba(46,64,54,0.08)] md:p-9">
+            <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+              <div>
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+                  Enlaces internos
+                </span>
+                <h2 className="mt-4 font-heading text-3xl font-bold text-[#2E4036]">
+                  También puedes explorar
+                </h2>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {relatedPages.map((relatedPage) => {
+                  const RelatedIcon = relatedPage.icon;
+
+                  return (
+                    <a
+                      key={relatedPage.path}
+                      href={relatedPage.path}
+                      className="group rounded-2xl border border-[#2E4036]/10 bg-[#F2F0E9] p-5 transition-all hover:-translate-y-0.5 hover:border-[#CC5833]/40 hover:bg-white"
+                    >
+                      <RelatedIcon size={20} className="text-[#CC5833]" />
+                      <h3 className="mt-4 font-heading text-base font-bold text-[#1A1A1A] group-hover:text-[#CC5833]">
+                        {relatedPage.label}
+                      </h3>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <p className="mx-auto mt-8 max-w-4xl text-center text-xs leading-relaxed text-[#1A1A1A]/[0.52]">
+            Los espacios de Gimnasio Emocional Mentes Brillantes son procesos de formación, acompañamiento y entrenamiento emocional/espiritual. No reemplazan atención médica, psicológica o psiquiátrica cuando esta sea necesaria.
+          </p>
+        </section>
+      </main>
+
+      <Footer />
+    </>
   );
 };
 
@@ -1702,20 +2269,44 @@ export default function App() {
   const [isInitialAssessmentOpen, setInitialAssessmentOpen] = useState(false);
   const [isEnneagramOpen, setEnneagramOpen] = useState(false);
   const [isGuaranteeOpen, setGuaranteeOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState(() =>
+    typeof window !== 'undefined' ? normalizePath(window.location.pathname) : '/'
+  );
   const [currentHash, setCurrentHash] = useState(() =>
     typeof window !== 'undefined' ? window.location.hash : ''
   );
   const isAdminRoute = currentHash === '#admin';
+  const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
+  const activeSeo = isAdminRoute
+    ? ADMIN_SEO
+    : currentProcessPage
+      ? {
+          title: currentProcessPage.title,
+          description: currentProcessPage.description,
+          url: `${SITE_URL}${currentProcessPage.path}`,
+          image: `${SITE_URL}/logo-gemb.png`,
+          structuredData: getProcessStructuredData(currentProcessPage)
+        }
+      : HOME_SEO;
+
+  useSeoMeta(activeSeo);
 
   useEffect(() => {
-    const handleHashChange = () => setCurrentHash(window.location.hash);
+    const syncLocation = () => {
+      setCurrentPath(normalizePath(window.location.pathname));
+      setCurrentHash(window.location.hash);
+    };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', syncLocation);
+    window.addEventListener('popstate', syncLocation);
+    return () => {
+      window.removeEventListener('hashchange', syncLocation);
+      window.removeEventListener('popstate', syncLocation);
+    };
   }, []);
 
   useEffect(() => {
-    if (isAdminRoute || gsapLoaded) return;
+    if (isAdminRoute || currentProcessPage || gsapLoaded) return;
 
     const load = async () => {
       try {
@@ -1730,7 +2321,7 @@ export default function App() {
       setGsapLoaded(true);
     };
     load();
-  }, [isAdminRoute, gsapLoaded]);
+  }, [currentProcessPage, isAdminRoute, gsapLoaded]);
 
   if (isAdminRoute) {
     return (
@@ -1738,6 +2329,29 @@ export default function App() {
         <GlobalStyles />
         <div className="noise-overlay"></div>
         <AdminPanel />
+      </>
+    );
+  }
+
+  if (currentProcessPage) {
+    return (
+      <>
+        <ProcessPage page={currentProcessPage} onOpenTest={() => setInitialAssessmentOpen(true)} />
+
+        <TestInitialAssessmentModal
+          isOpen={isInitialAssessmentOpen}
+          onClose={() => setInitialAssessmentOpen(false)}
+          onOpenEnneagram={() => setEnneagramOpen(true)}
+          waNumber={WA_NUMBER}
+        />
+        <EnhancedTestEnneagramModal
+          isOpen={isEnneagramOpen}
+          onClose={() => setEnneagramOpen(false)}
+          quickGroups={QUICK_GROUPS}
+          quickMatrix={QUICK_MATRIX}
+          eneatypes={ENEATYPES}
+          waNumber={WA_NUMBER}
+        />
       </>
     );
   }
