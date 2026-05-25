@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck
+  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
@@ -114,7 +114,7 @@ const GlobalStyles = () => (
       backdrop-filter: blur(12px);
       border: 1px solid rgba(46, 64, 54, 0.1);
     }
-    
+
     .btn-magnetic {
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
     }
@@ -138,9 +138,9 @@ const GoldenLogoLockup = ({ scrolled, inFooter = false }) => {
 
   return (
     <div className={`flex transition-all duration-700 origin-top-left ${isCompact ? 'scale-90' : 'scale-100'}`}>
-      <img 
-        src="/logo-gemb.png" 
-        alt="Gimnasio Emocional Mentes Brillantes" 
+      <img
+        src="/logo-gemb.png"
+        alt="Gimnasio Emocional Mentes Brillantes"
         className={`transition-all duration-700 object-contain ${
           isCompact ? 'h-12 md:h-14' : 'h-24 md:h-32 drop-shadow-2xl'
         }`}
@@ -152,6 +152,7 @@ const GoldenLogoLockup = ({ scrolled, inFooter = false }) => {
 const Navbar = ({ onOpenTest }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -175,13 +176,41 @@ const Navbar = ({ onOpenTest }) => {
             {/* CENTRO: Enlaces */}
             <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
               <a href="#metodo" className="hover:opacity-70 transition-opacity">Método</a>
-              <a href="#eneatipos" className="hover:opacity-70 transition-opacity">Eneatipos</a>
-              <a href="#archivo" className="hover:opacity-70 transition-opacity">Archivo</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
               <a href="#sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
-                <Star size={12} className="fill-current" /> Sesión Coach
+                <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
+
+              {/* Dropdown "Procesos" */}
+              <div
+                className="relative"
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <button
+                  className={`flex items-center gap-1 hover:opacity-70 transition-opacity outline-none ${scrolled ? 'py-1' : 'pt-0.5'}`}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Procesos <ChevronDown size={13} className={`transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white text-[#1A1A1A] rounded-2xl p-2 shadow-xl border border-gray-100 min-w-[240px] flex flex-col gap-1 z-50 animate-[fadeIn_0.2s_ease-out]">
+                    <a href="#sesion-coach" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
+                      <Star size={12} className="text-[#CC5833] fill-[#CC5833]" /> Sesión Coach
+                    </a>
+                    <a href="#sala-ego" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
+                      <Activity size={12} className="text-[#CC5833]" /> Sala del Ego
+                    </a>
+                    <a href="#entrega-pasos" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
+                      <Compass size={12} className="text-[#2E4036]" /> Entrega de Pasos
+                    </a>
+                    <a href="#curso-milagros" onClick={() => setDropdownOpen(false)} className="px-3.5 py-2.5 rounded-xl hover:bg-[#F2F0E9] transition-colors text-xs font-bold flex items-center gap-2 text-[#2E4036]">
+                      <BookOpen size={12} className="text-[#E2C17D]" /> Curso de Milagros
+                    </a>
+                  </div>
+                )}
+              </div>
 
               <a href="#planes" className="hover:opacity-70 transition-opacity">Planes</a>
               <a
@@ -215,23 +244,24 @@ const Navbar = ({ onOpenTest }) => {
 
       {/* Menú Móvil */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-6 p-6">
-          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Método</a>
-          <a href="#eneatipos" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Eneatipos</a>
-          <a href="#archivo" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Archivo</a>
-          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={20} className="fill-current" /> Sesión Coach</a>
-          <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-heading">Planes</a>
+        <div className="fixed inset-0 z-30 bg-[#1A1A1A] text-white flex flex-col items-center justify-center space-y-5 p-6 overflow-y-auto">
+          <a href="#metodo" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading">Método</a>
+          <a href="#sesion-coach" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading text-[#E2C17D] flex items-center gap-2"><Star size={16} className="fill-current text-[#CC5833]" /> Sesión Coach</a>
+          <a href="#sala-ego" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
+          <a href="#entrega-pasos" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><Compass size={16} className="text-[#2E4036]" /> Entrega de Pasos</a>
+          <a href="#curso-milagros" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading flex items-center gap-2"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
+          <a href="#planes" onClick={() => setMobileMenuOpen(false)} className="text-xl font-heading">Planes</a>
           <a
             href="/#admin"
             onClick={() => setMobileMenuOpen(false)}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white/85 hover:bg-white/10 transition-colors"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white/85 hover:bg-white/10 transition-colors"
           >
-            <ShieldCheck size={17} />
+            <ShieldCheck size={15} />
             Ingresar
           </a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
-            className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
+            className="bg-[#CC5833] text-white px-7 py-3.5 rounded-full font-semibold mt-2 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
             Valoraci&oacute;n inicial de tu proceso
           </button>
@@ -780,6 +810,126 @@ const StackedCards = () => {
           </div>
         </div>
       ))}
+    </section>
+  );
+};
+
+// --- NUEVA SECCIÓN: NUESTROS PROCESOS PRINCIPALES ---
+
+const NuestrosProcesosSection = () => {
+  const handleWA = (message) => {
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encoded}`, '_blank');
+  };
+
+  const procesos = [
+    {
+      id: "sesion-coach-card",
+      hashId: "sesion-coach",
+      title: "Sesión Coach",
+      subtitle: "Dirección privada 1:1",
+      text: "Una sesión privada para mirar tu historia con honestidad, ordenar tu mundo emocional y recibir dirección para tu proceso interior.",
+      cta: "Quiero información por WhatsApp",
+      message: "Hola, quiero más información sobre la Sesión Coach de Gimnasio Emocional Mentes Brillantes.",
+      icon: <User className="text-[#E2C17D]" size={32} />,
+      bg: "bg-white/[0.04]",
+      border: "border-white/10"
+    },
+    {
+      id: "sala-ego",
+      hashId: "sala-ego",
+      title: "Sala de Reducción del Ego",
+      subtitle: "Entrenamiento grupal en vivo",
+      text: "Un espacio de práctica donde aprendemos a reconocer el ego, soltar el control, escuchar la guía interior y transformar la reacción en conciencia.",
+      cta: "Preguntar por la Sala del Ego",
+      message: "Hola, quiero más información sobre la Sala de Reducción del Ego.",
+      icon: <Activity className="text-[#CC5833] animate-[pulse_2s_infinite]" size={32} />,
+      bg: "bg-white/[0.04]",
+      border: "border-white/10"
+    },
+    {
+      id: "entrega-pasos",
+      hashId: "entrega-pasos",
+      title: "Entrega de Pasos",
+      subtitle: "Libertad y responsabilidad",
+      text: "Un camino de honestidad, reparación interior y entrega, donde cada paso abre una nueva forma de vivir con más paz, responsabilidad y libertad.",
+      cta: "Quiero saber sobre los pasos",
+      message: "Hola, quiero más información sobre la Entrega de Pasos.",
+      icon: <Compass className="text-[#00FF66]" size={32} />,
+      bg: "bg-white/[0.04]",
+      border: "border-white/10"
+    },
+    {
+      id: "curso-milagros",
+      hashId: "curso-milagros",
+      title: "Un Curso de Milagros",
+      subtitle: "Entrenamiento mental anual",
+      text: "Cada año abrimos un recorrido de estudio y práctica de Un Curso de Milagros: un entrenamiento de la mente para elegir de nuevo, sanar la percepción y volver al amor.",
+      cta: "Quiero información del Curso de Milagros",
+      message: "Hola, quiero más información sobre Un Curso de Milagros.",
+      icon: <BookOpen className="text-white" size={32} />,
+      bg: "bg-white/[0.04]",
+      border: "border-white/10"
+    }
+  ];
+
+  return (
+    <section id="procesos" className="py-24 md:py-32 px-6 md:px-12 bg-[#2E4036] relative overflow-hidden text-white z-10">
+      {/* Glow background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[80%] bg-gradient-to-br from-[#CC5833]/15 via-transparent to-transparent blur-3xl rounded-full"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[80%] bg-gradient-to-tl from-[#E2C17D]/10 via-transparent to-transparent blur-3xl rounded-full"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16 md:mb-24">
+          <span className="font-mono text-xs text-[#E2C17D] font-bold tracking-widest uppercase mb-3 block">
+            Entrenamiento Integral
+          </span>
+          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
+            Nuestros Procesos Principales
+          </h2>
+          <p className="text-[#F2F0E9]/80 font-serif italic text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Estructuras diseñadas para descifrar tu ego y entrenar tu mente hacia la paz interior.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          {procesos.map((proceso) => (
+            <div
+              key={proceso.id}
+              id={proceso.hashId}
+              className="rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between transition-all duration-500 hover:-translate-y-2 group bg-[#1A1A1A]/40 border border-white/10 hover:border-[#E2C17D]/40 shadow-xl backdrop-blur-sm"
+            >
+              <div>
+                <div className="mb-6 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-[#E2C17D]/35 transition-colors">
+                  {proceso.icon}
+                </div>
+
+                <span className="font-mono text-[10px] text-[#E2C17D] tracking-widest uppercase block mb-1">
+                  {proceso.subtitle}
+                </span>
+
+                <h3 className="font-heading font-bold text-xl md:text-2xl mb-4 group-hover:text-[#E2C17D] transition-colors">
+                  {proceso.title}
+                </h3>
+
+                <p className="text-[#F2F0E9]/75 text-sm leading-relaxed mb-8 font-light">
+                  {proceso.text}
+                </p>
+              </div>
+
+              <button
+                onClick={() => handleWA(proceso.message)}
+                className="w-full py-4 rounded-full border border-white/20 group-hover:border-transparent group-hover:bg-[#CC5833] text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 group-hover:shadow-[0_8px_25px_rgba(204,88,51,0.35)]"
+              >
+                <MessageCircle size={14} className="fill-current text-white" />
+                {proceso.cta}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
@@ -1444,6 +1594,7 @@ export default function App() {
         <FeaturesSection />
         <Manifesto />
         <StackedCards />
+        <NuestrosProcesosSection />
 
         {/* Nueva sección: Sesión Guía Coach */}
         <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
