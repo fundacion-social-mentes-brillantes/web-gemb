@@ -7,6 +7,7 @@ import {
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
 import AdminPanel from './components/AdminPanel';
+import AlexandraPage from './components/AlexandraPage';
 
 // Carga asíncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
@@ -75,6 +76,10 @@ const GlobalStyles = () => (
     html {
       scroll-behavior: smooth;
       scroll-padding-top: 100px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
 
     body {
@@ -155,6 +160,40 @@ const ADMIN_SEO = {
   url: `${SITE_URL}/#admin`,
   image: `${SITE_URL}/logo-gemb.png`,
   robots: "noindex, nofollow"
+};
+
+const ALEXANDRA_PATH = "/alexandra-ortega";
+
+const ALEXANDRA_SEO = {
+  title: "Alexandra Ortega | Fundadora de Gimnasio Emocional Mentes Brillantes",
+  description: "Conoce a Alexandra Ortega: psicóloga, coach ontológica y fundadora de la técnica Gimnasio Emocional Mentes Brillantes (GEMB). Tallerista, conferencista y formadora en salud mental con trayectoria continua desde 2016.",
+  url: `${SITE_URL}${ALEXANDRA_PATH}`,
+  image: `${SITE_URL}/alexandra-sq.jpg`,
+  structuredData: {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Alexandra Ortega",
+    jobTitle: "Psicóloga, Coach Ontológica, Tallerista, Conferencista y Formadora en Salud Mental",
+    description: "Fundadora de la técnica Gimnasio Emocional Mentes Brillantes (GEMB), con trayectoria continua desde 2016 en inteligencia emocional, prevención en salud mental, liderazgo consciente, enfoque de género y construcción de paz territorial.",
+    image: `${SITE_URL}/alexandra-sq.jpg`,
+    url: `${SITE_URL}${ALEXANDRA_PATH}`,
+    email: "mailto:yaosproactiva@hotmail.com",
+    telephone: "+573208413878",
+    worksFor: {
+      "@type": "Organization",
+      name: "Fundación Social Gimnasio Emocional Mentes Brillantes",
+      url: SITE_URL
+    },
+    knowsAbout: [
+      "Inteligencia emocional",
+      "Prevención en salud mental",
+      "Liderazgo consciente",
+      "Enfoque de género",
+      "Duelo y resignificación",
+      "Construcción de paz"
+    ],
+    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
+  }
 };
 
 const PROCESS_PAGES = [
@@ -571,6 +610,7 @@ const Navbar = ({ onOpenTest }) => {
                 )}
               </div>
 
+              <a href="/alexandra-ortega" className="hover:opacity-70 transition-opacity">Alexandra</a>
               <a href="/#planes" className="hover:opacity-70 transition-opacity">Planes</a>
               <a
                 href="/#admin"
@@ -621,6 +661,7 @@ const Navbar = ({ onOpenTest }) => {
               <a href="/sala-reduccion-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
               <a href="/entrega-de-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
               <a href="/curso-de-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
+              <a href="/alexandra-ortega" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><User size={16} className="text-[#E2C17D]" /> ¿Quién es Alexandra?</a>
               <a href="/#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
             </div>
           </div>
@@ -1553,6 +1594,84 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
 };
 
 
+// --- SECCIÓN: ¿QUIÉN ES ALEXANDRA ORTEGA? ---
+
+const AlexandraFounderSection = () => (
+  <section id="alexandra" className="relative z-10 bg-white px-6 py-24 md:px-12 md:py-32 overflow-hidden">
+    <div className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[#E2C17D]/[0.12] blur-3xl"></div>
+    <div className="pointer-events-none absolute -bottom-40 -left-40 h-[26rem] w-[26rem] rounded-full bg-[#2E4036]/[0.08] blur-3xl"></div>
+
+    <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+      {/* Retrato */}
+      <div className="relative mx-auto w-full max-w-md">
+        <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-[#E2C17D]/30 via-transparent to-[#CC5833]/20 blur-xl" aria-hidden="true"></div>
+        <a href="/alexandra-ortega" aria-label="Conocer quién es Alexandra Ortega" className="group relative block overflow-hidden rounded-[2.5rem] shadow-[0_28px_60px_rgba(46,64,54,0.22)]">
+          <img
+            src="/alexandra-sq.jpg"
+            alt="Alexandra Ortega, fundadora de Gimnasio Emocional Mentes Brillantes"
+            width="800"
+            height="800"
+            className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/70 via-transparent to-transparent opacity-80"></div>
+          <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3">
+            <span className="rounded-full bg-white/15 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-md">
+              Fundadora GEMB
+            </span>
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#CC5833] text-white shadow-lg transition-transform duration-500 group-hover:rotate-45">
+              <ArrowRight size={18} />
+            </span>
+          </div>
+        </a>
+        <div className="absolute -right-4 -top-5 rounded-2xl border border-[#2E4036]/10 bg-white px-5 py-3.5 shadow-[0_18px_38px_rgba(46,64,54,0.16)] md:-right-8">
+          <p className="font-heading text-2xl font-bold text-[#2E4036]">+176</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/55">mujeres formadas</p>
+        </div>
+      </div>
+
+      {/* Texto */}
+      <div>
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+          La fundadora
+        </span>
+        <h2 className="font-heading text-4xl font-bold leading-tight tracking-tight text-[#1A1A1A] md:text-5xl lg:text-6xl">
+          ¿Quién es <span className="font-serif font-normal italic text-[#2E4036]">Alexandra Ortega?</span>
+        </h2>
+        <p className="mt-5 font-serif text-2xl italic text-[#CC5833] md:text-3xl">
+          "Las emociones también se entrenan."
+        </p>
+        <p className="mt-6 max-w-2xl text-base font-light leading-relaxed text-[#1A1A1A]/75 md:text-lg">
+          Psicóloga, coach ontológica y creadora de la técnica GEMB. Tallerista, conferencista y formadora en salud mental con trayectoria continua desde 2016, ponente en la Cumbre Global de Salud Mental 2025 y lideresa reconocida por su trabajo en salud mental comunitaria, enfoque de género y construcción de paz territorial.
+        </p>
+
+        <div className="mt-7 flex flex-wrap gap-2.5">
+          {['Psicóloga', 'Coach Ontológica', 'Ponente · Cumbre Global 2025', 'Escritora de 3 libros'].map((chip) => (
+            <span key={chip} className="rounded-full border border-[#2E4036]/15 bg-[#F2F0E9] px-4 py-2 text-xs font-medium text-[#2E4036]">
+              {chip}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <a
+            href="/alexandra-ortega"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2E4036] px-8 py-4 text-sm font-bold text-white btn-magnetic shadow-[0_14px_34px_rgba(46,64,54,0.3)] transition-colors hover:bg-[#243328]"
+          >
+            Conocer a Alexandra
+            <ArrowRight size={18} />
+          </a>
+          <a
+            href="/alexandra-ortega#trayectoria-alexandra"
+            className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#CC5833] transition-colors hover:text-[#2E4036]"
+          >
+            Ver su trayectoria desde 2016 →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 // --- PRICING ---
 
 const Pricing = ({ onOpenTest }) => {
@@ -1700,6 +1819,7 @@ const Footer = () => {
               <a href="/#metodo" className="hover:text-white transition-colors">Método</a>
               <a href="/#procesos" className="hover:text-white transition-colors">Procesos</a>
               <a href="/sesion-coach" className="hover:text-white transition-colors">Sesión Coach</a>
+              <a href="/alexandra-ortega" className="hover:text-white transition-colors">Alexandra Ortega</a>
               <a href="/#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
             </div>
@@ -2276,10 +2396,13 @@ export default function App() {
     typeof window !== 'undefined' ? window.location.hash : ''
   );
   const isAdminRoute = currentHash === '#admin';
+  const isAlexandraPage = currentPath === ALEXANDRA_PATH;
   const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
   const activeSeo = isAdminRoute
     ? ADMIN_SEO
-    : currentProcessPage
+    : isAlexandraPage
+      ? ALEXANDRA_SEO
+      : currentProcessPage
       ? {
           title: currentProcessPage.title,
           description: currentProcessPage.description,
@@ -2306,7 +2429,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAdminRoute || currentProcessPage || gsapLoaded) return;
+    if (isAdminRoute || isAlexandraPage || currentProcessPage || gsapLoaded) return;
 
     const load = async () => {
       try {
@@ -2321,7 +2444,7 @@ export default function App() {
       setGsapLoaded(true);
     };
     load();
-  }, [currentProcessPage, isAdminRoute, gsapLoaded]);
+  }, [currentProcessPage, isAdminRoute, isAlexandraPage, gsapLoaded]);
 
   if (isAdminRoute) {
     return (
@@ -2329,6 +2452,35 @@ export default function App() {
         <GlobalStyles />
         <div className="noise-overlay"></div>
         <AdminPanel />
+      </>
+    );
+  }
+
+  if (isAlexandraPage) {
+    return (
+      <>
+        <AlexandraPage
+          GlobalStyles={GlobalStyles}
+          Navbar={Navbar}
+          Footer={Footer}
+          waNumber={WA_NUMBER}
+          onOpenTest={() => setInitialAssessmentOpen(true)}
+        />
+
+        <TestInitialAssessmentModal
+          isOpen={isInitialAssessmentOpen}
+          onClose={() => setInitialAssessmentOpen(false)}
+          onOpenEnneagram={() => setEnneagramOpen(true)}
+          waNumber={WA_NUMBER}
+        />
+        <EnhancedTestEnneagramModal
+          isOpen={isEnneagramOpen}
+          onClose={() => setEnneagramOpen(false)}
+          quickGroups={QUICK_GROUPS}
+          quickMatrix={QUICK_MATRIX}
+          eneatypes={ENEATYPES}
+          waNumber={WA_NUMBER}
+        />
       </>
     );
   }
@@ -2380,6 +2532,9 @@ export default function App() {
 
         {/* Nueva sección: Sesión Guía Coach */}
         <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
+
+        {/* Sección: ¿Quién es Alexandra Ortega? */}
+        <AlexandraFounderSection />
 
         <Pricing onOpenTest={() => setInitialAssessmentOpen(true)} />
       </main>
