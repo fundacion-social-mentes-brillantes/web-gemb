@@ -8,6 +8,8 @@ import {
   MessageCircle,
   RefreshCw,
   Save,
+  Search,
+  X,
   ShieldCheck
 } from 'lucide-react';
 import {
@@ -167,6 +169,88 @@ const getWhatsappUrl = (whatsapp) => {
   const digits = String(whatsapp || '').replace(/\D/g, '');
   return digits ? `https://wa.me/${digits}` : '';
 };
+
+const normalizeSearchText = (value) =>
+  String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/ñ/g, 'n')
+    .replace(/[^a-z0-9@.+-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const normalizePhone = (value) => String(value || '').replace(/\D/g, '');
+
+const getSearchTerms = (query) => normalizeSearchText(query).split(' ').filter(Boolean);
+
+const getSearchDateParts = (response) => {
+  const date = toDate(response.createdAt);
+  if (!date || Number.isNaN(date.getTime())) return [];
+
+  return [
+    formatDate(response.createdAt),
+    date.toLocaleDateString('es-CO'),
+    date.toISOString().slice(0, 10)
+  ];
+};
+
+const getResponseSearchText = (response) => {
+  const contact = response.contact || {};
+  const answerText = Array.isArray(response.answers)
+    ? response.answers
+        .map((answer) => [
+          answer.question,
+          answer.label,
+          answer.eneatype ? `eneatipo ${answer.eneatype}` : '',
+          answer.order,
+          answer.questionId
+        ].filter(Boolean).join(' '))
+        .join(' ')
+    : '';
+
+  return normalizeSearchText([
+    response.id,
+    contact.fullName,
+    contact.whatsapp,
+    normalizePhone(contact.whatsapp),
+    contact.email,
+    contact.city,
+    TEST_TYPE_LABELS[response.testType],
+    response.testType,
+    getMainResult(response),
+    getStatusLabel(response),
+    isAlertResponse(response) ? 'alerta si alerta' : 'alerta no',
+    response.followUp?.notes,
+    ...getSearchDateParts(response),
+    answerText,
+    JSON.stringify(response.result || {})
+  ].filter(Boolean).join(' '));
+};
+
+const matchesSearchQuery = (response, query) => {
+  const terms = getSearchTerms(query);
+  if (!terms.length) return true;
+
+  const haystack = getResponseSearchText(response);
+  return terms.every((term) => haystack.includes(term));
+};
+
+const getPersonIdentityKeys = (response) => {
+  const contact = response.contact || {};
+  const name = normalizeSearchText(contact.fullName);
+  const email = normalizeSearchText(contact.email);
+  const phone = normalizePhone(contact.whatsapp);
+
+  return [
+    email && `email:${email}`,
+    phone && `phone:${phone}`,
+    name && `name:${name}`
+  ].filter(Boolean);
+};
+
+const sortByNewest = (items) =>
+  items.slice().sort((a, b) => (toDate(b.createdAt)?.getTime() || 0) - (toDate(a.createdAt)?.getTime() || 0));
 
 const downloadCsv = (responses) => {
   const headers = [
@@ -521,6 +605,7 @@ export default function AdminPanel() {
   const [responsesLoading, setResponsesLoading] = useState(false);
   const [responsesError, setResponsesError] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [draft, setDraft] = useState({
     status: 'new',
@@ -532,24 +617,48 @@ export default function AdminPanel() {
   const filteredResponses = useMemo(() => {
     return responses.filter((response) => {
       const status = normalizeStatus(response.followUp?.status);
+      let matchesFilter;
 
-      if (activeFilter === 'all') return true;
-      if (activeFilter === 'alerts') return isAlertResponse(response);
-      if (activeFilter === 'contacted') {
-        return status === 'contacted' || response.followUp?.contacted === true;
+      if (activeFilter === 'all') matchesFilter = true;
+      else if (activeFilter === 'alerts') matchesFilter = isAlertResponse(response);
+      else if (activeFilter === 'contacted') {
+        matchesFilter = status === 'contacted' || response.followUp?.contacted === true;
       }
-      if (['new', 'scheduled', 'in_process', 'closed'].includes(activeFilter)) {
-        return status === activeFilter;
+      else if (['new', 'scheduled', 'in_process', 'closed'].includes(activeFilter)) {
+        matchesFilter = status === activeFilter;
+      }
+      else {
+        matchesFilter = response.testType === activeFilter;
       }
 
-      return response.testType === activeFilter;
+      return matchesFilter && matchesSearchQuery(response, searchQuery);
     });
-  }, [responses, activeFilter]);
+  }, [responses, activeFilter, searchQuery]);
 
   const selectedResponse = useMemo(
     () => filteredResponses.find((response) => response.id === selectedId) || filteredResponses[0] || null,
     [filteredResponses, selectedId]
   );
+
+  const searchSuggestions = useMemo(() => {
+    if (!getSearchTerms(searchQuery).length) return [];
+
+    return sortByNewest(filteredResponses).slice(0, 6);
+  }, [filteredResponses, searchQuery]);
+
+  const selectedPersonHistory = useMemo(() => {
+    if (!selectedResponse) return [];
+
+    const selectedKeys = getPersonIdentityKeys(selectedResponse);
+    if (!selectedKeys.length) return [];
+
+    return sortByNewest(responses.filter((response) => {
+      if (response.id === selectedResponse.id) return false;
+
+      const responseKeys = getPersonIdentityKeys(response);
+      return responseKeys.some((key) => selectedKeys.includes(key));
+    }));
+  }, [responses, selectedResponse]);
 
   const analytics = useMemo(() => {
     const list = filteredResponses;
@@ -825,6 +934,75 @@ export default function AdminPanel() {
           ))}
         </div>
 
+        <section className="mb-5 rounded-[2rem] border border-[#2E4036]/10 bg-white p-4 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative flex-1">
+              <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#2E4036]/55" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Buscar por nombre, WhatsApp, email, ciudad, fecha, estado, tipo o resultado..."
+                className="w-full rounded-full border border-[#2E4036]/10 bg-[#F7F4ED] py-3 pl-11 pr-12 text-sm text-[#1A1A1A] outline-none transition focus:border-[#CC5833]/40 focus:bg-white focus:ring-4 focus:ring-[#CC5833]/10"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Limpiar búsqueda"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 transition hover:bg-white hover:text-[#CC5833]"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+            <div className="rounded-2xl bg-[#2E4036]/5 px-4 py-2 text-xs text-[#2E4036] lg:max-w-xs">
+              <strong>{filteredResponses.length}</strong> de {responses.length} registros
+              {searchQuery ? ' coinciden con la búsqueda' : ' en la vista actual'}.
+            </div>
+          </div>
+
+          {searchQuery && (
+            <div className="mt-4 border-t border-gray-100 pt-4">
+              {searchSuggestions.length ? (
+                <>
+                  <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#CC5833]">
+                    Coincidencias rápidas
+                  </p>
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {searchSuggestions.map((response) => (
+                      <button
+                        key={response.id}
+                        type="button"
+                        onClick={() => setSelectedId(response.id)}
+                        className={`min-w-[240px] rounded-2xl border p-3 text-left transition hover:border-[#CC5833]/40 hover:bg-[#FFF3EE] ${
+                          selectedResponse?.id === response.id
+                            ? 'border-[#CC5833]/40 bg-[#FFF3EE]'
+                            : 'border-[#2E4036]/10 bg-white'
+                        }`}
+                      >
+                        <p className="truncate font-heading text-sm text-[#1A1A1A]">
+                          {response.contact?.fullName || 'Sin nombre'}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-gray-500">
+                          {formatDate(response.createdAt)} · {TEST_TYPE_LABELS[response.testType] || response.testType}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-[#2E4036]">
+                          {getMainResult(response)}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  No encontramos coincidencias. Prueba con el nombre, apellido, celular, correo, ciudad, fecha o eneatipo.
+                </p>
+              )}
+            </div>
+          )}
+        </section>
+
         {responsesError && (
           <div className="mb-5 flex gap-3 rounded-2xl border border-[#CC5833]/25 bg-[#FFF3EE] p-4 text-sm text-[#7A3A25]">
             <AlertCircle size={18} className="shrink-0" />
@@ -885,7 +1063,9 @@ export default function AdminPanel() {
                   {!filteredResponses.length && (
                     <tr>
                       <td colSpan="9" className="px-4 py-10 text-center text-sm text-gray-500">
-                        No hay registros para este filtro.
+                        {searchQuery
+                          ? 'No hay registros para esta búsqueda dentro del filtro activo.'
+                          : 'No hay registros para este filtro.'}
                       </td>
                     </tr>
                   )}
@@ -925,6 +1105,53 @@ export default function AdminPanel() {
                     <p className="font-semibold">{TEST_TYPE_LABELS[selectedResponse.testType]}</p>
                   </div>
                 </div>
+
+                {selectedPersonHistory.length > 0 && (
+                  <div className="rounded-2xl border border-[#2E4036]/10 bg-[#F4F7F5] p-4">
+                    <div className="mb-3 flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#2E4036]">
+                          Historial de esta persona
+                        </p>
+                        <p className="text-xs text-[#1A1A1A]/60">
+                          {selectedPersonHistory.length} registro{selectedPersonHistory.length === 1 ? '' : 's'} relacionado{selectedPersonHistory.length === 1 ? '' : 's'}
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#2E4036]">
+                        Multi-test
+                      </span>
+                    </div>
+                    <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
+                      {selectedPersonHistory.map((response) => (
+                        <button
+                          key={response.id}
+                          type="button"
+                          onClick={() => {
+                            setActiveFilter('all');
+                            setSearchQuery('');
+                            setSelectedId(response.id);
+                          }}
+                          className="w-full rounded-2xl border border-white bg-white/85 p-3 text-left transition hover:border-[#CC5833]/35 hover:bg-[#FFF3EE]"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-semibold text-[#1A1A1A]">
+                                {TEST_TYPE_LABELS[response.testType] || response.testType}
+                              </p>
+                              <p className="mt-0.5 text-xs text-gray-500">{formatDate(response.createdAt)}</p>
+                            </div>
+                            <span className="shrink-0 rounded-full bg-[#2E4036]/10 px-2.5 py-1 text-[10px] font-bold text-[#2E4036]">
+                              {getStatusLabel(response)}
+                            </span>
+                          </div>
+                          <p className="mt-2 line-clamp-2 text-xs leading-snug text-[#1A1A1A]/65">
+                            {getMainResult(response)}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="rounded-2xl border border-[#2E4036]/10 p-4">
                   <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036]">
