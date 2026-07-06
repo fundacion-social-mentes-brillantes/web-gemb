@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   AlertCircle,
+  BarChart3,
   Download,
   Loader2,
   LogOut,
@@ -105,6 +106,58 @@ const getMainResult = (response) => {
 
 const isAlertResponse = (response) => Boolean(response.result?.isAlert);
 
+const ENNEA_TYPE_NAMES = {
+  1: 'El Perfeccionista',
+  2: 'El Ayudador',
+  3: 'El Triunfador',
+  4: 'El Individualista',
+  5: 'El Investigador',
+  6: 'El Leal',
+  7: 'El Entusiasta',
+  8: 'El Líder',
+  9: 'El Conciliador'
+};
+
+const getEneagramType = (response) => {
+  const result = response.result || {};
+  const type = result.dominantType ?? result.suggestedType ?? null;
+  if (!type) return null;
+
+  return {
+    type,
+    name: ENNEA_TYPE_NAMES[type] || result.suggestedLabel || '',
+    center: result.dominantCenter?.label || ''
+  };
+};
+
+const getAnswerStats = (response) => {
+  const answers = Array.isArray(response.answers) ? response.answers : [];
+  const counts = {};
+
+  answers.forEach((item) => {
+    const label = item.label || '—';
+    counts[label] = (counts[label] || 0) + 1;
+  });
+
+  return { total: answers.length, counts };
+};
+
+const getAnswerChipClass = (label) => {
+  const value = String(label || '').toLowerCase();
+  if (value === 'mucho') return 'bg-[#2E4036] text-white';
+  if (value === 'poco') return 'bg-[#F0E4C8] text-[#8A6D1F]';
+  if (value === 'nada') return 'bg-gray-100 text-gray-500';
+  if (value === 'si' || value === 'sí') return 'bg-[#CC5833] text-white';
+  if (value === 'no') return 'bg-[#2E4036]/10 text-[#2E4036]';
+  return 'bg-gray-100 text-gray-600';
+};
+
+const isResponseCompleted = (response) => {
+  if (response.completedAt) return true;
+  const main = getMainResult(response);
+  return main !== 'Sin completar' && main !== 'Sin resultado';
+};
+
 const escapeCsv = (value) => {
   const text = String(value ?? '');
   return `"${text.replace(/"/g, '""')}"`;
@@ -159,6 +212,306 @@ const JsonBlock = ({ value }) => (
   </pre>
 );
 
+const StatTile = ({ label, value, tone = 'default' }) => {
+  const toneClass =
+    tone === 'alert'
+      ? 'border-[#CC5833]/25 bg-[#FFF3EE]'
+      : tone === 'good'
+        ? 'border-[#2E4036]/15 bg-[#F4F7F5]'
+        : 'border-[#2E4036]/10 bg-white';
+
+  return (
+    <div className={`rounded-2xl border p-4 ${toneClass}`}>
+      <p className="font-heading text-3xl text-[#1A1A1A]">{value}</p>
+      <p className="mt-1 text-xs text-gray-500">{label}</p>
+    </div>
+  );
+};
+
+const AnalyticsPanel = ({ analytics }) => {
+  if (!analytics || !analytics.total) return null;
+
+  return (
+    <section className="mb-5 rounded-[2rem] border border-[#2E4036]/10 bg-white p-5 shadow-sm">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <BarChart3 size={18} className="text-[#CC5833]" />
+        <h2 className="font-heading text-xl text-[#1A1A1A]">Análisis</h2>
+        <span className="text-xs text-gray-500">· {analytics.total} registros en la vista actual</span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatTile label="Registros" value={analytics.total} />
+        <StatTile label="Completados" value={analytics.completed} tone="good" />
+        <StatTile label="Alertas" value={analytics.alerts} tone={analytics.alerts ? 'alert' : 'default'} />
+        <StatTile label="Contactados" value={analytics.contacted} />
+      </div>
+
+      {analytics.eneatypeTotal > 0 && (
+        <div className="mt-5">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036]">
+            Distribución de eneatipos ({analytics.eneatypeTotal})
+          </p>
+          <div className="space-y-2">
+            {analytics.eneatypes.map((entry) => {
+              const pct = analytics.eneatypeTotal ? (entry.count / analytics.eneatypeTotal) * 100 : 0;
+
+              return (
+                <div key={entry.type} className="grid grid-cols-[140px_1fr_36px] items-center gap-3">
+                  <span className="truncate text-sm text-[#1A1A1A]">
+                    <span className="font-heading">{entry.type}</span> · {ENNEA_TYPE_NAMES[entry.type]}
+                  </span>
+                  <div className="h-3 overflow-hidden rounded-full bg-[#F1EFE8]">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[#CC5833] to-[#2E4036]"
+                      style={{ width: `${Math.max(pct, 3)}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-right text-xs text-gray-500">{entry.count}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {Object.entries(analytics.byStatus).map(([status, count]) => (
+          <span
+            key={status}
+            className="rounded-full border border-[#2E4036]/10 bg-[#F7F4ED] px-3 py-1.5 text-xs text-[#2E4036]"
+          >
+            {STATUS_LABELS[status] || status}: <strong>{count}</strong>
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const EneatypeAffinityBars = ({ affinityTable, dominantType }) => (
+  <div className="space-y-2">
+    {affinityTable.map((entry) => {
+      const isDominant = Number(entry.type) === Number(dominantType);
+
+      return (
+        <div key={entry.type} className="grid grid-cols-[120px_1fr_44px] items-center gap-2">
+          <span className="truncate text-xs text-[#1A1A1A]">
+            <span className="font-heading text-sm">{entry.type}</span> {ENNEA_TYPE_NAMES[entry.type]}
+          </span>
+          <div className="h-3 overflow-hidden rounded-full border border-[#E8E2D8] bg-[#F1EFE8]">
+            <div
+              className={`h-full rounded-full ${
+                isDominant
+                  ? 'bg-gradient-to-r from-[#E86137] to-[#B64624]'
+                  : 'bg-gradient-to-r from-[#2E4036] to-[#708979]'
+              }`}
+              style={{ width: `${Math.max(entry.affinity, 2)}%` }}
+            ></div>
+          </div>
+          <span className="text-right text-xs text-gray-600">{Number(entry.affinity).toFixed(0)}%</span>
+        </div>
+      );
+    })}
+  </div>
+);
+
+const ResultDetail = ({ response }) => {
+  const result = response.result || {};
+
+  if (response.testType === 'initial-assessment') {
+    if (result.yesCount === undefined) {
+      return <p className="text-sm text-gray-500">Este test aún no fue completado.</p>;
+    }
+
+    const yes = result.yesCount ?? 0;
+    const total = result.totalQuestions ?? (response.answers?.length || 0);
+    const no = result.noCount ?? Math.max(total - yes, 0);
+    const alert = Boolean(result.isAlert);
+
+    return (
+      <div className="space-y-4">
+        <div className={`rounded-2xl border p-4 ${alert ? 'border-[#CC5833]/25 bg-[#FFF3EE]' : 'border-[#2E4036]/15 bg-[#F4F7F5]'}`}>
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036]">Respuestas afirmativas</p>
+              <p className="font-heading text-4xl text-[#1A1A1A]">
+                {yes} <span className="text-lg text-gray-400">/ {total}</span>
+              </p>
+            </div>
+            <span className={`rounded-full px-3 py-1.5 text-xs font-bold ${alert ? 'bg-[#CC5833] text-white' : 'bg-[#2E4036] text-white'}`}>
+              {alert ? 'Alerta' : 'Sin alerta'}
+            </span>
+          </div>
+          <p className="mt-2 text-sm text-[#1A1A1A]/70">
+            {alert
+              ? 'Cuatro o más respuestas afirmativas: se sugiere acompañamiento cercano.'
+              : 'Menos de cuatro respuestas afirmativas.'}
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl bg-[#FFF3EE] p-3 text-center">
+            <p className="font-heading text-2xl text-[#CC5833]">{yes}</p>
+            <p className="text-xs text-gray-500">Sí</p>
+          </div>
+          <div className="rounded-2xl bg-[#F4F7F5] p-3 text-center">
+            <p className="font-heading text-2xl text-[#2E4036]">{no}</p>
+            <p className="text-xs text-gray-500">No</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const dominant = getEneagramType(response);
+  if (!dominant) {
+    return <p className="text-sm text-gray-500">Este test aún no fue completado.</p>;
+  }
+
+  const affinity = (Array.isArray(result.affinityTable) ? result.affinityTable : [])
+    .filter((entry) => Number.isFinite(entry?.affinity))
+    .slice()
+    .sort((a, b) => b.affinity - a.affinity);
+  const hasAffinity = affinity.length > 1;
+  const dominantAffinity = affinity.find((entry) => Number(entry.type) === Number(dominant.type))?.affinity;
+  const subtitle = result.dominantTypeSubtitle || result.subtitle || '';
+  const triads = result.triads
+    ? Object.values(result.triads).slice().sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    : [];
+  const stats = getAnswerStats(response);
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-[#2E4036]/12 bg-[#F4F7F5] p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036]">
+              {response.testType === 'enneagram-quick' ? 'Eneatipo sugerido' : 'Eneatipo dominante'}
+            </p>
+            <p className="font-heading text-2xl text-[#1A1A1A]">
+              Eneatipo {dominant.type} · {dominant.name}
+            </p>
+            {subtitle && <p className="text-sm text-[#CC5833]">{subtitle}</p>}
+          </div>
+          {Number.isFinite(dominantAffinity) && (
+            <div className="shrink-0 text-right">
+              <p className="font-heading text-3xl text-[#1A1A1A]">{dominantAffinity.toFixed(0)}%</p>
+              <p className="text-[11px] text-gray-500">Afinidad</p>
+            </div>
+          )}
+        </div>
+        {dominant.center && (
+          <p className="mt-2 text-sm text-[#1A1A1A]/70">
+            Centro dominante: <strong>{dominant.center}</strong>
+          </p>
+        )}
+      </div>
+
+      {(result.motivation || result.fear) && (
+        <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+          {result.motivation && (
+            <div className="rounded-2xl border border-gray-100 p-3">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036]">Motivación</p>
+              <p className="mt-1 text-[#1A1A1A]/80">{result.motivation}</p>
+            </div>
+          )}
+          {result.fear && (
+            <div className="rounded-2xl border border-gray-100 p-3">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-[#2E4036]">Miedo central</p>
+              <p className="mt-1 text-[#1A1A1A]/80">{result.fear}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {hasAffinity && (
+        <div className="rounded-2xl border border-gray-100 p-4">
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-[#2E4036]">Afinidad por eneatipo</p>
+          <EneatypeAffinityBars affinityTable={affinity} dominantType={dominant.type} />
+        </div>
+      )}
+
+      {triads.length > 0 && (
+        <div className="rounded-2xl border border-gray-100 p-4">
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-[#2E4036]">Centros</p>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            {triads.map((triad) => (
+              <div key={triad.key} className="rounded-xl bg-[#F7F4ED] p-2">
+                <p className="text-xs text-gray-500">{triad.label}</p>
+                <p className="font-heading text-lg text-[#1A1A1A]">{Number(triad.score ?? 0).toFixed(0)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {stats.total > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(stats.counts).map(([label, count]) => (
+            <span key={label} className={`rounded-full px-3 py-1 text-xs font-bold ${getAnswerChipClass(label)}`}>
+              {label}: {count}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AnswerList = ({ response }) => {
+  const answers = Array.isArray(response.answers) ? response.answers : [];
+  const [filter, setFilter] = useState('all');
+
+  if (!answers.length) {
+    return <p className="text-sm text-gray-500">Sin respuestas guardadas.</p>;
+  }
+
+  const labels = [...new Set(answers.map((item) => item.label).filter(Boolean))];
+  const visible = filter === 'all' ? answers : answers.filter((item) => item.label === filter);
+  const isEneagram = response.testType !== 'initial-assessment';
+
+  return (
+    <div className="space-y-3">
+      {labels.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setFilter('all')}
+            className={`rounded-full px-3 py-1 text-xs font-bold ${filter === 'all' ? 'bg-[#2E4036] text-white' : 'bg-gray-100 text-gray-600'}`}
+          >
+            Todas ({answers.length})
+          </button>
+          {labels.map((label) => (
+            <button
+              key={label}
+              onClick={() => setFilter(label)}
+              className={`rounded-full px-3 py-1 text-xs font-bold ${filter === label ? 'bg-[#2E4036] text-white' : 'bg-gray-100 text-gray-600'}`}
+            >
+              {label} ({answers.filter((item) => item.label === label).length})
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="max-h-96 space-y-2 overflow-y-auto pr-1">
+        {visible.map((item, index) => (
+          <div key={item.questionId || index} className="flex items-start gap-3 rounded-xl border border-gray-100 p-3">
+            <span className="mt-0.5 shrink-0 font-mono text-[11px] text-gray-400">
+              {item.order || item.questionId || index + 1}
+            </span>
+            <p className="flex-1 text-sm leading-snug text-[#1A1A1A]/80">{item.question}</p>
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${getAnswerChipClass(item.label)}`}>
+                {item.label || '—'}
+              </span>
+              {isEneagram && item.eneatype && (
+                <span className="text-[10px] text-gray-400">Tipo {item.eneatype}</span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function AdminPanel() {
   const [authUser, setAuthUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -197,6 +550,37 @@ export default function AdminPanel() {
     () => filteredResponses.find((response) => response.id === selectedId) || filteredResponses[0] || null,
     [filteredResponses, selectedId]
   );
+
+  const analytics = useMemo(() => {
+    const list = filteredResponses;
+    const byStatus = {};
+    const eneatypeCounts = {};
+    let completed = 0;
+    let alerts = 0;
+    let contacted = 0;
+
+    list.forEach((response) => {
+      const status = normalizeStatus(response.followUp?.status);
+      byStatus[status] = (byStatus[status] || 0) + 1;
+
+      const done = isResponseCompleted(response);
+      if (done) completed += 1;
+      if (isAlertResponse(response)) alerts += 1;
+      if (response.followUp?.contacted || status === 'contacted') contacted += 1;
+
+      const enea = getEneagramType(response);
+      if (enea && done) {
+        eneatypeCounts[enea.type] = (eneatypeCounts[enea.type] || 0) + 1;
+      }
+    });
+
+    const eneatypes = Object.entries(eneatypeCounts)
+      .map(([type, count]) => ({ type: Number(type), count }))
+      .sort((a, b) => b.count - a.count);
+    const eneatypeTotal = eneatypes.reduce((sum, entry) => sum + entry.count, 0);
+
+    return { total: list.length, completed, alerts, contacted, byStatus, eneatypes, eneatypeTotal };
+  }, [filteredResponses]);
 
   useEffect(() => {
     if (!selectedResponse) return;
@@ -448,6 +832,8 @@ export default function AdminPanel() {
           </div>
         )}
 
+        <AnalyticsPanel analytics={analytics} />
+
         <div className="grid gap-5 lg:grid-cols-[1.35fr_0.95fr]">
           <section className="overflow-hidden rounded-[2rem] border border-[#2E4036]/10 bg-white shadow-sm">
             <div className="flex items-center justify-between gap-4 border-b border-gray-100 px-5 py-4">
@@ -541,13 +927,10 @@ export default function AdminPanel() {
                 </div>
 
                 <div className="rounded-2xl border border-[#2E4036]/10 p-4">
-                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036] mb-2">
-                    Resultado principal
+                  <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-[#2E4036]">
+                    Resultado
                   </p>
-                  <p className="font-heading text-xl">{getMainResult(selectedResponse)}</p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Alerta: {isAlertResponse(selectedResponse) ? 'Si' : 'No'}
-                  </p>
+                  <ResultDetail response={selectedResponse} />
                 </div>
 
                 <div className="space-y-3">
@@ -618,17 +1001,28 @@ export default function AdminPanel() {
                   </button>
                 </div>
 
-                <details className="rounded-2xl border border-gray-200 p-4">
-                  <summary className="cursor-pointer font-heading text-lg">Respuestas</summary>
+                <details className="rounded-2xl border border-gray-200 p-4" open>
+                  <summary className="cursor-pointer font-heading text-lg">
+                    Respuestas ({selectedResponse.answers?.length || 0})
+                  </summary>
                   <div className="mt-3">
-                    <JsonBlock value={selectedResponse.answers} />
+                    <AnswerList key={selectedResponse.id} response={selectedResponse} />
                   </div>
                 </details>
 
                 <details className="rounded-2xl border border-gray-200 p-4">
-                  <summary className="cursor-pointer font-heading text-lg">Resultado completo</summary>
-                  <div className="mt-3">
-                    <JsonBlock value={selectedResponse.result} />
+                  <summary className="cursor-pointer text-sm font-semibold text-gray-500">
+                    Datos técnicos (JSON)
+                  </summary>
+                  <div className="mt-3 space-y-3">
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-500">Resultado</p>
+                      <JsonBlock value={selectedResponse.result} />
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-gray-500">Respuestas</p>
+                      <JsonBlock value={selectedResponse.answers} />
+                    </div>
                   </div>
                 </details>
               </div>
