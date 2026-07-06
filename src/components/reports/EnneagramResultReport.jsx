@@ -107,7 +107,9 @@ export default function EnneagramResultReport({ report }) {
     ? 'Hipotesis inicial · test rapido · punto de partida'
     : 'Lectura profunda · 135 preguntas · 10 bloques';
   const resultLabel = isQuick ? 'Eneatipo sugerido' : 'Eneatipo dominante';
-  const affinityLabel = isQuick ? 'Pendiente con test completo' : formatPercent(dominantAffinity);
+  const affinityLabel = isQuick && !Number.isFinite(dominantAffinity)
+    ? 'Pendiente con test completo'
+    : formatPercent(dominantAffinity);
   const interpretation = isQuick
     ? `Este resultado rapido sugiere una primera afinidad con el Eneatipo ${dominantType}. Usalo como una hipotesis de trabajo y, para una lectura mas precisa, continua con el test completo.`
     : `Tu mapa emocional muestra una afinidad principal con el Eneatipo ${dominantType}. Esta lectura no define quien eres: te ofrece un espejo practico para observar patrones, fortalezas y puntos de trabajo.`;

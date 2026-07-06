@@ -2216,91 +2216,6 @@ const ENEATYPES = {
   }
 };
 
-const QUICK_GROUPS = {
-  "first": [
-    {
-      "code": "A",
-      "title": "Impulso y autonomía",
-      "desc": "Independencia, empuje, objetivos claros, deseo de impacto y baja tolerancia a que otros marquen tu paso."
-    },
-    {
-      "code": "B",
-      "title": "Reserva y quietud",
-      "desc": "Preferencia por la soledad elegida, imaginación, poca competitividad y gusto por la calma."
-    },
-    {
-      "code": "C",
-      "title": "Deber y entrega",
-      "desc": "Sentido fuerte de responsabilidad, compromiso con otros y tendencia a postergarte para cumplir."
-    }
-  ],
-  "second": [
-    {
-      "code": "X",
-      "title": "Optimismo y evitar dolor",
-      "desc": "Actitud positiva, búsqueda de entusiasmo, sociabilidad y tendencia a esquivar lo doloroso."
-    },
-    {
-      "code": "Y",
-      "title": "Intensidad y reactividad",
-      "desc": "Sensibilidad alta, lealtades claras, necesidad de decidir por ti mismo y respuestas emocionales fuertes."
-    },
-    {
-      "code": "Z",
-      "title": "Control y distancia",
-      "desc": "Lógica, eficiencia, perfeccionismo, preferencia por trabajar en solitario y contención emocional."
-    }
-  ]
-};
-
-const QUICK_MATRIX = {
-  "AX": {
-    "typeId": 7,
-    "label": "Entusiasta",
-    "note": "Energía alta, optimismo y búsqueda de opciones."
-  },
-  "AY": {
-    "typeId": 8,
-    "label": "Líder",
-    "note": "Autoafirmación, fuerza y control del terreno."
-  },
-  "AZ": {
-    "typeId": 3,
-    "label": "Triunfador",
-    "note": "Orientación a logro, eficiencia e imagen eficaz."
-  },
-  "BX": {
-    "typeId": 9,
-    "label": "Conciliador",
-    "note": "Calma, receptividad y preferencia por la armonía."
-  },
-  "BY": {
-    "typeId": 4,
-    "label": "Individualista",
-    "note": "Sensibilidad, identidad propia y expresión emocional."
-  },
-  "BZ": {
-    "typeId": 5,
-    "label": "Investigador",
-    "note": "Observación, objetividad y protección de energía."
-  },
-  "CX": {
-    "typeId": 2,
-    "label": "Ayudador",
-    "note": "Entrega, cuidado y búsqueda de conexión."
-  },
-  "CY": {
-    "typeId": 6,
-    "label": "Leal",
-    "note": "Compromiso, cautela y necesidad de seguridad."
-  },
-  "CZ": {
-    "typeId": 1,
-    "label": "Perfeccionista",
-    "note": "Principios, racionalidad y autoexigencia."
-  }
-};
-
 const guaranteeItems = [
   "El proceso se define en la primera sesión con Alexandra según tu caso. No vendemos 'una sesión': definimos un plan.",
   "La garantía aplica solo si completas el proceso completo indicado por la entrenadora, sin dejarlo a medias.",
@@ -2476,8 +2391,6 @@ export default function App() {
         <EnhancedTestEnneagramModal
           isOpen={isEnneagramOpen}
           onClose={() => setEnneagramOpen(false)}
-          quickGroups={QUICK_GROUPS}
-          quickMatrix={QUICK_MATRIX}
           eneatypes={ENEATYPES}
           waNumber={WA_NUMBER}
         />
@@ -2499,8 +2412,6 @@ export default function App() {
         <EnhancedTestEnneagramModal
           isOpen={isEnneagramOpen}
           onClose={() => setEnneagramOpen(false)}
-          quickGroups={QUICK_GROUPS}
-          quickMatrix={QUICK_MATRIX}
           eneatypes={ENEATYPES}
           waNumber={WA_NUMBER}
         />
@@ -2551,8 +2462,6 @@ export default function App() {
       <EnhancedTestEnneagramModal
         isOpen={isEnneagramOpen}
         onClose={() => setEnneagramOpen(false)}
-        quickGroups={QUICK_GROUPS}
-        quickMatrix={QUICK_MATRIX}
         eneatypes={ENEATYPES}
         waNumber={WA_NUMBER}
       />

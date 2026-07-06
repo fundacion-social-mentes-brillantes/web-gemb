@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, ScanLine, CheckCircle2, Activity, Check, ArrowLeft, Printer, ArrowRight, FileDown, Loader2 } from 'lucide-react';
 import { FULL_STATEMENTS, FULL_BLOCKS, FULL_RESPONSE_OPTIONS } from './testConfig';
+import { QUICK_STATEMENTS } from './quickTestConfig';
 import LeadCaptureForm from './components/LeadCaptureForm';
 import EnneagramResultReport from './components/reports/EnneagramResultReport';
 import { completeTestResponse, createTestLead } from './services/testResponsesService';
@@ -179,6 +180,98 @@ const calculateFullResult = (answers) => {
   };
 };
 
+/* Motor genérico del TEST RÁPIDO. Es una copia parametrizada de
+   calculateFullResult: misma escala, misma normalización por número
+   de preguntas y mismos desempates, pero sobre cualquier banco de
+   preguntas. Se mantiene separada a propósito para no tocar el motor
+   del test completo (ver docs/mapa-test-eneagrama.md). */
+const calculateResultForStatements = (statements, answers) => {
+  const weightedPointsByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const questionCountByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const muchosByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const pocosByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  const nadasByType = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+
+  statements.forEach((statement) => {
+    questionCountByType[statement.eneatype] += 1;
+  });
+
+  statements.forEach((statement, index) => {
+    const answer = answers[index];
+    if (answer === undefined || answer === null) return;
+
+    const type = statement.eneatype;
+    weightedPointsByType[type] += RESPONSE_SCORE_MAP[answer] ?? 0;
+
+    if (answer === 2) {
+      muchosByType[type] += 1;
+    } else if (answer === 1) {
+      pocosByType[type] += 1;
+    } else if (answer === 0) {
+      nadasByType[type] += 1;
+    }
+  });
+
+  const affinityByType = Object.fromEntries(
+    Object.keys(weightedPointsByType).map((type) => {
+      const questionCount = questionCountByType[type] || 1;
+      return [type, (weightedPointsByType[type] / questionCount) * 100];
+    })
+  );
+
+  const getGroupScore = (members) => members.reduce((sum, type) => sum + (affinityByType[type] ?? 0), 0) / members.length;
+
+  const triads = Object.fromEntries(
+    Object.entries(TRIAD_GROUPS).map(([key, group]) => [key, { ...group, score: getGroupScore(group.members) }])
+  );
+
+  const harmonics = Object.fromEntries(
+    Object.entries(HARMONIC_GROUPS).map(([key, group]) => [key, { ...group, score: getGroupScore(group.members) }])
+  );
+
+  const getHarmonicKeyForType = (type) =>
+    Object.values(HARMONIC_GROUPS).find((group) => group.members.includes(type))?.key;
+
+  const getCenterKeyForType = (type) =>
+    Object.values(TRIAD_GROUPS).find((group) => group.members.includes(type))?.key;
+
+  const affinityTable = Object.keys(affinityByType)
+    .map((type) => ({
+      type: Number(type),
+      affinity: affinityByType[type],
+      weightedPoints: weightedPointsByType[type],
+      questionCount: questionCountByType[type],
+      muchos: muchosByType[type],
+      pocos: pocosByType[type],
+      nadas: nadasByType[type],
+      center: TYPE_TO_CENTER[type],
+      centerKey: getCenterKeyForType(Number(type)),
+      harmonicKey: getHarmonicKeyForType(Number(type))
+    }))
+    .sort((a, b) => sortTypesWithTieBreak(a, b, triads, harmonics, muchosByType));
+
+  const dominantCenter = Object.values(triads)
+    .slice()
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return a.label.localeCompare(b.label, 'es');
+    })[0];
+
+  return {
+    dominantType: affinityTable[0]?.type ?? null,
+    affinityByType,
+    weightedPointsByType,
+    questionCountByType,
+    muchosByType,
+    pocosByType,
+    nadasByType,
+    affinityTable,
+    triads,
+    harmonics,
+    dominantCenter
+  };
+};
+
 const getResultTableRows = (typeData, centerLabel) => {
   if (!typeData) return [];
 
@@ -192,51 +285,46 @@ const getResultTableRows = (typeData, centerLabel) => {
   ];
 };
 
-const getQuickResultForChoice = (choice, quickMatrix, eneatypes) => {
-  if (!choice.first || !choice.second) return null;
+const QUICK_NOTE = 'Hipótesis basada en 27 preguntas clave del banco oficial (3 por eneatipo).';
 
-  const code = `${choice.first}${choice.second}`;
-  const combo = quickMatrix[code];
-  if (!combo) return null;
+const buildQuickAnswersPayload = (answerValues) =>
+  QUICK_STATEMENTS.map((statement, index) => {
+    const answer = answerValues[index];
+    const option = FULL_RESPONSE_OPTIONS.find((item) => item.value === answer);
 
-  return {
-    code,
-    typeId: combo.typeId,
-    label: combo.label,
-    note: combo.note,
-    type: eneatypes[combo.typeId]
-  };
-};
+    return {
+      questionId: statement.id,
+      order: index + 1,
+      bankOrder: statement.order,
+      eneatype: statement.eneatype,
+      question: statement.text,
+      answer,
+      label: option?.label || ''
+    };
+  });
 
-const buildQuickAnswersPayload = (choice, quickGroups) => {
-  const firstOption = quickGroups.first.find((option) => option.code === choice.first);
-  const secondOption = quickGroups.second.find((option) => option.code === choice.second);
-
-  return [
-    {
-      group: 'first',
-      code: firstOption?.code || choice.first,
-      title: firstOption?.title || '',
-      description: firstOption?.desc || ''
-    },
-    {
-      group: 'second',
-      code: secondOption?.code || choice.second,
-      title: secondOption?.title || '',
-      description: secondOption?.desc || ''
-    }
-  ];
-};
-
-const buildQuickResultPayload = (quickResult) => ({
-  combination: quickResult.code,
-  suggestedType: quickResult.typeId,
-  suggestedLabel: quickResult.label,
-  note: quickResult.note,
-  result: quickResult.type?.type || '',
-  subtitle: quickResult.type?.subtitle || '',
-  motivation: quickResult.type?.motivation || '',
-  fear: quickResult.type?.fear || ''
+/* Conserva los campos suggestedType / suggestedLabel que el
+   AdminPanel usa para listar respuestas de 'enneagram-quick'. */
+const buildQuickResultPayload = (quickResult, dominantTypeData) => ({
+  suggestedType: quickResult.dominantType,
+  // Mismo formato que los registros históricos del test rápido anterior
+  // ("Perfeccionista", no "El Perfeccionista"), que el AdminPanel lista.
+  suggestedLabel: dominantTypeData?.type?.replace(/^Eneatipo \d+: /, '').replace(/^El /, '') || '',
+  note: QUICK_NOTE,
+  result: dominantTypeData?.type || '',
+  subtitle: dominantTypeData?.subtitle || '',
+  motivation: dominantTypeData?.motivation || '',
+  fear: dominantTypeData?.fear || '',
+  dominantCenter: quickResult.dominantCenter,
+  affinityTable: quickResult.affinityTable,
+  calculationDetails: {
+    affinityByType: quickResult.affinityByType,
+    weightedPointsByType: quickResult.weightedPointsByType,
+    questionCountByType: quickResult.questionCountByType,
+    muchosByType: quickResult.muchosByType,
+    pocosByType: quickResult.pocosByType,
+    nadasByType: quickResult.nadasByType
+  }
 });
 
 const buildFullAnswersPayload = (answerValues) =>
@@ -288,42 +376,32 @@ const buildFullReportData = ({ fullResult, dominantTypeData, contact, generatedA
   waNumber
 });
 
-const buildQuickReportData = ({ quickResult, contact, generatedAt, eneatypes, waNumber }) => {
-  const centerLabel = TYPE_TO_CENTER[quickResult.typeId] || '';
-
-  return {
-    mode: 'quick',
-    personName: contact?.fullName || '',
-    generatedAt,
-    dominantType: quickResult.typeId,
-    dominantTypeData: quickResult.type,
-    dominantCenter: {
-      key: CENTER_TO_KEY[centerLabel],
-      label: centerLabel
-    },
-    affinityTable: [
-      {
-        type: quickResult.typeId,
-        center: centerLabel
-      }
-    ],
-    typeCatalog: eneatypes,
-    waNumber
-  };
-};
+const buildQuickReportData = ({ quickResult, contact, generatedAt, eneatypes, waNumber }) => ({
+  mode: 'quick',
+  personName: contact?.fullName || '',
+  generatedAt,
+  dominantType: quickResult.dominantType,
+  dominantTypeData: eneatypes[quickResult.dominantType],
+  dominantCenter: quickResult.dominantCenter,
+  dominantAffinity: quickResult.affinityByType?.[quickResult.dominantType],
+  affinityTable: quickResult.affinityTable,
+  triads: quickResult.triads,
+  harmonics: quickResult.harmonics,
+  typeCatalog: eneatypes,
+  waNumber
+});
 
 export default function TestEnneagramModal({
   isOpen,
   onClose,
-  quickGroups,
-  quickMatrix,
   eneatypes,
   waNumber
 }) {
-  const [quickChoice, setQuickChoice] = useState({ first: null, second: null });
   const [step, setStep] = useState('choice');
   const [fullIndex, setFullIndex] = useState(0);
   const [fullAnswers, setFullAnswers] = useState([]);
+  const [quickIndex, setQuickIndex] = useState(0);
+  const [quickAnswers, setQuickAnswers] = useState([]);
   const [answerFeedback, setAnswerFeedback] = useState('');
   const [questionMotion, setQuestionMotion] = useState('idle');
   const [isTransitioningQuestion, setIsTransitioningQuestion] = useState(false);
@@ -336,6 +414,7 @@ export default function TestEnneagramModal({
   const [pdfState, setPdfState] = useState({ isGenerating: false, error: '' });
   const reportContentRef = useRef(null);
   const lastCompletionPayloadRef = useRef(null);
+  const quickMotionTimeoutsRef = useRef([]);
 
   useEffect(() => {
     if (!answerFeedback) return undefined;
@@ -343,9 +422,16 @@ export default function TestEnneagramModal({
     return () => window.clearTimeout(timer);
   }, [answerFeedback]);
 
+  const clearQuickMotionTimeouts = () => {
+    quickMotionTimeoutsRef.current.forEach((id) => window.clearTimeout(id));
+    quickMotionTimeoutsRef.current = [];
+  };
+
   const resetModal = () => {
+    clearQuickMotionTimeouts();
     setStep('choice');
-    setQuickChoice({ first: null, second: null });
+    setQuickIndex(0);
+    setQuickAnswers([]);
     setFullIndex(0);
     setFullAnswers([]);
     setAnswerFeedback('');
@@ -368,11 +454,14 @@ export default function TestEnneagramModal({
 
   if (!isOpen) return null;
 
-  const quickResult = () => {
-    return getQuickResultForChoice(quickChoice, quickMatrix, eneatypes);
-  };
-
   const handleTestStart = (testType, nextStep) => {
+    // Cada inicio de test arranca limpio: evita reutilizar respuestas
+    // de una corrida anterior dentro de la misma sesión del modal.
+    clearQuickMotionTimeouts();
+    setQuickIndex(0);
+    setQuickAnswers([]);
+    setFullIndex(0);
+    setFullAnswers([]);
     setSelectedTestType(testType);
     setPendingStartStep(nextStep);
     setSaveState({ isSaving: false, error: '' });
@@ -413,23 +502,6 @@ export default function TestEnneagramModal({
   const retryPersistCompletion = () => {
     if (!lastCompletionPayloadRef.current) return;
     persistCompletion(lastCompletionPayloadRef.current);
-  };
-
-  const handleQuickSecondSelect = (code) => {
-    const updatedChoice = { ...quickChoice, second: code };
-    const nextQuickResult = getQuickResultForChoice(updatedChoice, quickMatrix, eneatypes);
-
-    setQuickChoice(updatedChoice);
-    setStep('quick-result');
-    setResultGeneratedAt(new Date().toISOString());
-    setPdfState({ isGenerating: false, error: '' });
-
-    if (nextQuickResult) {
-      persistCompletion({
-        answers: buildQuickAnswersPayload(updatedChoice, quickGroups),
-        result: buildQuickResultPayload(nextQuickResult)
-      });
-    }
   };
 
   const maybeVibrate = () => {
@@ -480,6 +552,50 @@ export default function TestEnneagramModal({
     });
   };
 
+  const moveToQuickQuestion = (nextIndex) => {
+    setQuestionMotion('out');
+    setIsTransitioningQuestion(true);
+
+    const outerId = window.setTimeout(() => {
+      setQuickIndex(nextIndex);
+      setQuestionMotion('in');
+      const innerId = window.setTimeout(() => {
+        setQuestionMotion('idle');
+        setIsTransitioningQuestion(false);
+      }, 220);
+      quickMotionTimeoutsRef.current.push(innerId);
+    }, 280);
+    quickMotionTimeoutsRef.current.push(outerId);
+  };
+
+  const handleQuickAnswer = (value) => {
+    if (isTransitioningQuestion) return;
+
+    const updated = [...quickAnswers];
+    updated[quickIndex] = value;
+    setQuickAnswers(updated);
+    setAnswerFeedback(`Respuesta guardada: ${FULL_RESPONSE_OPTIONS.find((opt) => opt.value === value)?.label || value}`);
+    maybeVibrate();
+
+    if (quickIndex < QUICK_STATEMENTS.length - 1) {
+      moveToQuickQuestion(quickIndex + 1);
+      return;
+    }
+
+    const completedQuickResult = calculateResultForStatements(QUICK_STATEMENTS, updated);
+    const completedDominantTypeData = eneatypes[completedQuickResult.dominantType];
+
+    setStep('quick-result');
+    setResultGeneratedAt(new Date().toISOString());
+    setPdfState({ isGenerating: false, error: '' });
+    setQuestionMotion('idle');
+    setIsTransitioningQuestion(false);
+    persistCompletion({
+      answers: buildQuickAnswersPayload(updated),
+      result: buildQuickResultPayload(completedQuickResult, completedDominantTypeData)
+    });
+  };
+
   const handleDownloadReport = async () => {
     if (!reportContentRef.current || pdfState.isGenerating) return;
 
@@ -522,7 +638,11 @@ export default function TestEnneagramModal({
   const currentStatement = FULL_STATEMENTS[fullIndex];
   const currentBlock = FULL_BLOCKS.find((block) => currentStatement.order >= block.start && currentStatement.order <= block.end);
   const answeredCount = fullAnswers.filter((value) => value !== undefined && value !== null).length;
-  const currentQuickResult = quickResult();
+  const quickProgression = Math.round(((quickIndex + 1) / QUICK_STATEMENTS.length) * 100);
+  const currentQuickStatement = QUICK_STATEMENTS[quickIndex];
+  const quickAnsweredCount = quickAnswers.filter((value) => value !== undefined && value !== null).length;
+  const quickResultData = step === 'quick-result' ? calculateResultForStatements(QUICK_STATEMENTS, quickAnswers) : null;
+  const quickDominantTypeData = quickResultData ? eneatypes[quickResultData.dominantType] : null;
   const fullResult = step === 'full-result' ? calculateFullResult(fullAnswers) : null;
   const dominantTypeData = fullResult ? eneatypes[fullResult.dominantType] : null;
   const dominantCenterKey = fullResult ? CENTER_TO_KEY[fullResult.dominantCenter.label] : null;
@@ -537,9 +657,9 @@ export default function TestEnneagramModal({
         eneatypes,
         waNumber
       })
-    : step === 'quick-result' && currentQuickResult
+    : step === 'quick-result' && quickResultData
       ? buildQuickReportData({
-          quickResult: currentQuickResult,
+          quickResult: quickResultData,
           contact: leadContact,
           generatedAt: resultGeneratedAt,
           eneatypes,
@@ -625,15 +745,15 @@ export default function TestEnneagramModal({
                 <div className="w-10 h-10 rounded-2xl bg-[#CC5833]/10 flex items-center justify-center text-[#CC5833] font-bold">1</div>
                 <div>
                   <p className="font-heading text-xl text-[#1A1A1A]">Hipótesis inicial de eneatipo</p>
-                  <p className="text-sm text-gray-500">Test rápido · 2-3 minutos</p>
+                  <p className="text-sm text-gray-500">Test rápido · 27 preguntas · 3-4 minutos</p>
                 </div>
               </div>
               <ul className="text-sm text-[#2E4036] space-y-2">
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Grupo 1 (A/B/C) + Grupo 2 (X/Y/Z).</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Orientativo, no diagnóstico definitivo.</li>
-                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Sirve como punto de partida para pasar al test completo.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> 27 preguntas clave del banco oficial (3 por eneatipo).</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Misma escala y cálculo que la lectura profunda.</li>
+                <li className="flex gap-2"><CheckCircle2 size={16} className="text-[#CC5833] mt-0.5" /> Hipótesis con top 3 de eneatipos y centro dominante.</li>
               </ul>
-              <button onClick={() => handleTestStart('enneagram-quick', 'quick-first')} className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
+              <button onClick={() => handleTestStart('enneagram-quick', 'quick-quiz')} className="mt-auto bg-[#2E4036] text-white px-6 py-3 rounded-full font-bold btn-magnetic">
                 Hacer test rápido
               </button>
             </div>
@@ -667,81 +787,122 @@ export default function TestEnneagramModal({
           />
         )}
 
-        {step === 'quick-first' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <p className="font-mono text-xs text-[#CC5833] uppercase tracking-[0.2em]">Test rápido · Paso 1 de 2</p>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Elige el parrafo que mejor describe tu estilo de base</h3>
+        {step === 'quick-quiz' && (
+          <div className="animate-[fadeIn_0.3s_ease-out] space-y-5 flex-1 flex flex-col">
             <div className="space-y-3">
-              {quickGroups.first.map(opt => (
-                <button key={opt.code} onClick={() => { setQuickChoice({ ...quickChoice, first: opt.code }); setStep('quick-second'); }} className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-9 h-9 rounded-xl bg-[#CC5833]/10 text-[#CC5833] font-bold flex items-center justify-center">{opt.code}</span>
-                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
+              <div className="flex justify-between items-center gap-3 text-sm text-gray-600">
+                <span className="font-mono text-xs text-[#CC5833]">Test rápido · Pregunta {quickIndex + 1} de {QUICK_STATEMENTS.length}</span>
+                <span className="text-xs px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold">{quickProgression}%</span>
+              </div>
+              <div className="h-2 rounded-full bg-[#2E4036]/10 overflow-hidden">
+                <div className="h-full rounded-full bg-gradient-to-r from-[#CC5833] to-[#2E4036] transition-all duration-300" style={{ width: `${quickProgression}%` }}></div>
+              </div>
+            </div>
+
+            <div className={`rounded-[2rem] bg-white border border-gray-200 shadow-sm p-5 sm:p-6 transition-all duration-300 ease-out ${motionClass}`}>
+              <h3 className="font-heading text-[1.55rem] sm:text-3xl text-[#1A1A1A] leading-snug">{currentQuickStatement.text}</h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {FULL_RESPONSE_OPTIONS.map(opt => {
+                const isSelected = quickAnswers[quickIndex] === opt.value;
+                return (
+                  <button key={opt.value} onClick={() => handleQuickAnswer(opt.value)} className={`rounded-[1.4rem] border px-4 py-4 text-left sm:text-center font-bold text-sm transition-all duration-200 ${isSelected ? 'bg-[#2E4036] text-white border-[#2E4036] shadow-[0_14px_30px_-18px_rgba(46,64,54,0.85)] scale-[1.01]' : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#2E4036] hover:-translate-y-0.5'}`}>
+                    <div className="flex items-center justify-between gap-3 sm:flex-col sm:gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center border ${isSelected ? 'border-white/30 bg-white/12' : 'border-[#2E4036]/20 bg-[#F2F0E9]'}`}>
+                        {isSelected ? <Check size={16} /> : <span className="text-[11px] font-mono">{opt.value}</span>}
+                      </div>
+                      <div>
+                        <div className="text-base sm:text-lg">{opt.label}</div>
+                        <div className={`text-[11px] ${isSelected ? 'text-white/70' : 'text-gray-500'}`}>{isSelected ? 'Seleccionada' : `Valor ${opt.value}`}</div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-auto pt-2 space-y-4">
+              <div className={`min-h-[2.5rem] rounded-2xl border px-4 py-3 text-sm transition-all ${answerFeedback ? 'border-[#2E4036]/15 bg-[#2E4036]/8 text-[#2E4036]' : 'border-transparent bg-transparent text-gray-400'}`}>
+                {answerFeedback ? <div className="flex items-center gap-2"><CheckCircle2 size={16} className="text-[#2E4036]" /><span>{answerFeedback}</span></div> : <span>Toca una opción para guardar y avanzar.</span>}
+              </div>
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-1 border-t border-[#2E4036]/10">
+                <button disabled={quickIndex === 0 || isTransitioningQuestion} onClick={() => setQuickIndex((prev) => Math.max(0, prev - 1))} className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full border ${quickIndex === 0 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors'}`}>
+                  <ArrowLeft size={16} />
+                  Volver
                 </button>
-              ))}
+                <p className="text-xs sm:text-right text-gray-600 leading-relaxed max-w-md">Responde según tu experiencia habitual, no tu estado de hoy. Respondidas: {quickAnsweredCount} de {QUICK_STATEMENTS.length}.</p>
+              </div>
             </div>
           </div>
         )}
 
-        {step === 'quick-second' && (
-          <div className="animate-[fadeIn_0.3s_ease-out] space-y-6">
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <span className="font-mono text-xs text-[#CC5833]">Test rápido · Paso 2 de 2</span>
-              <span className="px-3 py-1 rounded-full bg-[#2E4036]/10 text-[#2E4036] font-semibold text-xs">Elegiste {quickChoice.first}</span>
-            </div>
-            <h3 className="font-heading text-2xl text-[#1A1A1A]">Ahora elige la opción que describe cómo manejas tu mundo interno</h3>
-            <div className="space-y-3">
-              {quickGroups.second.map(opt => (
-                <button key={opt.code} onClick={() => handleQuickSecondSelect(opt.code)} className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-[#2E4036] hover:shadow-md transition-all">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-9 h-9 rounded-xl bg-[#2E4036]/10 text-[#2E4036] font-bold flex items-center justify-center">{opt.code}</span>
-                    <p className="font-heading text-lg text-[#1A1A1A]">{opt.title}</p>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{opt.desc}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 'quick-result' && currentQuickResult && (
+        {step === 'quick-result' && quickResultData && (
           <div className="animate-[fadeIn_0.4s_ease-out] space-y-6">
             <div className="flex flex-col items-center text-center gap-2">
               <div className="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center">
                 <Activity className="text-[#00FF66]" size={22} />
               </div>
               <p className="font-mono text-[11px] text-[#CC5833] tracking-[0.2em]">Hipótesis inicial de eneatipo</p>
-              <h3 className="font-heading text-3xl text-[#1A1A1A]">Combinación {currentQuickResult.code}</h3>
-              <p className="text-[#CC5833] font-serif italic">{currentQuickResult.note}</p>
+              <h3 className="font-heading text-3xl text-[#1A1A1A]">Tu hipótesis: Eneatipo {quickResultData.dominantType}</h3>
+              <p className="text-[#CC5833] font-serif italic">{QUICK_NOTE}</p>
             </div>
-          </div>
-        )}
 
-        {step === 'quick-result' && currentQuickResult && (
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
-            {saveStatusNotice}
-            <p className="text-sm text-gray-500">Orientativo, no diagnóstico definitivo. Úsalo como punto de partida y valida con el test completo para una lectura más profunda.</p>
-            <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
-              <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
-              <h4 className="font-heading text-2xl text-[#1A1A1A]">{currentQuickResult.type.type}</h4>
-              <p className="text-[#CC5833] text-sm font-serif italic">{currentQuickResult.type.subtitle}</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
-              <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivacion</p>
-                <p>{currentQuickResult.type.motivation}</p>
+            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-4 text-left">
+              {saveStatusNotice}
+              <p className="text-sm text-gray-500">Orientativo, no diagnóstico definitivo. Úsalo como punto de partida y valida con la lectura profunda de 135 preguntas.</p>
+              <div className="p-4 rounded-2xl bg-[#F2F0E9] border border-gray-200">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Eneatipo sugerido</p>
+                    <h4 className="font-heading text-2xl text-[#1A1A1A]">{quickDominantTypeData?.type}</h4>
+                    <p className="text-[#CC5833] text-sm font-serif italic">{quickDominantTypeData?.subtitle}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="font-heading text-3xl text-[#1A1A1A]">{quickResultData.affinityByType[quickResultData.dominantType].toFixed(0)}%</p>
+                    <p className="text-[11px] text-gray-500">Afinidad</p>
+                  </div>
+                </div>
               </div>
-              <div className="bg-white border border-gray-100 rounded-2xl p-3">
-                <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Miedo central</p>
-                <p>{currentQuickResult.type.fear}</p>
+
+              <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
+                <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Motivación</p>
+                  <p>{quickDominantTypeData?.motivation}</p>
+                </div>
+                <div className="bg-white border border-gray-100 rounded-2xl p-3">
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest mb-1">Miedo central</p>
+                  <p>{quickDominantTypeData?.fear}</p>
+                </div>
               </div>
-            </div>
-            {reportActions}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={() => handleTestStart('enneagram-full', 'full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
-              <button onClick={() => { setStep('choice'); setQuickChoice({ first: null, second: null }); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rápido</button>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-mono text-xs text-[#2E4036] uppercase tracking-widest">Top 3 de afinidad</p>
+                  <p className="text-[11px] text-gray-500">Centro dominante estimado: <span className="font-semibold text-[#2E4036]">{quickResultData.dominantCenter?.label}</span></p>
+                </div>
+                {quickResultData.affinityTable.slice(0, 3).map((entry, index) => (
+                  <div key={entry.type} className={`grid grid-cols-[36px_1fr_52px] items-center gap-3 rounded-2xl px-3 py-2.5 border ${index === 0 ? 'border-[#CC5833]/30 bg-[#FFF7F1]' : 'border-gray-100 bg-[#FCFCFA]'}`}>
+                    <div className="font-heading text-xl text-[#1A1A1A] text-center">{entry.type}</div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-gray-500">{eneatypes[entry.type]?.subtitle || `Centro ${entry.center}`}</p>
+                      <div className="h-4 rounded-full bg-[#F1EFE8] overflow-hidden border border-[#E8E2D8]">
+                        <div
+                          className={`h-full rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#E86137] to-[#B64624]' : 'bg-gradient-to-r from-[#2E4036] to-[#708979]'}`}
+                          style={{ width: `${Math.max(entry.affinity, 2)}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <p className="font-heading text-base text-[#1A1A1A] text-right">{entry.affinity.toFixed(0)}%</p>
+                  </div>
+                ))}
+              </div>
+
+              {reportActions}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button onClick={() => handleTestStart('enneagram-full', 'full-intro')} className="flex-1 bg-[#CC5833] text-white px-6 py-4 rounded-full font-bold btn-magnetic">Pasar a lectura profunda</button>
+                <button onClick={() => { setStep('choice'); setQuickIndex(0); setQuickAnswers([]); }} className="flex-1 px-6 py-4 rounded-full border border-gray-300 text-gray-600 font-bold hover:bg-gray-100 transition-colors">Repetir test rápido</button>
+              </div>
             </div>
           </div>
         )}
