@@ -6,6 +6,18 @@ service cloud.firestore {
         request.auth.token.email == 'fundacionsocial@gimnasioemocionalmb.com';
     }
 
+    // Admin del PORTAL DE PROCESO: el super-admin (por email) o
+    // cualquier miembro con rol admin/superadmin.
+    function isProcessAdmin() {
+      return request.auth != null && (
+        isAdmin() ||
+        (
+          exists(/databases/$(database)/documents/processMembers/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/processMembers/$(request.auth.uid)).data.role in ['admin', 'superadmin']
+        )
+      );
+    }
+
     function isValidTestType(testType) {
       return testType in [
         'initial-assessment',
@@ -156,6 +168,75 @@ service cloud.firestore {
     match /adminUsers/{uid} {
       allow read: if false;
       allow write: if false;
+    }
+
+    // ── PORTAL DE PROCESO ──────────────────────────────────────
+    // Miembros: perfil, rol y estado de acceso, kits habilitados.
+    match /processMembers/{uid} {
+      // La persona crea SU propio registro como cliente pendiente;
+      // no puede auto-aprobarse ni auto-asignarse rol o kits.
+      allow create: if request.auth != null &&
+        request.auth.uid == uid &&
+        request.resource.data.keys().hasOnly([
+          'uid', 'email', 'fullName', 'phone', 'gender',
+          'role', 'status', 'kits', 'consent', 'createdAt', 'updatedAt'
+        ]) &&
+        request.resource.data.uid == uid &&
+        request.resource.data.email is string &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.role == 'client' &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.gender in ['masculino', 'femenino'] &&
+        request.resource.data.fullName is string &&
+        request.resource.data.fullName.size() >= 2 &&
+        request.resource.data.fullName.size() <= 140 &&
+        request.resource.data.phone is string &&
+        request.resource.data.phone.size() <= 40 &&
+        request.resource.data.kits.emocional == false &&
+        request.resource.data.kits.financiero == false &&
+        request.resource.data.kits.salud == false &&
+        request.resource.data.consent.privacyAccepted == true &&
+        request.resource.data.consent.sensitiveDataAccepted == true;
+
+      // Lee su propio registro; los admins leen todos.
+      allow read: if request.auth != null &&
+        (request.auth.uid == uid || isProcessAdmin());
+
+      allow update: if
+        // El dueño edita solo su perfil (no rol/estado/kits).
+        (request.auth != null && request.auth.uid == uid &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fullName', 'phone', 'gender', 'updatedAt']) &&
+          request.resource.data.role == resource.data.role &&
+          request.resource.data.status == resource.data.status &&
+          request.resource.data.kits == resource.data.kits) ||
+        // Un admin de proceso cambia estado y/o kits (no el rol).
+        (isProcessAdmin() &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'kits', 'updatedAt']) &&
+          request.resource.data.role == resource.data.role) ||
+        // Solo el super-admin (por email) puede cambiar roles.
+        (isAdmin() &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'updatedAt']));
+
+      allow delete: if false;
+    }
+
+    // Avance: lecciones completadas. La persona escribe lo suyo;
+    // la coach (admin) puede verlo para acompañar.
+    match /processProgress/{uid} {
+      allow read: if request.auth != null &&
+        (request.auth.uid == uid || isProcessAdmin());
+      allow write: if request.auth != null &&
+        request.auth.uid == uid &&
+        request.resource.data.completedLessons is list;
+      allow delete: if false;
+    }
+
+    // Diario: lo que la persona escribe. ESTRICTAMENTE PRIVADO:
+    // solo la propia persona puede leerlo o escribirlo (ni el admin).
+    match /processJournals/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null && request.auth.uid == uid;
+      allow delete: if false;
     }
 
     match /{document=**} {

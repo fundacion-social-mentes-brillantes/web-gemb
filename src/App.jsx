@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles
+  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn
 } from 'lucide-react';
 import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
 import AdminPanel from './components/AdminPanel';
 import AlexandraPage from './components/AlexandraPage';
+import ProcessPortal from './components/ProcessPortal';
 
 // Carga asíncrona de GSAP
 const loadScript = (src) => new Promise((resolve, reject) => {
@@ -194,6 +195,16 @@ const ALEXANDRA_SEO = {
     ],
     sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
   }
+};
+
+const PROCESO_PATH = "/mi-proceso";
+
+const PROCESO_SEO = {
+  title: "Mi Proceso | Gimnasio Emocional Mentes Brillantes",
+  description: "Área privada para continuar tu proceso con Gimnasio Emocional Mentes Brillantes.",
+  url: `${SITE_URL}${PROCESO_PATH}`,
+  image: `${SITE_URL}/logo-gemb.png`,
+  robots: "noindex, nofollow"
 };
 
 const PROCESS_PAGES = [
@@ -606,6 +617,9 @@ const Navbar = ({ onOpenTest }) => {
                     <a href="/curso-de-milagros" role="menuitem" onClick={() => setDropdownOpen(false)} className="px-4 py-3 rounded-xl hover:bg-[#F2F0E9] focus:bg-[#F2F0E9] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-[#2E4036]">
                       <BookOpen size={14} className="text-[#E2C17D]" /> Curso de Milagros
                     </a>
+                    <a href="/mi-proceso" role="menuitem" onClick={() => setDropdownOpen(false)} className="mt-1 px-4 py-3 rounded-xl bg-[#2E4036] hover:bg-[#243328] focus:bg-[#243328] focus:outline-none transition-colors text-xs font-bold flex items-center gap-3 text-white">
+                      <LogIn size={14} className="text-[#E2C17D]" /> Continuar mi proceso
+                    </a>
                   </div>
                 )}
               </div>
@@ -661,6 +675,7 @@ const Navbar = ({ onOpenTest }) => {
               <a href="/sala-reduccion-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
               <a href="/entrega-de-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
               <a href="/curso-de-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
+              <a href="/mi-proceso" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#CC5833] px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-[#b04a29] focus:outline-none"><LogIn size={16} className="text-white" /> Continuar mi proceso</a>
               <a href="/alexandra-ortega" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><User size={16} className="text-[#E2C17D]" /> ¿Quién es Alexandra?</a>
               <a href="/#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
             </div>
@@ -2312,10 +2327,13 @@ export default function App() {
   );
   const isAdminRoute = currentHash === '#admin';
   const isAlexandraPage = currentPath === ALEXANDRA_PATH;
+  const isProcesoPage = currentPath === PROCESO_PATH;
   const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
   const activeSeo = isAdminRoute
     ? ADMIN_SEO
-    : isAlexandraPage
+    : isProcesoPage
+      ? PROCESO_SEO
+      : isAlexandraPage
       ? ALEXANDRA_SEO
       : currentProcessPage
       ? {
@@ -2344,7 +2362,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAdminRoute || isAlexandraPage || currentProcessPage || gsapLoaded) return;
+    if (isAdminRoute || isAlexandraPage || isProcesoPage || currentProcessPage || gsapLoaded) return;
 
     const load = async () => {
       try {
@@ -2359,7 +2377,7 @@ export default function App() {
       setGsapLoaded(true);
     };
     load();
-  }, [currentProcessPage, isAdminRoute, isAlexandraPage, gsapLoaded]);
+  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, gsapLoaded]);
 
   if (isAdminRoute) {
     return (
@@ -2369,6 +2387,10 @@ export default function App() {
         <AdminPanel />
       </>
     );
+  }
+
+  if (isProcesoPage) {
+    return <ProcessPortal GlobalStyles={GlobalStyles} />;
   }
 
   if (isAlexandraPage) {

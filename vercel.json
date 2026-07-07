@@ -39,6 +39,14 @@
     {
       "source": "/alexandra-ortega/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/mi-proceso",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/mi-proceso/",
+      "destination": "/index.html"
     }
   ]
 }

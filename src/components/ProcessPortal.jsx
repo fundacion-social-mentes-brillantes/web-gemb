@@ -1,0 +1,886 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Heart, Wallet, HeartPulse, Lock, LogOut, ArrowLeft, ArrowRight, ShieldCheck,
+  Sparkles, CheckCircle2, Circle, Loader2, Users, Home, Volume2, PlayCircle,
+  PenLine, Quote, ChevronRight, AlertCircle, Check
+} from 'lucide-react';
+import {
+  GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut
+} from 'firebase/auth';
+import { auth, db } from '../lib/firebase';
+import {
+  PROCESS_KITS, PROCESS_KITS_BY_ID, KIT_ORDER, resolveText, getLessonCountForKit
+} from '../processContentConfig';
+import {
+  getMyMember, createMyMember, getMyProgress, setLessonCompleted,
+  getMyJournal, saveJournalEntry, listMembers, setMemberStatus, setMemberKit, setMemberRole
+} from '../services/processMembersService';
+
+const ADMIN_EMAIL = 'fundacionsocial@gimnasioemocionalmb.com';
+const CONTACT_ADMINS = 'Sebastián o Valeria';
+
+const KIT_ICONS = { heart: Heart, wallet: Wallet, heartPulse: HeartPulse };
+
+const PORTAL_STYLES = `
+  .pp-fade { animation: pp-fade 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes pp-fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .pp-slide { animation: pp-slide 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes pp-slide { from { opacity: 0; transform: translateY(16px) scale(0.995); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pp-fade, .pp-slide { animation: none !important; } }
+`;
+
+/* ── Piezas de UI ──────────────────────────────────────────────── */
+
+const Shell = ({ children }) => (
+  <div className="min-h-[100dvh] bg-[#F2F0E9] text-[#1A1A1A]">{children}</div>
+);
+
+const CenteredCard = ({ children }) => (
+  <div className="flex min-h-[100dvh] items-center justify-center p-5">
+    <div className="pp-fade w-full max-w-md rounded-[2.25rem] border border-[#2E4036]/10 bg-white p-8 shadow-[0_28px_70px_-40px_rgba(26,26,26,0.5)]">
+      {children}
+    </div>
+  </div>
+);
+
+const PortalHeader = ({ member, isAdmin, view, onGoHome, onGoAdmin, onSignOut }) => (
+  <header className="sticky top-0 z-30 border-b border-[#2E4036]/10 bg-[#F2F0E9]/85 backdrop-blur">
+    <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3.5">
+      <button onClick={onGoHome} className="flex items-center gap-2.5">
+        <img src="/logo-gemb.png" alt="GEMB" className="h-9 w-auto object-contain" />
+        <span className="hidden font-heading text-sm font-bold text-[#2E4036] sm:block">Mi Proceso</span>
+      </button>
+      <div className="flex items-center gap-2">
+        {isAdmin && (
+          <>
+            <button
+              onClick={onGoHome}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view !== 'admin' ? 'bg-[#2E4036] text-white' : 'text-[#2E4036] hover:bg-[#2E4036]/10'}`}
+            >
+              <Home size={14} /> Proceso
+            </button>
+            <button
+              onClick={onGoAdmin}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view === 'admin' ? 'bg-[#CC5833] text-white' : 'text-[#2E4036] hover:bg-[#2E4036]/10'}`}
+            >
+              <Users size={14} /> Administración
+            </button>
+          </>
+        )}
+        <span className="hidden max-w-[160px] truncate rounded-full bg-white px-3 py-2 text-xs text-[#2E4036] shadow-sm md:block">
+          {member?.fullName || member?.email || 'Mi cuenta'}
+        </span>
+        <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-full border border-[#CC5833]/25 px-3 py-2 text-xs font-bold text-[#CC5833] hover:bg-white">
+          <LogOut size={14} /> Salir
+        </button>
+      </div>
+    </div>
+  </header>
+);
+
+/* ── Formulario de perfil ──────────────────────────────────────── */
+
+const ProfileForm = ({ defaultName, onSubmit, isSaving, error }) => {
+  const [fullName, setFullName] = useState(defaultName || '');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [consent, setConsent] = useState({ privacyAccepted: false, sensitiveDataAccepted: false });
+  const [localError, setLocalError] = useState('');
+
+  const canSubmit = fullName.trim().length > 1 && phone.replace(/\D/g, '').length >= 8 &&
+    gender && consent.privacyAccepted && consent.sensitiveDataAccepted && !isSaving;
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!canSubmit) {
+      setLocalError('Completa tu nombre, teléfono, género y las autorizaciones.');
+      return;
+    }
+    setLocalError('');
+    onSubmit({ fullName: fullName.trim(), phone: phone.trim(), gender, consent });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2E4036] text-white">
+          <Sparkles size={22} />
+        </div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#CC5833]">Tu espacio personal</p>
+        <h1 className="font-heading text-2xl text-[#1A1A1A]">Completa tus datos</h1>
+        <p className="mt-2 text-sm text-[#1A1A1A]/65">Esto hace que tu proceso sea tuyo y personalizado.</p>
+      </div>
+
+      <label className="block text-sm font-semibold text-[#2E4036]">
+        Nombre completo
+        <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1.5 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-[#1A1A1A] outline-none focus:border-[#CC5833] focus:ring-4 focus:ring-[#CC5833]/10" placeholder="Tu nombre" />
+      </label>
+
+      <label className="block text-sm font-semibold text-[#2E4036]">
+        Teléfono / WhatsApp
+        <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" className="mt-1.5 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-[#1A1A1A] outline-none focus:border-[#CC5833] focus:ring-4 focus:ring-[#CC5833]/10" placeholder="+57 300 000 0000" />
+      </label>
+
+      <div className="text-sm font-semibold text-[#2E4036]">
+        <span id="genero-label">Género</span>
+        <div role="radiogroup" aria-labelledby="genero-label" className="mt-2 grid grid-cols-2 gap-3">
+          {[['masculino', 'Masculino'], ['femenino', 'Femenino']].map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={gender === value}
+              onClick={() => setGender(value)}
+              className={`rounded-2xl border px-4 py-3 text-sm font-bold transition ${gender === value ? 'border-[#CC5833] bg-[#CC5833] text-white' : 'border-gray-200 bg-white text-[#2E4036] hover:border-[#CC5833]/50'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-1.5 text-xs font-normal text-gray-500">Con esto te mostramos la versión de tu kit que corresponde.</p>
+      </div>
+
+      <div className="space-y-2.5 rounded-2xl border border-[#2E4036]/10 bg-[#F7F4ED] p-4 text-sm text-[#1A1A1A]/75">
+        <label className="flex items-start gap-3">
+          <input type="checkbox" checked={consent.privacyAccepted} onChange={(e) => setConsent((c) => ({ ...c, privacyAccepted: e.target.checked }))} className="mt-1 h-4 w-4 accent-[#CC5833]" />
+          <span>Acepto la política de tratamiento de datos personales.</span>
+        </label>
+        <label className="flex items-start gap-3">
+          <input type="checkbox" checked={consent.sensitiveDataAccepted} onChange={(e) => setConsent((c) => ({ ...c, sensitiveDataAccepted: e.target.checked }))} className="mt-1 h-4 w-4 accent-[#CC5833]" />
+          <span>Autorizo el tratamiento de mi información dentro de mi proceso, de forma confidencial.</span>
+        </label>
+      </div>
+
+      {(localError || error) && (
+        <div className="flex items-start gap-2 rounded-2xl border border-[#CC5833]/25 bg-[#FFF3EE] px-4 py-3 text-sm text-[#7A3A25]">
+          <AlertCircle size={16} className="mt-0.5 shrink-0" /> <p>{localError || error}</p>
+        </div>
+      )}
+
+      <button type="submit" disabled={!canSubmit} className={`w-full rounded-full px-6 py-4 font-bold transition ${canSubmit ? 'bg-[#CC5833] text-white btn-magnetic' : 'cursor-not-allowed bg-gray-200 text-gray-400'}`}>
+        {isSaving ? <Loader2 size={18} className="mx-auto animate-spin" /> : 'Entrar a mi proceso'}
+      </button>
+      {!canSubmit && !isSaving && (
+        <p className="text-center text-xs text-gray-500">
+          Para continuar: nombre, teléfono (mín. 8 dígitos), género y las dos autorizaciones.
+        </p>
+      )}
+    </form>
+  );
+};
+
+/* ── Bloques de lección ────────────────────────────────────────── */
+
+const LessonBlock = ({ block, gender, journalDraft, onJournalChange, onJournalBlur, onJournalToggle }) => {
+  const title = resolveText(block.title, gender);
+  const text = resolveText(block.text, gender);
+
+  switch (block.type) {
+    case 'portada':
+      return (
+        <div className="rounded-[2rem] bg-gradient-to-br from-[#2E4036] to-[#1A1A1A] p-10 text-center text-white">
+          <Sparkles size={30} className="mx-auto mb-4 text-[#E2C17D]" />
+          <h2 className="font-heading text-3xl">{title}</h2>
+          {block.subtitle && <p className="mt-3 text-sm text-white/70">{block.subtitle}</p>}
+        </div>
+      );
+    case 'texto':
+      return (
+        <div>
+          {title && <h2 className="mb-3 font-heading text-2xl text-[#2E4036]">{title}</h2>}
+          <p className="text-lg leading-relaxed text-[#1A1A1A]/80">{text}</p>
+        </div>
+      );
+    case 'cita':
+      return (
+        <blockquote className="border-l-4 border-[#E2C17D] pl-6">
+          <Quote size={32} className="mb-3 text-[#E2C17D]" />
+          <p className="font-serif text-2xl italic leading-snug text-[#2E4036]">{text}</p>
+          {block.author && <footer className="mt-3 text-sm font-semibold text-[#CC5833]">— {block.author}</footer>}
+        </blockquote>
+      );
+    case 'lista':
+      return (
+        <div>
+          {title && <h2 className="mb-4 font-heading text-2xl text-[#2E4036]">{title}</h2>}
+          <ul className="space-y-3">
+            {(block.items || []).map((item) => (
+              <li key={item} className="flex items-start gap-3 text-lg text-[#1A1A1A]/80">
+                <ChevronRight size={20} className="mt-1 shrink-0 text-[#CC5833]" /> {resolveText(item, gender)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    case 'imagen':
+      return block.src ? (
+        <figure>
+          <img src={block.src} alt={block.alt || ''} className="w-full rounded-[1.5rem] object-cover" />
+          {block.caption && <figcaption className="mt-2 text-center text-sm text-gray-500">{block.caption}</figcaption>}
+        </figure>
+      ) : (
+        <div className="flex h-48 items-center justify-center rounded-[1.5rem] border border-dashed border-[#2E4036]/20 bg-[#F7F4ED] text-sm text-gray-400">
+          Imagen próximamente
+        </div>
+      );
+    case 'audio':
+      return (
+        <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-6">
+          <div className="mb-3 flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2E4036]/10 text-[#2E4036]"><Volume2 size={20} /></div>
+            <p className="font-heading text-lg text-[#2E4036]">{title || 'Audio'}</p>
+          </div>
+          {block.src ? <audio controls src={block.src} className="w-full" /> : <p className="text-sm text-gray-400">Audio próximamente.</p>}
+        </div>
+      );
+    case 'video':
+      return (
+        <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-6">
+          <div className="mb-3 flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#CC5833]/10 text-[#CC5833]"><PlayCircle size={20} /></div>
+            <p className="font-heading text-lg text-[#2E4036]">{title || 'Video'}</p>
+          </div>
+          {block.url ? (
+            <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: '56.25%' }}>
+              <iframe title={title || 'Video'} src={block.url} className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+            </div>
+          ) : <p className="text-sm text-gray-400">Video próximamente.</p>}
+        </div>
+      );
+    case 'escritura':
+      return (
+        <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-6">
+          <div className="mb-3 flex items-center gap-2 text-[#2E4036]">
+            <PenLine size={18} /> <p className="font-heading text-lg">Tu espacio para escribir</p>
+          </div>
+          <p className="mb-3 text-[#1A1A1A]/75">{resolveText(block.prompt, gender)}</p>
+          <textarea
+            value={journalDraft[block.id] || ''}
+            onChange={(e) => onJournalChange(block.id, e.target.value)}
+            onBlur={() => onJournalBlur(block.id)}
+            rows={5}
+            placeholder={block.placeholder || 'Escribe aquí…'}
+            className="w-full resize-y rounded-2xl border border-gray-200 bg-[#FCFCFA] px-4 py-3 text-[#1A1A1A] outline-none focus:border-[#CC5833] focus:ring-4 focus:ring-[#CC5833]/10"
+          />
+          <p className="mt-2 flex items-center gap-1.5 text-xs text-gray-400"><Lock size={11} /> Privado: solo tú puedes ver lo que escribes aquí.</p>
+        </div>
+      );
+    case 'checklist': {
+      const checked = Array.isArray(journalDraft[block.id]) ? journalDraft[block.id] : [];
+      return (
+        <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-6">
+          {title && <p className="mb-4 font-heading text-lg text-[#2E4036]">{title}</p>}
+          <div className="space-y-2.5">
+            {(block.items || []).map((item) => {
+              const isOn = checked.includes(item);
+              return (
+                <button key={item} type="button" aria-pressed={isOn} onClick={() => onJournalToggle(block.id, item)} className="flex w-full items-center gap-3 rounded-2xl border border-gray-100 p-3 text-left transition hover:border-[#2E4036]/30">
+                  {isOn ? <CheckCircle2 size={20} className="shrink-0 text-[#2E4036]" /> : <Circle size={20} className="shrink-0 text-gray-300" />}
+                  <span className={`text-[#1A1A1A]/80 ${isOn ? 'line-through opacity-60' : ''}`}>{resolveText(item, gender)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+    case 'cierre':
+      return (
+        <div className="rounded-[2rem] bg-gradient-to-br from-[#CC5833] to-[#8a3a20] p-10 text-center text-white">
+          <CheckCircle2 size={34} className="mx-auto mb-4" />
+          <h2 className="font-heading text-3xl">{title}</h2>
+          {text && <p className="mt-3 text-white/85">{text}</p>}
+        </div>
+      );
+    default:
+      return null;
+  }
+};
+
+/* ── Visor de lección (diapositivas) ───────────────────────────── */
+
+const LessonViewer = ({ lesson, gender, journalDraft, onJournalChange, onJournalBlur, onJournalToggle, isCompleted, onComplete, onBack, isSaving }) => {
+  const [index, setIndex] = useState(0);
+  const blocks = lesson.blocks || [];
+  const total = blocks.length;
+  const block = blocks[index];
+  const isLast = index === total - 1;
+  const progress = Math.round(((index + 1) / total) * 100);
+
+  const handleFinish = async () => {
+    await onComplete();
+    onBack();
+  };
+
+  return (
+    <div className="mx-auto max-w-3xl px-5 py-6">
+      <button onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#2E4036] hover:text-[#CC5833]">
+        <ArrowLeft size={16} /> Volver a las lecciones
+      </button>
+
+      <div className="mb-2 flex items-center justify-between text-xs text-gray-500">
+        <span className="font-mono">{resolveText(lesson.title, gender)}</span>
+        <span>{index + 1} / {total}</span>
+      </div>
+      <div className="mb-7 h-2 overflow-hidden rounded-full bg-[#2E4036]/10">
+        <div className="h-full rounded-full bg-gradient-to-r from-[#CC5833] to-[#2E4036] transition-all duration-300" style={{ width: `${progress}%` }} />
+      </div>
+
+      <div key={index} className="pp-slide min-h-[220px] rounded-[2rem] border border-[#2E4036]/10 bg-white p-6 shadow-sm md:p-9">
+        <LessonBlock block={block} gender={gender} journalDraft={journalDraft} onJournalChange={onJournalChange} onJournalBlur={onJournalBlur} onJournalToggle={onJournalToggle} />
+      </div>
+
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <button
+          onClick={() => setIndex((i) => Math.max(0, i - 1))}
+          disabled={index === 0}
+          className={`inline-flex items-center gap-2 rounded-full border px-5 py-3 font-bold ${index === 0 ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-[#2E4036] hover:bg-white'}`}
+        >
+          <ArrowLeft size={16} /> Atrás
+        </button>
+
+        {isLast ? (
+          <button
+            onClick={handleFinish}
+            disabled={isSaving}
+            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold text-white ${isCompleted ? 'bg-[#2E4036]' : 'bg-[#CC5833]'} disabled:opacity-60`}
+          >
+            {isSaving ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
+            {isCompleted ? 'Completada ✓ · volver' : 'Marcar como completada'}
+          </button>
+        ) : (
+          <button onClick={() => setIndex((i) => Math.min(total - 1, i + 1))} className="inline-flex items-center gap-2 rounded-full bg-[#2E4036] px-6 py-3 font-bold text-white btn-magnetic">
+            Siguiente <ArrowRight size={16} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/* ── Administración de miembros ────────────────────────────────── */
+
+const AdminMembers = ({ isSuperAdmin }) => {
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [busyId, setBusyId] = useState('');
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      setMembers(await listMembers());
+    } catch (err) {
+      setError(err?.message || 'No pudimos cargar los miembros.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const patch = async (uid, fn) => {
+    setBusyId(uid);
+    try {
+      await fn();
+      setMembers((current) => current.map((m) => (m.id === uid ? { ...m, ...(m._next || {}) } : m)));
+      await load();
+    } catch (err) {
+      setError(err?.message || 'No se pudo actualizar.');
+    } finally {
+      setBusyId('');
+    }
+  };
+
+  const pending = members.filter((m) => (m.status || 'pending') === 'pending' && m.role === 'client');
+  const others = members.filter((m) => !pending.includes(m));
+
+  const MemberCard = ({ member }) => {
+    const kits = member.kits || {};
+    return (
+      <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="font-heading text-lg text-[#1A1A1A]">{member.fullName || 'Sin nombre'}</p>
+            <p className="text-sm text-gray-500">{member.email}</p>
+            <p className="text-sm text-gray-500">{member.phone || 'Sin teléfono'} · {member.gender || 'sin género'}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`rounded-full px-3 py-1 text-xs font-bold ${member.status === 'active' ? 'bg-[#2E4036] text-white' : member.status === 'blocked' ? 'bg-[#CC5833] text-white' : 'bg-[#F0E4C8] text-[#8A6D1F]'}`}>
+              {member.status === 'active' ? 'Activo' : member.status === 'blocked' ? 'Bloqueado' : 'Pendiente'}
+            </span>
+            {member.role !== 'client' && <span className="rounded-full bg-[#7FA9D8]/20 px-3 py-1 text-xs font-bold text-[#3D6681]">{member.role}</span>}
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {KIT_ORDER.map((kitId) => {
+            const enabled = Boolean(kits[kitId]);
+            return (
+              <button
+                key={kitId}
+                disabled={busyId === member.id}
+                onClick={() => patch(member.id, () => setMemberKit(member.id, kitId, !enabled))}
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${enabled ? 'bg-[#2E4036] text-white' : 'border border-gray-200 text-gray-500 hover:border-[#2E4036]/40'}`}
+              >
+                {enabled ? <Check size={11} className="mr-1 inline" /> : <Lock size={11} className="mr-1 inline" />}
+                {PROCESS_KITS_BY_ID[kitId]?.title || kitId}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-4">
+          {member.status !== 'active' && (
+            <button disabled={busyId === member.id} onClick={() => patch(member.id, () => setMemberStatus(member.id, 'active'))} className="rounded-full bg-[#2E4036] px-4 py-2 text-xs font-bold text-white disabled:opacity-60">
+              Aprobar acceso
+            </button>
+          )}
+          {member.status !== 'blocked' && (
+            <button disabled={busyId === member.id} onClick={() => patch(member.id, () => setMemberStatus(member.id, 'blocked'))} className="rounded-full border border-[#CC5833]/30 px-4 py-2 text-xs font-bold text-[#CC5833] disabled:opacity-60">
+              Bloquear
+            </button>
+          )}
+          {member.status === 'blocked' && (
+            <button disabled={busyId === member.id} onClick={() => patch(member.id, () => setMemberStatus(member.id, 'pending'))} className="rounded-full border border-gray-300 px-4 py-2 text-xs font-bold text-gray-600 disabled:opacity-60">
+              Volver a pendiente
+            </button>
+          )}
+          {isSuperAdmin && member.email !== ADMIN_EMAIL && (
+            <select
+              value={member.role || 'client'}
+              disabled={busyId === member.id}
+              onChange={(e) => patch(member.id, () => setMemberRole(member.id, e.target.value))}
+              className="rounded-full border border-gray-200 px-3 py-2 text-xs font-bold text-[#2E4036] outline-none"
+            >
+              <option value="client">Cliente</option>
+              <option value="admin">Admin / Coach</option>
+              <option value="superadmin">Super-admin</option>
+            </select>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="mx-auto max-w-4xl px-5 py-6">
+      <div className="mb-5 flex items-center justify-between">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#CC5833]">Administración</p>
+          <h1 className="font-heading text-2xl text-[#1A1A1A]">Miembros del proceso</h1>
+        </div>
+        <button onClick={load} className="rounded-full border border-[#2E4036]/15 px-4 py-2 text-sm font-bold text-[#2E4036] hover:bg-white">Actualizar</button>
+      </div>
+
+      {error && <div className="mb-4 flex gap-2 rounded-2xl border border-[#CC5833]/25 bg-[#FFF3EE] p-4 text-sm text-[#7A3A25]"><AlertCircle size={16} /> {error}</div>}
+      {loading ? (
+        <div className="flex items-center gap-2 text-sm text-gray-500"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
+      ) : (
+        <div className="space-y-6">
+          {pending.length > 0 && (
+            <div>
+              <p className="mb-3 font-heading text-lg text-[#CC5833]">Solicitudes pendientes ({pending.length})</p>
+              <div className="space-y-3">{pending.map((m) => <MemberCard key={m.id} member={m} />)}</div>
+            </div>
+          )}
+          <div>
+            <p className="mb-3 font-heading text-lg text-[#2E4036]">Todos los miembros ({others.length})</p>
+            <div className="space-y-3">
+              {others.map((m) => <MemberCard key={m.id} member={m} />)}
+              {!others.length && <p className="text-sm text-gray-500">Aún no hay miembros aprobados.</p>}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ── Portal (kits + lecciones) ─────────────────────────────────── */
+
+const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJournalChange, onJournalBlur, onJournalToggle, onComplete, savingLesson }) => {
+  const [selectedKitId, setSelectedKitId] = useState(null);
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const completed = progress.completedLessons || [];
+
+  const kit = selectedKitId ? PROCESS_KITS_BY_ID[selectedKitId] : null;
+  const lesson = useMemo(() => {
+    if (!kit || !selectedLessonId) return null;
+    for (const module of kit.modules || []) {
+      const found = (module.lessons || []).find((l) => l.id === selectedLessonId);
+      if (found) return found;
+    }
+    return null;
+  }, [kit, selectedLessonId]);
+
+  if (lesson) {
+    return (
+      <LessonViewer
+        lesson={lesson}
+        gender={gender}
+        journalDraft={journalDraft}
+        onJournalChange={onJournalChange}
+        onJournalBlur={onJournalBlur}
+        onJournalToggle={onJournalToggle}
+        isCompleted={completed.includes(lesson.id)}
+        onComplete={() => onComplete(lesson.id)}
+        onBack={() => setSelectedLessonId(null)}
+        isSaving={savingLesson}
+      />
+    );
+  }
+
+  if (kit) {
+    return (
+      <div className="mx-auto max-w-4xl px-5 py-6">
+        <button onClick={() => setSelectedKitId(null)} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#2E4036] hover:text-[#CC5833]">
+          <ArrowLeft size={16} /> Volver a mis kits
+        </button>
+        <h1 className="font-heading text-3xl text-[#1A1A1A]">{kit.title}</h1>
+        <p className="mt-1 text-[#1A1A1A]/65">{kit.subtitle}</p>
+
+        <div className="mt-6 space-y-6">
+          {(kit.modules || []).map((module) => (
+            <div key={module.id}>
+              <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-[#CC5833]">{module.title}</p>
+              <div className="space-y-3">
+                {(module.lessons || []).map((l) => {
+                  const done = completed.includes(l.id);
+                  return (
+                    <button key={l.id} onClick={() => setSelectedLessonId(l.id)} className="flex w-full items-center justify-between gap-3 rounded-2xl border border-[#2E4036]/10 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-[#CC5833]/40 hover:shadow-md">
+                      <span className="flex items-center gap-3">
+                        {done ? <CheckCircle2 size={22} className="text-[#2E4036]" /> : <Circle size={22} className="text-gray-300" />}
+                        <span className="font-heading text-[#1A1A1A]">{resolveText(l.title, gender)}</span>
+                      </span>
+                      <ChevronRight size={18} className="text-gray-400" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Home: grid de kits
+  return (
+    <div className="mx-auto max-w-5xl px-5 py-8">
+      <div className="pp-fade mb-8 rounded-[2rem] bg-gradient-to-br from-[#2E4036] to-[#1A1A1A] p-8 text-white md:p-10">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#E2C17D]">Bienvenido a tu proceso</p>
+        <h1 className="mt-2 font-heading text-3xl md:text-4xl">
+          Hola, {(member?.fullName || '').split(' ')[0] || 'bienvenido'} 👋
+        </h1>
+        <p className="mt-3 max-w-xl text-white/75">Este es tu espacio privado y seguro. Avanza a tu ritmo, acompañado por tu coach. Lo que escribas aquí es solo tuyo.</p>
+      </div>
+
+      <div className="grid gap-5 md:grid-cols-3">
+        {PROCESS_KITS.map((k) => {
+          const Icon = KIT_ICONS[k.icon] || Heart;
+          const enabled = isAdmin || Boolean(member?.kits?.[k.id]);
+          const lessons = getLessonCountForKit(k);
+          const doneCount = (progress.completedLessons || []).filter((id) =>
+            (k.modules || []).some((m) => (m.lessons || []).some((l) => l.id === id))
+          ).length;
+
+          return (
+            <div key={k.id} className={`relative overflow-hidden rounded-[2rem] border p-6 shadow-sm transition ${enabled ? 'border-[#2E4036]/10 bg-white hover:-translate-y-1 hover:shadow-lg' : 'border-gray-200 bg-[#F7F4ED]'}`}>
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl text-white" style={{ backgroundColor: enabled ? k.accent : '#B9B4A8' }}>
+                <Icon size={26} />
+              </div>
+              <h2 className="font-heading text-xl text-[#1A1A1A]">{k.title}</h2>
+              <p className="mt-1 text-sm text-[#1A1A1A]/65">{k.description}</p>
+
+              {enabled ? (
+                <>
+                  <div className="mt-4 text-xs text-gray-500">{doneCount} / {lessons} lecciones</div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#2E4036]/10">
+                    <div className="h-full rounded-full bg-[#2E4036]" style={{ width: `${lessons ? (doneCount / lessons) * 100 : 0}%` }} />
+                  </div>
+                  <button onClick={() => setSelectedKitId(k.id)} className="mt-5 w-full rounded-full bg-[#2E4036] px-5 py-3 text-sm font-bold text-white btn-magnetic">
+                    {doneCount > 0 ? 'Continuar' : 'Comenzar'}
+                  </button>
+                </>
+              ) : (
+                <div className="mt-5 flex items-center gap-2 rounded-2xl bg-white/70 px-4 py-3 text-sm text-gray-500">
+                  <Lock size={16} /> Disponible más adelante · habla con tu coach
+                </div>
+              )}
+              {isAdmin && !member?.kits?.[k.id] && (
+                <p className="mt-2 text-[11px] text-gray-400">(Vista de admin: lo ves desbloqueado)</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+/* ── Componente raíz ───────────────────────────────────────────── */
+
+export default function ProcessPortal({ GlobalStyles }) {
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authUser, setAuthUser] = useState(null);
+  const [authError, setAuthError] = useState('');
+  const [member, setMember] = useState(null);
+  const [memberLoading, setMemberLoading] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileError, setProfileError] = useState('');
+  const [view, setView] = useState('home');
+  const [homeKey, setHomeKey] = useState(0);
+  const [signingIn, setSigningIn] = useState(false);
+  const [progress, setProgress] = useState({ completedLessons: [] });
+  const [journalDraft, setJournalDraft] = useState({});
+  const [savingLesson, setSavingLesson] = useState(false);
+  const journalTimersRef = useRef({});
+
+  const isSuperAdminEmail = authUser?.email?.toLowerCase() === ADMIN_EMAIL;
+  const effectiveRole = isSuperAdminEmail ? 'superadmin' : (member?.role || 'client');
+  const isAdmin = effectiveRole === 'admin' || effectiveRole === 'superadmin';
+  const effectiveStatus = isAdmin ? 'active' : (member?.status || 'pending');
+  const needsProfile = Boolean(authUser) && !isSuperAdminEmail && !member;
+  const gender = member?.gender || 'masculino';
+
+  const loadMember = useCallback(async (uid) => {
+    setMemberLoading(true);
+    try {
+      const found = await getMyMember(uid);
+      setMember(found);
+      if (found && (found.status === 'active' || found.role !== 'client')) {
+        const [prog, journal] = await Promise.all([getMyProgress(uid), getMyJournal(uid)]);
+        setProgress(prog || { completedLessons: [] });
+        setJournalDraft(journal || {});
+      }
+    } catch {
+      setMember(null);
+    } finally {
+      setMemberLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!auth || !db) {
+      setAuthError('El acceso a procesos no está configurado todavía.');
+      setAuthLoading(false);
+      return undefined;
+    }
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user && !user.isAnonymous) {
+        setAuthUser(user);
+        await loadMember(user.uid);
+      } else {
+        setAuthUser(null);
+        setMember(null);
+      }
+      setAuthLoading(false);
+    });
+    return unsub;
+  }, [loadMember]);
+
+  // Super-admin sin doc de miembro: carga su avance de todos modos
+  useEffect(() => {
+    if (isSuperAdminEmail && authUser && !member) {
+      Promise.all([getMyProgress(authUser.uid), getMyJournal(authUser.uid)])
+        .then(([prog, journal]) => { setProgress(prog || { completedLessons: [] }); setJournalDraft(journal || {}); })
+        .catch(() => {});
+    }
+  }, [isSuperAdminEmail, authUser, member]);
+
+  const handleSignIn = async () => {
+    if (signingIn) return;
+    setAuthError('');
+    setSigningIn(true);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try {
+      if (auth.currentUser?.isAnonymous) await signOut(auth);
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      setAuthError(err?.message || 'No pudimos iniciar sesión con Google.');
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const goHome = () => {
+    setView('home');
+    setHomeKey((k) => k + 1);
+  };
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    setView('home');
+  };
+
+  const handleProfileSubmit = async ({ fullName, phone, gender: g, consent }) => {
+    if (!authUser) return;
+    setSavingProfile(true);
+    setProfileError('');
+    try {
+      await createMyMember({ uid: authUser.uid, email: authUser.email, fullName, phone, gender: g, consent });
+      await loadMember(authUser.uid);
+    } catch (err) {
+      setProfileError(err?.message || 'No pudimos guardar tus datos. Intenta de nuevo.');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handleJournalChange = (blockId, value) => {
+    setJournalDraft((current) => ({ ...current, [blockId]: value }));
+    // Autoguardado con debounce: lo escrito no se pierde aunque no haya "blur".
+    if (typeof value === 'string' && authUser) {
+      if (journalTimersRef.current[blockId]) window.clearTimeout(journalTimersRef.current[blockId]);
+      journalTimersRef.current[blockId] = window.setTimeout(() => {
+        saveJournalEntry(authUser.uid, blockId, value).catch(() => {});
+      }, 900);
+    }
+  };
+
+  const handleJournalBlur = async (blockId, explicitValue) => {
+    if (!authUser) return;
+    const value = explicitValue !== undefined ? explicitValue : journalDraft[blockId];
+    if (value === undefined) return;
+    if (journalTimersRef.current[blockId]) window.clearTimeout(journalTimersRef.current[blockId]);
+    try {
+      await saveJournalEntry(authUser.uid, blockId, value);
+    } catch {
+      // se reintenta al próximo cambio; no bloqueamos la experiencia
+    }
+  };
+
+  // Checklist: usa actualización funcional para no perder toques rápidos.
+  const handleJournalToggle = (blockId, item) => {
+    setJournalDraft((current) => {
+      const arr = Array.isArray(current[blockId]) ? current[blockId] : [];
+      const next = arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
+      if (authUser) saveJournalEntry(authUser.uid, blockId, next).catch(() => {});
+      return { ...current, [blockId]: next };
+    });
+  };
+
+  const handleCompleteLesson = async (lessonId) => {
+    if (!authUser) return;
+    setSavingLesson(true);
+    try {
+      const next = await setLessonCompleted(authUser.uid, lessonId, progress.completedLessons);
+      setProgress((current) => ({ ...current, completedLessons: next }));
+    } catch {
+      // silencioso; el avance se puede reintentar
+    } finally {
+      setSavingLesson(false);
+    }
+  };
+
+  const frame = (content) => (
+    <Shell>
+      {GlobalStyles ? <GlobalStyles /> : null}
+      <style dangerouslySetInnerHTML={{ __html: PORTAL_STYLES }} />
+      <div className="noise-overlay"></div>
+      {content}
+    </Shell>
+  );
+
+  if (authLoading || memberLoading) {
+    return frame(
+      <div className="flex min-h-[100dvh] items-center justify-center">
+        <div className="flex items-center gap-3 rounded-full bg-white px-5 py-3 shadow-sm">
+          <Loader2 size={18} className="animate-spin text-[#2E4036]" />
+          <span className="font-mono text-sm text-[#2E4036]">Cargando tu proceso…</span>
+        </div>
+      </div>
+    );
+  }
+
+  // No autenticado → landing
+  if (!authUser) {
+    return frame(
+      <CenteredCard>
+        <a href="/" className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#2E4036]/60 hover:text-[#2E4036]">
+          <ArrowLeft size={14} /> Volver a GEMB
+        </a>
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2E4036] text-white"><ShieldCheck size={26} /></div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#CC5833]">Área privada</p>
+        <h1 className="font-heading text-3xl text-[#1A1A1A]">Continúa con tu proceso</h1>
+        <p className="mt-3 text-sm leading-relaxed text-[#1A1A1A]/65">
+          Ingresa con tu cuenta de Google para entrar a tu espacio personal, seguro y privado. El acceso lo habilita tu coach.
+        </p>
+        {authError && <div className="mt-4 flex gap-2 rounded-2xl border border-[#CC5833]/25 bg-[#FFF3EE] p-3 text-sm text-[#7A3A25]"><AlertCircle size={16} /> {authError}</div>}
+        <button onClick={handleSignIn} disabled={!auth || signingIn} className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#CC5833] px-6 py-4 font-bold text-white btn-magnetic disabled:cursor-not-allowed disabled:bg-gray-300">
+          {signingIn ? <><Loader2 size={18} className="animate-spin" /> Abriendo Google…</> : 'Ingresar con Google'}
+        </button>
+      </CenteredCard>
+    );
+  }
+
+  // Autenticado pero sin perfil → completar datos
+  if (needsProfile) {
+    return frame(<CenteredCard><ProfileForm defaultName={authUser.displayName} onSubmit={handleProfileSubmit} isSaving={savingProfile} error={profileError} /></CenteredCard>);
+  }
+
+  // En revisión
+  if (effectiveStatus === 'pending') {
+    return frame(
+      <CenteredCard>
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F0E4C8] text-[#8A6D1F]"><ShieldCheck size={26} /></div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#CC5833]">Acceso en revisión</p>
+        <h1 className="font-heading text-2xl text-[#1A1A1A]">Tu acceso está en revisión</h1>
+        <p className="mt-3 text-sm leading-relaxed text-[#1A1A1A]/70">
+          Ya recibimos tu registro, <strong>{(member?.fullName || '').split(' ')[0] || ''}</strong>. Para habilitar tu proceso, escribe a <strong>{CONTACT_ADMINS}</strong> y con gusto activamos tu espacio.
+        </p>
+        <div className="mt-5 rounded-2xl bg-[#F7F4ED] p-4 text-sm text-[#2E4036]">
+          <p className="font-semibold">Mientras tanto:</p>
+          <p className="mt-1 text-[#1A1A1A]/70">Puedes tener a la mano un cuaderno para tu proceso. Te avisaremos apenas quede habilitado.</p>
+        </div>
+        <button onClick={handleSignOut} className="mt-6 w-full rounded-full border border-[#2E4036]/20 px-6 py-3 font-bold text-[#2E4036] hover:bg-white">Salir</button>
+      </CenteredCard>
+    );
+  }
+
+  // Bloqueado
+  if (effectiveStatus === 'blocked') {
+    return frame(
+      <CenteredCard>
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#CC5833] text-white"><Lock size={26} /></div>
+        <h1 className="font-heading text-2xl text-[#1A1A1A]">Tu acceso está inactivo</h1>
+        <p className="mt-3 text-sm text-[#1A1A1A]/70">Escribe a {CONTACT_ADMINS} para reactivar tu proceso.</p>
+        <button onClick={handleSignOut} className="mt-6 w-full rounded-full border border-[#2E4036]/20 px-6 py-3 font-bold text-[#2E4036] hover:bg-white">Salir</button>
+      </CenteredCard>
+    );
+  }
+
+  // Activo → portal
+  return frame(
+    <>
+      <PortalHeader
+        member={member}
+        isAdmin={isAdmin}
+        view={view}
+        onGoHome={goHome}
+        onGoAdmin={() => setView('admin')}
+        onSignOut={handleSignOut}
+      />
+      {view === 'admin' && isAdmin ? (
+        <AdminMembers isSuperAdmin={effectiveRole === 'superadmin'} />
+      ) : (
+        <PortalContent
+          key={homeKey}
+          member={member}
+          isAdmin={isAdmin}
+          gender={gender}
+          progress={progress}
+          journalDraft={journalDraft}
+          onJournalChange={handleJournalChange}
+          onJournalBlur={handleJournalBlur}
+          onJournalToggle={handleJournalToggle}
+          onComplete={handleCompleteLesson}
+          savingLesson={savingLesson}
+        />
+      )}
+    </>
+  );
+}
