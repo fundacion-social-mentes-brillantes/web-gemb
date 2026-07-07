@@ -92,6 +92,22 @@ export const setLessonCompleted = async (uid, lessonId, completedLessons) => {
   return next;
 };
 
+/* Resultados de herramientas (ej. escáner de creencias). Se guardan en
+   processProgress para que la coach pueda verlos. La regla de Firestore
+   solo exige que completedLessons sea lista, por eso la incluimos. */
+export const saveToolResult = async (uid, toolId, resultData, completedLessons) => {
+  await setDoc(
+    doc(ensureDb(), PROCESS_PROGRESS_COLLECTION, uid),
+    {
+      uid,
+      completedLessons: Array.isArray(completedLessons) ? completedLessons : [],
+      toolResults: { [toolId]: resultData },
+      updatedAt: serverTimestamp()
+    },
+    { merge: true }
+  );
+};
+
 /* ── Diario privado (lo que la persona escribe) ───────────────── */
 
 export const getMyJournal = async (uid) => {

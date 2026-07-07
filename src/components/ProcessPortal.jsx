@@ -12,12 +12,25 @@ import {
   PROCESS_KITS, PROCESS_KITS_BY_ID, KIT_ORDER, resolveText, getLessonCountForKit
 } from '../processContentConfig';
 import {
-  getMyMember, createMyMember, getMyProgress, setLessonCompleted,
+  getMyMember, createMyMember, getMyProgress, setLessonCompleted, saveToolResult,
   getMyJournal, saveJournalEntry, listMembers, setMemberStatus, setMemberKit, setMemberRole
 } from '../services/processMembersService';
+import BeliefScanner from './BeliefScanner';
 
 const ADMIN_EMAIL = 'fundacionsocial@gimnasioemocionalmb.com';
 const CONTACT_ADMINS = 'Sebastián o Valeria';
+
+// Normaliza el resultado de una herramienta para guardar en Firestore.
+// Incluye el resumen (para que la coach lo vea) y completedAt solo al terminar.
+const cleanToolResult = (result, completed) => ({
+  ratings: result.ratings || {},
+  total10: result.total10 || 0,
+  totalHigh: result.totalHigh || 0,
+  answered: result.answered || 0,
+  sumScores: result.sumScores || 0,
+  highBeliefs: (result.highBeliefs || []).map((b) => ({ id: b.id, score: b.score, text: b.text })),
+  ...(completed ? { completedAt: new Date().toISOString() } : {})
+});
 
 const KIT_ICONS = { heart: Heart, wallet: Wallet, heartPulse: HeartPulse };
 
@@ -398,6 +411,23 @@ const AdminMembers = ({ isSuperAdmin }) => {
 
   const MemberCard = ({ member }) => {
     const kits = member.kits || {};
+    const [detail, setDetail] = useState(undefined);
+    const [loadingDetail, setLoadingDetail] = useState(false);
+
+    const loadDetail = async () => {
+      if (detail !== undefined) { setDetail(undefined); return; }
+      setLoadingDetail(true);
+      try {
+        setDetail(await getMyProgress(member.id));
+      } catch {
+        setDetail('error');
+      } finally {
+        setLoadingDetail(false);
+      }
+    };
+
+    const scanner = detail && detail !== 'error' ? detail.toolResults?.['financiero-h2'] : null;
+
     return (
       <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -459,7 +489,40 @@ const AdminMembers = ({ isSuperAdmin }) => {
               <option value="superadmin">Super-admin</option>
             </select>
           )}
+          <button onClick={loadDetail} className="rounded-full border border-[#2E4036]/15 px-4 py-2 text-xs font-bold text-[#2E4036] hover:bg-[#F7F4ED]">
+            {detail !== undefined ? 'Ocultar resultados' : 'Ver resultados'}
+          </button>
         </div>
+
+        {loadingDetail && <p className="mt-3 flex items-center gap-2 text-xs text-gray-500"><Loader2 size={14} className="animate-spin" /> Cargando…</p>}
+
+        {detail !== undefined && !loadingDetail && (
+          <div className="mt-3 rounded-2xl border border-[#2E4036]/10 bg-[#F7F4ED] p-4">
+            <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[#CC5833]">Escáner de creencias (Kit Financiero)</p>
+            {detail === 'error' ? (
+              <p className="text-sm text-[#7A3A25]">No pudimos cargar los resultados. Intenta de nuevo.</p>
+            ) : scanner ? (
+              <>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <span><strong className="font-heading text-lg text-[#2E4036]">{scanner.totalHigh ?? 0}</strong> creencias fuertes (8–10)</span>
+                  <span><strong className="font-heading text-lg text-[#2E4036]">{scanner.total10 ?? 0}</strong> marcó 10</span>
+                  <span><strong className="font-heading text-lg text-[#2E4036]">{scanner.answered ?? 0}</strong>/65 respondidas</span>
+                </div>
+                {Array.isArray(scanner.highBeliefs) && scanner.highBeliefs.length > 0 && (
+                  <ul className="mt-3 space-y-1.5 text-sm text-[#1A1A1A]/75">
+                    {scanner.highBeliefs.map((b) => (
+                      <li key={b.id} className="flex gap-2">
+                        <span className="shrink-0 font-bold text-[#CC5833]">{b.score}</span> {b.text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            ) : (
+              <p className="text-sm text-gray-500">Aún no ha realizado el escáner de creencias.</p>
+            )}
+          </div>
+        )}
       </div>
     );
   };
@@ -500,7 +563,7 @@ const AdminMembers = ({ isSuperAdmin }) => {
 
 /* ── Portal (kits + lecciones) ─────────────────────────────────── */
 
-const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJournalChange, onJournalBlur, onJournalToggle, onComplete, savingLesson }) => {
+const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJournalChange, onJournalBlur, onJournalToggle, onComplete, onSaveToolProgress, onCompleteTool, savingLesson }) => {
   const [selectedKitId, setSelectedKitId] = useState(null);
   const [selectedLessonId, setSelectedLessonId] = useState(null);
   const completed = progress.completedLessons || [];
@@ -514,6 +577,20 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
     }
     return null;
   }, [kit, selectedLessonId]);
+
+  // Herramienta especial: Escáner de Creencias Limitantes.
+  if (lesson && lesson.tool === 'escaner-creencias') {
+    const toolData = progress.toolResults?.[lesson.id];
+    return (
+      <BeliefScanner
+        initialRatings={toolData?.ratings || {}}
+        savedResult={toolData?.completedAt ? toolData : null}
+        onSaveProgress={(result) => onSaveToolProgress(lesson.id, result)}
+        onComplete={(result) => onCompleteTool(lesson.id, result)}
+        onBack={() => setSelectedLessonId(null)}
+      />
+    );
+  }
 
   if (lesson) {
     return (
@@ -776,6 +853,33 @@ export default function ProcessPortal({ GlobalStyles }) {
     }
   };
 
+  // Guardado parcial de una herramienta (ej. escáner de creencias):
+  // guarda respuestas + resumen (sin completedAt) para que la coach vea
+  // totales consistentes con las respuestas actuales. El efecto de red
+  // va FUERA del updater de estado (updater puro).
+  const handleSaveToolProgress = (toolId, result) => {
+    if (!authUser) return;
+    const clean = cleanToolResult(result, false);
+    saveToolResult(authUser.uid, toolId, clean, progress.completedLessons || []).catch(() => {});
+    setProgress((current) => ({
+      ...current,
+      toolResults: { ...(current.toolResults || {}), [toolId]: { ...(current.toolResults?.[toolId] || {}), ...clean } }
+    }));
+  };
+
+  // Al terminar: guarda el resultado con completedAt y marca la lección.
+  const handleCompleteTool = (toolId, result) => {
+    if (!authUser) return;
+    const clean = cleanToolResult(result, true);
+    const nextCompleted = Array.from(new Set([...(progress.completedLessons || []), toolId]));
+    saveToolResult(authUser.uid, toolId, clean, nextCompleted).catch(() => {});
+    setProgress((current) => ({
+      ...current,
+      completedLessons: Array.from(new Set([...(current.completedLessons || []), toolId])),
+      toolResults: { ...(current.toolResults || {}), [toolId]: { ...(current.toolResults?.[toolId] || {}), ...clean } }
+    }));
+  };
+
   const frame = (content) => (
     <Shell>
       {GlobalStyles ? <GlobalStyles /> : null}
@@ -878,6 +982,8 @@ export default function ProcessPortal({ GlobalStyles }) {
           onJournalBlur={handleJournalBlur}
           onJournalToggle={handleJournalToggle}
           onComplete={handleCompleteLesson}
+          onSaveToolProgress={handleSaveToolProgress}
+          onCompleteTool={handleCompleteTool}
           savingLesson={savingLesson}
         />
       )}

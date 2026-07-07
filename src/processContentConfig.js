@@ -95,18 +95,23 @@ export const PROCESS_KITS = [
   },
   {
     id: 'financiero',
-    title: 'Kit Financiero',
-    subtitle: 'Tu relación con el dinero',
+    title: 'Kit Transformación Financiera',
+    subtitle: 'Salud es Riqueza · tu relación con el dinero',
     icon: 'wallet',
-    accent: '#2E4036',
-    description: 'Ordena tu mundo financiero desde la conciencia: hábitos, creencias y decisiones con propósito.',
+    accent: '#C9A24B',
+    theme: 'gold',
+    description: 'Reconoce, mide y transforma tu diálogo interno financiero. Abundancia con conciencia y propósito.',
     modules: [
       {
-        id: 'financiero-m1',
-        title: 'Módulo 1 · Conciencia financiera',
+        id: 'financiero-herramientas',
+        title: 'Herramientas',
         lessons: [
-          sampleLesson('financiero-l1', 'Lección 1 · Mi historia con el dinero', '🪙'),
-          sampleLesson('financiero-l2', 'Lección 2 · De la escasez a la abundancia', '🌿')
+          sampleLesson('financiero-h1', 'Herramienta 1 · Mi historia con el dinero', '🪙'),
+          {
+            id: 'financiero-h2',
+            title: 'Herramienta 2 · Escáner de Creencias Limitantes',
+            tool: 'escaner-creencias'
+          }
         ]
       }
     ]
