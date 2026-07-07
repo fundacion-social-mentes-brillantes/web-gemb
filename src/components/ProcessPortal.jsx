@@ -41,51 +41,129 @@ const PORTAL_STYLES = `
   @keyframes pp-fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .pp-slide { animation: pp-slide 0.35s cubic-bezier(0.22,1,0.36,1) both; }
   @keyframes pp-slide { from { opacity: 0; transform: translateY(16px) scale(0.995); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .pp-fade, .pp-slide { animation: none !important; } }
+
+  /* Ambiente dorado en movimiento */
+  @keyframes pp-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(50px,-35px) scale(1.1); } }
+  @keyframes pp-drift-b { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-60px,30px) scale(1.06); } }
+  .pp-glow-a { animation: pp-drift-a 18s ease-in-out infinite; }
+  .pp-glow-b { animation: pp-drift-b 24s ease-in-out infinite; }
+
+  @keyframes pp-twinkle { 0%,100% { opacity: 0.1; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.3); } }
+  .pp-star {
+    position: absolute; border-radius: 9999px; background: #E4C878;
+    box-shadow: 0 0 8px rgba(228,200,120,0.8);
+    animation: pp-twinkle var(--dur, 5s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+
+  @keyframes pp-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  .pp-rise { animation: pp-rise 0.75s cubic-bezier(0.22,1,0.36,1) both; animation-delay: var(--d, 0s); }
+
+  @keyframes pp-aurora { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .pp-aurora {
+    background: linear-gradient(120deg, #191410, #2a1d0c, #12150f, #221809, #191410);
+    background-size: 300% 300%;
+    animation: pp-aurora 16s ease infinite;
+  }
+
+  .pp-shine { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+  .pp-shine::after {
+    content: ''; position: absolute; top: -10%; bottom: -10%; width: 34%;
+    background: linear-gradient(105deg, transparent, rgba(255,244,214,0.22), transparent);
+    transform: translateX(-160%) skewX(-18deg);
+  }
+  .group:hover .pp-shine::after { animation: pp-shine-sweep 0.9s ease; }
+  @keyframes pp-shine-sweep { to { transform: translateX(340%) skewX(-18deg); } }
+
+  @keyframes pp-breathe { 0%,100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
+  .pp-breathe { animation: pp-breathe 3.2s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-fade, .pp-slide, .pp-rise { animation-duration: 0.01s !important; animation-delay: 0s !important; }
+    .pp-glow-a, .pp-glow-b, .pp-star, .pp-aurora, .pp-breathe { animation: none !important; }
+    .group:hover .pp-shine::after { animation: none !important; }
+  }
 `;
+
+/* Posiciones fijas de las "estrellas" doradas del fondo (determinista). */
+const PP_STARS = [
+  { top: '8%', left: '12%', s: 3, del: '0s', dur: '5s' },
+  { top: '16%', left: '78%', s: 2, del: '1.2s', dur: '6s' },
+  { top: '24%', left: '38%', s: 2, del: '2.4s', dur: '7s' },
+  { top: '32%', left: '90%', s: 3, del: '0.6s', dur: '5.5s' },
+  { top: '41%', left: '6%', s: 2, del: '3s', dur: '6.5s' },
+  { top: '52%', left: '68%', s: 3, del: '1.8s', dur: '5s' },
+  { top: '60%', left: '22%', s: 2, del: '0.9s', dur: '7.5s' },
+  { top: '68%', left: '84%', s: 2, del: '2.1s', dur: '6s' },
+  { top: '75%', left: '46%', s: 3, del: '3.6s', dur: '5.5s' },
+  { top: '84%', left: '10%', s: 2, del: '1.5s', dur: '6.8s' },
+  { top: '88%', left: '70%', s: 2, del: '0.3s', dur: '5.2s' },
+  { top: '12%', left: '55%', s: 2, del: '4.2s', dur: '7s' }
+];
 
 /* ── Piezas de UI ──────────────────────────────────────────────── */
 
-const Shell = ({ children }) => (
-  <div className="min-h-[100dvh] bg-[#F2F0E9] text-[#1A1A1A]">{children}</div>
-);
+const Shell = ({ children, dark = false }) => {
+  if (!dark) {
+    return <div className="min-h-[100dvh] bg-[#F2F0E9] text-[#1A1A1A]">{children}</div>;
+  }
+
+  return (
+    <div className="relative min-h-[100dvh] overflow-x-clip bg-[#0D0B07] text-[#F3ECDD]">
+      {/* Ambiente: brillos dorados que se mueven lento + estrellas que titilan */}
+      <div className="pointer-events-none fixed inset-0" aria-hidden="true">
+        <div className="pp-glow-a absolute -left-40 top-[-10%] h-[34rem] w-[34rem] rounded-full bg-[#E4C878]/[0.09] blur-3xl"></div>
+        <div className="pp-glow-b absolute -right-48 top-[38%] h-[30rem] w-[30rem] rounded-full bg-[#B8860B]/[0.10] blur-3xl"></div>
+        <div className="pp-glow-a absolute bottom-[-14%] left-[28%] h-[26rem] w-[26rem] rounded-full bg-[#2E4036]/[0.22] blur-3xl"></div>
+        {PP_STARS.map((star, i) => (
+          <span
+            key={i}
+            className="pp-star"
+            style={{ top: star.top, left: star.left, width: star.s, height: star.s, '--del': star.del, '--dur': star.dur }}
+          ></span>
+        ))}
+      </div>
+      <div className="relative">{children}</div>
+    </div>
+  );
+};
 
 const CenteredCard = ({ children }) => (
   <div className="flex min-h-[100dvh] items-center justify-center p-5">
-    <div className="pp-fade w-full max-w-md rounded-[2.25rem] border border-[#2E4036]/10 bg-white p-8 shadow-[0_28px_70px_-40px_rgba(26,26,26,0.5)]">
+    <div className="pp-fade w-full max-w-md rounded-[2.25rem] border border-[#E4C878]/25 bg-white p-8 shadow-[0_0_60px_-12px_rgba(228,200,120,0.25),0_28px_70px_-40px_rgba(0,0,0,0.9)]">
       {children}
     </div>
   </div>
 );
 
 const PortalHeader = ({ member, isAdmin, view, onGoHome, onGoAdmin, onSignOut }) => (
-  <header className="sticky top-0 z-30 border-b border-[#2E4036]/10 bg-[#F2F0E9]/85 backdrop-blur">
+  <header className="sticky top-0 z-30 border-b border-[#E4C878]/15 bg-[#0D0B07]/85 backdrop-blur-md">
     <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3.5">
       <button onClick={onGoHome} className="flex items-center gap-2.5">
-        <img src="/logo-gemb.png" alt="GEMB" className="h-9 w-auto object-contain" />
-        <span className="hidden font-heading text-sm font-bold text-[#2E4036] sm:block">Mi Proceso</span>
+        <img src="/logo-gemb.png" alt="GEMB" className="h-9 w-auto object-contain drop-shadow-[0_0_10px_rgba(228,200,120,0.35)]" />
+        <span className="hidden font-heading text-sm font-bold text-[#E4C878] sm:block">Mi Proceso</span>
       </button>
       <div className="flex items-center gap-2">
         {isAdmin && (
           <>
             <button
               onClick={onGoHome}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view !== 'admin' ? 'bg-[#2E4036] text-white' : 'text-[#2E4036] hover:bg-[#2E4036]/10'}`}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view !== 'admin' ? 'bg-[#E4C878] text-[#14110A]' : 'text-[#E4C878]/80 hover:bg-[#E4C878]/10'}`}
             >
               <Home size={14} /> Proceso
             </button>
             <button
               onClick={onGoAdmin}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view === 'admin' ? 'bg-[#CC5833] text-white' : 'text-[#2E4036] hover:bg-[#2E4036]/10'}`}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition ${view === 'admin' ? 'bg-[#CC5833] text-white' : 'text-[#E4C878]/80 hover:bg-[#E4C878]/10'}`}
             >
               <Users size={14} /> Administración
             </button>
           </>
         )}
-        <span className="hidden max-w-[160px] truncate rounded-full bg-white px-3 py-2 text-xs text-[#2E4036] shadow-sm md:block">
+        <span className="hidden max-w-[160px] truncate rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-[#F3ECDD]/80 md:block">
           {member?.fullName || member?.email || 'Mi cuenta'}
         </span>
-        <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-full border border-[#CC5833]/25 px-3 py-2 text-xs font-bold text-[#CC5833] hover:bg-white">
+        <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-full border border-[#E4C878]/30 px-3 py-2 text-xs font-bold text-[#E4C878] transition hover:bg-[#E4C878]/10">
           <LogOut size={14} /> Salir
         </button>
       </div>
@@ -329,19 +407,19 @@ const LessonViewer = ({ lesson, gender, journalDraft, onJournalChange, onJournal
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-6">
-      <button onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#2E4036] hover:text-[#CC5833]">
+      <button onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#E4C878] transition hover:text-[#F5E5B8]">
         <ArrowLeft size={16} /> Volver a las lecciones
       </button>
 
-      <div className="mb-2 flex items-center justify-between text-xs text-gray-500">
+      <div className="mb-2 flex items-center justify-between text-xs text-[#F3ECDD]/55">
         <span className="font-mono">{resolveText(lesson.title, gender)}</span>
         <span>{index + 1} / {total}</span>
       </div>
-      <div className="mb-7 h-2 overflow-hidden rounded-full bg-[#2E4036]/10">
-        <div className="h-full rounded-full bg-gradient-to-r from-[#CC5833] to-[#2E4036] transition-all duration-300" style={{ width: `${progress}%` }} />
+      <div className="mb-7 h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-gradient-to-r from-[#C9A24B] to-[#F5E5B8] transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
 
-      <div key={index} className="pp-slide min-h-[220px] rounded-[2rem] border border-[#2E4036]/10 bg-white p-6 shadow-sm md:p-9">
+      <div key={index} className="pp-slide min-h-[220px] rounded-[2rem] border border-[#E4C878]/20 bg-white p-6 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.8)] md:p-9">
         <LessonBlock block={block} gender={gender} journalDraft={journalDraft} onJournalChange={onJournalChange} onJournalBlur={onJournalBlur} onJournalToggle={onJournalToggle} />
       </div>
 
@@ -349,7 +427,7 @@ const LessonViewer = ({ lesson, gender, journalDraft, onJournalChange, onJournal
         <button
           onClick={() => setIndex((i) => Math.max(0, i - 1))}
           disabled={index === 0}
-          className={`inline-flex items-center gap-2 rounded-full border px-5 py-3 font-bold ${index === 0 ? 'cursor-not-allowed border-gray-200 text-gray-300' : 'border-gray-300 text-[#2E4036] hover:bg-white'}`}
+          className={`inline-flex items-center gap-2 rounded-full border px-5 py-3 font-bold transition ${index === 0 ? 'cursor-not-allowed border-white/10 text-white/25' : 'border-[#E4C878]/40 text-[#E4C878] hover:bg-[#E4C878]/10'}`}
         >
           <ArrowLeft size={16} /> Atrás
         </button>
@@ -358,13 +436,13 @@ const LessonViewer = ({ lesson, gender, journalDraft, onJournalChange, onJournal
           <button
             onClick={handleFinish}
             disabled={isSaving}
-            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold text-white ${isCompleted ? 'bg-[#2E4036]' : 'bg-[#CC5833]'} disabled:opacity-60`}
+            className={`inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold ${isCompleted ? 'bg-[#2E4036] text-white' : 'bg-[#E4C878] text-[#14110A] hover:bg-[#efd693]'} disabled:opacity-60`}
           >
             {isSaving ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
             {isCompleted ? 'Completada ✓ · volver' : 'Marcar como completada'}
           </button>
         ) : (
-          <button onClick={() => setIndex((i) => Math.min(total - 1, i + 1))} className="inline-flex items-center gap-2 rounded-full bg-[#2E4036] px-6 py-3 font-bold text-white btn-magnetic">
+          <button onClick={() => setIndex((i) => Math.min(total - 1, i + 1))} className="inline-flex items-center gap-2 rounded-full bg-[#E4C878] px-6 py-3 font-bold text-[#14110A] btn-magnetic transition hover:bg-[#efd693]">
             Siguiente <ArrowRight size={16} />
           </button>
         )}
@@ -628,43 +706,47 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
   if (kit) {
     return (
       <div className="mx-auto max-w-4xl px-5 py-6">
-        <button onClick={() => setSelectedKitId(null)} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#2E4036] hover:text-[#CC5833]">
+        <button onClick={() => setSelectedKitId(null)} className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[#E4C878] transition hover:text-[#F5E5B8]">
           <ArrowLeft size={16} /> Volver a mis kits
         </button>
-        <h1 className="font-heading text-3xl text-[#1A1A1A]">{kit.title}</h1>
-        <p className="mt-1 text-[#1A1A1A]/65">{kit.subtitle}</p>
+        <div className="pp-rise">
+          <h1 className="font-heading text-3xl text-[#F3ECDD] md:text-4xl">{kit.title}</h1>
+          <p className="mt-1 font-serif italic text-[#E4C878]/80">{kit.subtitle}</p>
+          <div className="mt-4 h-px w-24 bg-gradient-to-r from-[#E4C878] to-transparent"></div>
+        </div>
 
-        <div className="mt-6 space-y-6">
+        <div className="mt-7 space-y-7">
           {(kit.modules || []).map((module) => (
             <div key={module.id}>
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-[#CC5833]">{module.title}</p>
+              <p className="mb-3 font-mono text-xs uppercase tracking-[0.18em] text-[#E4C878]/70">{module.title}</p>
               <div className="space-y-3">
-                {(module.lessons || []).map((l) => {
+                {(module.lessons || []).map((l, lessonIndex) => {
                   const done = completed.includes(l.id);
                   const isAssignment = Boolean(l.assignmentOf);
                   return (
                     <button
                       key={l.id}
                       onClick={() => setSelectedLessonId(l.id)}
-                      className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+                      style={{ '--d': `${0.1 + lessonIndex * 0.09}s` }}
+                      className={`pp-rise group flex w-full items-center justify-between gap-3 rounded-2xl border p-4 text-left backdrop-blur transition duration-300 hover:-translate-y-0.5 ${
                         isAssignment
-                          ? 'ml-3 border-dashed border-[#C9A24B]/45 bg-[#FBF6EA] hover:border-[#C9A24B] sm:ml-6'
-                          : 'border-[#2E4036]/10 bg-white hover:border-[#CC5833]/40'
+                          ? 'ml-3 border-dashed border-[#E4C878]/40 bg-[#E4C878]/[0.06] hover:border-[#E4C878]/80 hover:bg-[#E4C878]/[0.10] sm:ml-6'
+                          : 'border-white/10 bg-white/[0.05] hover:border-[#E4C878]/50 hover:bg-white/[0.08] hover:shadow-[0_12px_36px_-16px_rgba(228,200,120,0.35)]'
                       }`}
                     >
                       <span className="flex items-center gap-3">
-                        {done ? <CheckCircle2 size={22} className="shrink-0 text-[#2E4036]" /> : <Circle size={22} className="shrink-0 text-gray-300" />}
+                        {done ? <CheckCircle2 size={22} className="shrink-0 text-[#E4C878]" /> : <Circle size={22} className="shrink-0 text-white/25" />}
                         <span>
                           {isAssignment && (
-                            <span className="mb-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-[#C9A24B]">
+                            <span className="mb-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-[#E4C878]">
                               Asignación · {l.assignmentOf}
                             </span>
                           )}
-                          <span className="font-heading text-[#1A1A1A]">{resolveText(l.title, gender)}</span>
-                          {l.subtitle && !isAssignment && <span className="block text-xs text-gray-500">{l.subtitle}</span>}
+                          <span className="font-heading text-[#F3ECDD]">{resolveText(l.title, gender)}</span>
+                          {l.subtitle && !isAssignment && <span className="block text-xs text-[#F3ECDD]/50">{l.subtitle}</span>}
                         </span>
                       </span>
-                      <ChevronRight size={18} className="shrink-0 text-gray-400" />
+                      <ChevronRight size={18} className="shrink-0 text-[#E4C878]/50 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#E4C878]" />
                     </button>
                   );
                 })}
@@ -677,18 +759,32 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
   }
 
   // Home: grid de kits
+  const hour = new Date().getHours();
+  const timeGreeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+  const firstName = (member?.fullName || '').split(' ')[0];
+
   return (
     <div className="mx-auto max-w-5xl px-5 py-8">
-      <div className="pp-fade mb-8 rounded-[2rem] bg-gradient-to-br from-[#2E4036] to-[#1A1A1A] p-8 text-white md:p-10">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#E2C17D]">Bienvenido a tu proceso</p>
-        <h1 className="mt-2 font-heading text-3xl md:text-4xl">
-          Hola, {(member?.fullName || '').split(' ')[0] || 'bienvenido'} 👋
-        </h1>
-        <p className="mt-3 max-w-xl text-white/75">Este es tu espacio privado y seguro. Avanza a tu ritmo, acompañado por tu coach. Lo que escribas aquí es solo tuyo.</p>
+      <div className="pp-rise pp-aurora relative mb-9 overflow-hidden rounded-[2rem] border border-[#E4C878]/25 p-8 text-[#F3ECDD] shadow-[0_0_70px_-20px_rgba(228,200,120,0.35)] md:p-10">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#E4C878]/[0.16] blur-3xl"></div>
+        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-[#CC5833]/[0.10] blur-3xl"></div>
+        <div className="relative">
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-[#E4C878]">
+            <Sparkles size={14} className="pp-breathe" /> Bienvenido a tu proceso
+          </p>
+          <h1 className="mt-3 font-heading text-3xl md:text-5xl">
+            {timeGreeting}{firstName ? ',' : ''}{' '}
+            {firstName ? <span className="bg-gradient-to-r from-[#E4C878] via-[#F5E5B8] to-[#C9A24B] bg-clip-text text-transparent">{firstName}</span> : ''} 👋
+          </h1>
+          <p className="mt-4 max-w-xl font-serif text-lg italic text-[#F3ECDD]/75">
+            Este es tu espacio privado y seguro. Avanza a tu ritmo, con tu coach. Lo que escribas aquí es solo tuyo.
+          </p>
+          <div className="mt-5 h-px w-24 bg-gradient-to-r from-[#E4C878] to-transparent"></div>
+        </div>
       </div>
 
       <div className="grid gap-5 md:grid-cols-3">
-        {PROCESS_KITS.map((k) => {
+        {PROCESS_KITS.map((k, kitIndex) => {
           const Icon = KIT_ICONS[k.icon] || Heart;
           const enabled = isAdmin || Boolean(member?.kits?.[k.id]);
           const lessons = getLessonCountForKit(k);
@@ -696,15 +792,17 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
             (k.modules || []).some((m) => (m.lessons || []).some((l) => l.id === id))
           ).length;
           const pct = lessons ? (doneCount / lessons) * 100 : 0;
+          const riseDelay = { '--d': `${0.15 + kitIndex * 0.13}s` };
 
           // Tarjeta premium con imagen de fondo (cuando el kit tiene `image`).
           if (enabled && k.image) {
             return (
-              <div key={k.id} className="group relative flex min-h-[320px] flex-col overflow-hidden rounded-[2rem] border border-[#E4C878]/25 shadow-lg transition hover:-translate-y-1 hover:shadow-2xl">
+              <div key={k.id} className="pp-rise group relative flex min-h-[320px] flex-col overflow-hidden rounded-[2rem] border border-[#E4C878]/25 shadow-lg transition duration-300 hover:-translate-y-1.5 hover:border-[#E4C878]/60 hover:shadow-[0_20px_60px_-20px_rgba(228,200,120,0.4)]" style={riseDelay}>
                 <img src={k.image} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/70"></div>
+                <div className="pp-shine"></div>
                 <div className="relative flex flex-1 flex-col p-6 text-white [text-shadow:_0_1px_10px_rgba(0,0,0,0.7)]">
-                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E4C878] text-[#14110A] shadow-lg">
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E4C878] text-[#14110A] shadow-[0_0_24px_rgba(228,200,120,0.45)] transition-transform duration-300 group-hover:scale-110">
                     <Icon size={26} />
                   </div>
                   <h2 className="font-heading text-xl">{k.title}</h2>
@@ -712,7 +810,7 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
                   <div className="mt-auto pt-4">
                     <div className="text-xs text-white/60">{doneCount} / {lessons} lecciones</div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15">
-                      <div className="h-full rounded-full bg-[#E4C878]" style={{ width: `${pct}%` }} />
+                      <div className="h-full rounded-full bg-gradient-to-r from-[#C9A24B] to-[#F5E5B8] transition-all duration-700" style={{ width: `${pct}%` }} />
                     </div>
                     <button onClick={() => setSelectedKitId(k.id)} className="mt-5 w-full rounded-full bg-[#E4C878] px-5 py-3 text-sm font-bold text-[#14110A] btn-magnetic transition hover:bg-[#efd693]">
                       {doneCount > 0 ? 'Continuar' : 'Comenzar'}
@@ -727,31 +825,39 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
           }
 
           return (
-            <div key={k.id} className={`relative overflow-hidden rounded-[2rem] border p-6 shadow-sm transition ${enabled ? 'border-[#2E4036]/10 bg-white hover:-translate-y-1 hover:shadow-lg' : 'border-gray-200 bg-[#F7F4ED]'}`}>
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl text-white" style={{ backgroundColor: enabled ? k.accent : '#B9B4A8' }}>
-                <Icon size={26} />
-              </div>
-              <h2 className="font-heading text-xl text-[#1A1A1A]">{k.title}</h2>
-              <p className="mt-1 text-sm text-[#1A1A1A]/65">{k.description}</p>
-
-              {enabled ? (
+            <div key={k.id} className={`pp-rise group relative overflow-hidden rounded-[2rem] border p-6 transition duration-300 ${enabled ? 'border-[#E4C878]/20 bg-white/[0.05] backdrop-blur hover:-translate-y-1.5 hover:border-[#E4C878]/50' : 'border-white/10 bg-white/[0.03]'}`} style={riseDelay}>
+              {k.image && (
                 <>
-                  <div className="mt-4 text-xs text-gray-500">{doneCount} / {lessons} lecciones</div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#2E4036]/10">
-                    <div className="h-full rounded-full bg-[#2E4036]" style={{ width: `${lessons ? (doneCount / lessons) * 100 : 0}%` }} />
-                  </div>
-                  <button onClick={() => setSelectedKitId(k.id)} className="mt-5 w-full rounded-full bg-[#2E4036] px-5 py-3 text-sm font-bold text-white btn-magnetic">
-                    {doneCount > 0 ? 'Continuar' : 'Comenzar'}
-                  </button>
+                  <img src={k.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-25 saturate-50" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/75 to-black/60"></div>
                 </>
-              ) : (
-                <div className="mt-5 flex items-center gap-2 rounded-2xl bg-white/70 px-4 py-3 text-sm text-gray-500">
-                  <Lock size={16} /> Disponible más adelante · habla con tu coach
+              )}
+              <div className="relative">
+                <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${enabled ? 'bg-[#E4C878] text-[#14110A]' : 'bg-white/10 text-[#E4C878]/50'}`}>
+                  <Icon size={26} />
                 </div>
-              )}
-              {isAdmin && !member?.kits?.[k.id] && (
-                <p className="mt-2 text-[11px] text-gray-400">(Vista de admin: lo ves desbloqueado)</p>
-              )}
+                <h2 className="font-heading text-xl text-[#F3ECDD]">{k.title}</h2>
+                <p className="mt-1 text-sm text-[#F3ECDD]/60">{k.description}</p>
+
+                {enabled ? (
+                  <>
+                    <div className="mt-4 text-xs text-[#F3ECDD]/50">{doneCount} / {lessons} lecciones</div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                      <div className="h-full rounded-full bg-gradient-to-r from-[#C9A24B] to-[#F5E5B8] transition-all duration-700" style={{ width: `${pct}%` }} />
+                    </div>
+                    <button onClick={() => setSelectedKitId(k.id)} className="mt-5 w-full rounded-full bg-[#E4C878] px-5 py-3 text-sm font-bold text-[#14110A] btn-magnetic transition hover:bg-[#efd693]">
+                      {doneCount > 0 ? 'Continuar' : 'Comenzar'}
+                    </button>
+                  </>
+                ) : (
+                  <div className="mt-5 flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-[#F3ECDD]/55">
+                    <Lock size={16} className="text-[#E4C878]/60" /> Disponible más adelante · habla con tu coach
+                  </div>
+                )}
+                {isAdmin && !member?.kits?.[k.id] && (
+                  <p className="mt-2 text-[11px] text-[#F3ECDD]/40">(Vista de admin: lo ves desbloqueado)</p>
+                )}
+              </div>
             </div>
           );
         })}
@@ -943,8 +1049,8 @@ export default function ProcessPortal({ GlobalStyles }) {
     }));
   };
 
-  const frame = (content) => (
-    <Shell>
+  const frame = (content, dark = true) => (
+    <Shell dark={dark}>
       {GlobalStyles ? <GlobalStyles /> : null}
       <style dangerouslySetInnerHTML={{ __html: PORTAL_STYLES }} />
       <div className="noise-overlay"></div>
@@ -955,9 +1061,9 @@ export default function ProcessPortal({ GlobalStyles }) {
   if (authLoading || memberLoading) {
     return frame(
       <div className="flex min-h-[100dvh] items-center justify-center">
-        <div className="flex items-center gap-3 rounded-full bg-white px-5 py-3 shadow-sm">
-          <Loader2 size={18} className="animate-spin text-[#2E4036]" />
-          <span className="font-mono text-sm text-[#2E4036]">Cargando tu proceso…</span>
+        <div className="flex items-center gap-3 rounded-full border border-[#E4C878]/25 bg-black/40 px-6 py-3.5 backdrop-blur">
+          <Loader2 size={18} className="animate-spin text-[#E4C878]" />
+          <span className="font-mono text-sm text-[#E4C878]">Cargando tu proceso…</span>
         </div>
       </div>
     );
@@ -1050,6 +1156,7 @@ export default function ProcessPortal({ GlobalStyles }) {
           savingLesson={savingLesson}
         />
       )}
-    </>
+    </>,
+    !(view === 'admin' && isAdmin)
   );
 }
