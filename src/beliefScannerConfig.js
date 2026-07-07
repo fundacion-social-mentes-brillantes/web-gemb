@@ -143,3 +143,6 @@ export const BELIEF_GROUPS = [
 export const ALL_BELIEFS = BELIEF_GROUPS.flatMap((group) => group.beliefs);
 export const TOTAL_BELIEFS = ALL_BELIEFS.length;
 export const HIGH_THRESHOLD = 8; // 8-10 se cuenta como creencia fuerte a trabajar
+
+// Id de la asignación (escáner). La coach lee sus resultados con este id.
+export const SCANNER_TOOL_ID = 'financiero-h2-escaner';

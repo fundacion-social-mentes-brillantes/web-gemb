@@ -16,6 +16,8 @@ import {
   getMyJournal, saveJournalEntry, listMembers, setMemberStatus, setMemberKit, setMemberRole
 } from '../services/processMembersService';
 import BeliefScanner from './BeliefScanner';
+import DesignedSlides from './DesignedSlides';
+import { SCANNER_TOOL_ID } from '../beliefScannerConfig';
 
 const ADMIN_EMAIL = 'fundacionsocial@gimnasioemocionalmb.com';
 const CONTACT_ADMINS = 'Sebastián o Valeria';
@@ -426,7 +428,7 @@ const AdminMembers = ({ isSuperAdmin }) => {
       }
     };
 
-    const scanner = detail && detail !== 'error' ? detail.toolResults?.['financiero-h2'] : null;
+    const scanner = detail && detail !== 'error' ? detail.toolResults?.[SCANNER_TOOL_ID] : null;
 
     return (
       <div className="rounded-[1.5rem] border border-[#2E4036]/10 bg-white p-5">
@@ -578,6 +580,20 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
     return null;
   }, [kit, selectedLessonId]);
 
+  // Herramienta de diapositivas diseñadas (PDF de la diseñadora).
+  if (lesson && lesson.tool === 'slides') {
+    return (
+      <DesignedSlides
+        title={lesson.subtitle ? `${lesson.title} · ${lesson.subtitle}` : lesson.title}
+        slides={lesson.slides || []}
+        isCompleted={completed.includes(lesson.id)}
+        onComplete={() => onComplete(lesson.id)}
+        onBack={() => setSelectedLessonId(null)}
+        isSaving={savingLesson}
+      />
+    );
+  }
+
   // Herramienta especial: Escáner de Creencias Limitantes.
   if (lesson && lesson.tool === 'escaner-creencias') {
     const toolData = progress.toolResults?.[lesson.id];
@@ -625,13 +641,30 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
               <div className="space-y-3">
                 {(module.lessons || []).map((l) => {
                   const done = completed.includes(l.id);
+                  const isAssignment = Boolean(l.assignmentOf);
                   return (
-                    <button key={l.id} onClick={() => setSelectedLessonId(l.id)} className="flex w-full items-center justify-between gap-3 rounded-2xl border border-[#2E4036]/10 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-[#CC5833]/40 hover:shadow-md">
+                    <button
+                      key={l.id}
+                      onClick={() => setSelectedLessonId(l.id)}
+                      className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+                        isAssignment
+                          ? 'ml-3 border-dashed border-[#C9A24B]/45 bg-[#FBF6EA] hover:border-[#C9A24B] sm:ml-6'
+                          : 'border-[#2E4036]/10 bg-white hover:border-[#CC5833]/40'
+                      }`}
+                    >
                       <span className="flex items-center gap-3">
-                        {done ? <CheckCircle2 size={22} className="text-[#2E4036]" /> : <Circle size={22} className="text-gray-300" />}
-                        <span className="font-heading text-[#1A1A1A]">{resolveText(l.title, gender)}</span>
+                        {done ? <CheckCircle2 size={22} className="shrink-0 text-[#2E4036]" /> : <Circle size={22} className="shrink-0 text-gray-300" />}
+                        <span>
+                          {isAssignment && (
+                            <span className="mb-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-[#C9A24B]">
+                              Asignación · {l.assignmentOf}
+                            </span>
+                          )}
+                          <span className="font-heading text-[#1A1A1A]">{resolveText(l.title, gender)}</span>
+                          {l.subtitle && !isAssignment && <span className="block text-xs text-gray-500">{l.subtitle}</span>}
+                        </span>
                       </span>
-                      <ChevronRight size={18} className="text-gray-400" />
+                      <ChevronRight size={18} className="shrink-0 text-gray-400" />
                     </button>
                   );
                 })}

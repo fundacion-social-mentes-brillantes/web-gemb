@@ -106,10 +106,24 @@ export const PROCESS_KITS = [
         id: 'financiero-herramientas',
         title: 'Herramientas',
         lessons: [
-          sampleLesson('financiero-h1', 'Herramienta 1 · Mi historia con el dinero', '🪙'),
+          {
+            id: 'financiero-h1',
+            title: 'Herramienta 1 · Inteligencia Financiera',
+            subtitle: 'Desocupa tus bolsillos',
+            tool: 'slides',
+            slides: Array.from({ length: 11 }, (_, i) => `/kits/h1-${i + 1}.jpg`)
+          },
           {
             id: 'financiero-h2',
-            title: 'Herramienta 2 · Escáner de Creencias Limitantes',
+            title: 'Herramienta 2',
+            subtitle: 'Guía diseñada del proceso financiero',
+            tool: 'slides',
+            slides: Array.from({ length: 10 }, (_, i) => `/kits/h2-${i + 1}.jpg`)
+          },
+          {
+            id: 'financiero-h2-escaner',
+            title: 'Escáner de Creencias Limitantes hacia el Dinero',
+            assignmentOf: 'Herramienta 2',
             tool: 'escaner-creencias'
           }
         ]
