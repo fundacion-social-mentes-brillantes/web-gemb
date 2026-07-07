@@ -695,6 +695,36 @@ const PortalContent = ({ member, isAdmin, gender, progress, journalDraft, onJour
           const doneCount = (progress.completedLessons || []).filter((id) =>
             (k.modules || []).some((m) => (m.lessons || []).some((l) => l.id === id))
           ).length;
+          const pct = lessons ? (doneCount / lessons) * 100 : 0;
+
+          // Tarjeta premium con imagen de fondo (cuando el kit tiene `image`).
+          if (enabled && k.image) {
+            return (
+              <div key={k.id} className="group relative flex min-h-[320px] flex-col overflow-hidden rounded-[2rem] border border-[#E4C878]/25 shadow-lg transition hover:-translate-y-1 hover:shadow-2xl">
+                <img src={k.image} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/80 to-black/70"></div>
+                <div className="relative flex flex-1 flex-col p-6 text-white [text-shadow:_0_1px_10px_rgba(0,0,0,0.7)]">
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E4C878] text-[#14110A] shadow-lg">
+                    <Icon size={26} />
+                  </div>
+                  <h2 className="font-heading text-xl">{k.title}</h2>
+                  <p className="mt-1 text-sm text-white/85">{k.description}</p>
+                  <div className="mt-auto pt-4">
+                    <div className="text-xs text-white/60">{doneCount} / {lessons} lecciones</div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15">
+                      <div className="h-full rounded-full bg-[#E4C878]" style={{ width: `${pct}%` }} />
+                    </div>
+                    <button onClick={() => setSelectedKitId(k.id)} className="mt-5 w-full rounded-full bg-[#E4C878] px-5 py-3 text-sm font-bold text-[#14110A] btn-magnetic transition hover:bg-[#efd693]">
+                      {doneCount > 0 ? 'Continuar' : 'Comenzar'}
+                    </button>
+                    {isAdmin && !member?.kits?.[k.id] && (
+                      <p className="mt-2 text-[11px] text-white/50">(Vista de admin: lo ves desbloqueado)</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          }
 
           return (
             <div key={k.id} className={`relative overflow-hidden rounded-[2rem] border p-6 shadow-sm transition ${enabled ? 'border-[#2E4036]/10 bg-white hover:-translate-y-1 hover:shadow-lg' : 'border-gray-200 bg-[#F7F4ED]'}`}>

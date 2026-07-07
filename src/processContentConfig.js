@@ -100,6 +100,7 @@ export const PROCESS_KITS = [
     icon: 'wallet',
     accent: '#C9A24B',
     theme: 'gold',
+    image: '/kits/kit-financiero.jpg',
     description: 'Reconoce, mide y transforma tu diálogo interno financiero. Abundancia con conciencia y propósito.',
     modules: [
       {
