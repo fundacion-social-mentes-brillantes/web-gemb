@@ -1,0 +1,41 @@
+{
+  "name": "Gimnasio Emocional Mentes Brillantes",
+  "short_name": "GEMB",
+  "description": "Entrenamiento emocional guiado para continuar tu proceso desde el navegador o la pantalla de inicio.",
+  "id": "/",
+  "start_url": "/mi-proceso",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0C0A06",
+  "theme_color": "#2E4036",
+  "categories": ["health", "education", "lifestyle"],
+  "lang": "es-CO",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
