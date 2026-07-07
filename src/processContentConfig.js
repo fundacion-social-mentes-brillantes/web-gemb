@@ -81,6 +81,7 @@ export const PROCESS_KITS = [
     subtitle: 'El punto de partida de todo proceso',
     icon: 'heart',
     accent: '#CC5833',
+    image: '/kits/kit-emocional.jpg',
     description: 'Entrena la base: reconocer, comprender y regular tus emociones para responder distinto a la vida.',
     modules: [
       {
@@ -137,6 +138,7 @@ export const PROCESS_KITS = [
     subtitle: 'El cuerpo como aliado',
     icon: 'heartPulse',
     accent: '#7FA9D8',
+    image: '/kits/kit-salud.jpg',
     description: 'Integra cuerpo, mente y hábitos: la salud como base de tu bienestar y tu energía vital.',
     modules: [
       {
