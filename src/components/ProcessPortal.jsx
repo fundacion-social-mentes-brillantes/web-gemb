@@ -894,13 +894,16 @@ export default function ProcessPortal({ GlobalStyles }) {
   const loadMember = useCallback(async (uid) => {
     setMemberLoading(true);
     try {
-      const found = await getMyMember(uid);
+      // Cargamos SIEMPRE el avance y el diario antes de mostrar el portal,
+      // así al refrescar las respuestas ya están listas (sin carreras de carga).
+      const [found, prog, journal] = await Promise.all([
+        getMyMember(uid),
+        getMyProgress(uid).catch(() => ({ completedLessons: [] })),
+        getMyJournal(uid).catch(() => ({}))
+      ]);
       setMember(found);
-      if (found && (found.status === 'active' || found.role !== 'client')) {
-        const [prog, journal] = await Promise.all([getMyProgress(uid), getMyJournal(uid)]);
-        setProgress(prog || { completedLessons: [] });
-        setJournalDraft(journal || {});
-      }
+      setProgress(prog || { completedLessons: [] });
+      setJournalDraft(journal || {});
     } catch {
       setMember(null);
     } finally {
@@ -926,15 +929,6 @@ export default function ProcessPortal({ GlobalStyles }) {
     });
     return unsub;
   }, [loadMember]);
-
-  // Super-admin sin doc de miembro: carga su avance de todos modos
-  useEffect(() => {
-    if (isSuperAdminEmail && authUser && !member) {
-      Promise.all([getMyProgress(authUser.uid), getMyJournal(authUser.uid)])
-        .then(([prog, journal]) => { setProgress(prog || { completedLessons: [] }); setJournalDraft(journal || {}); })
-        .catch(() => {});
-    }
-  }, [isSuperAdminEmail, authUser, member]);
 
   const handleSignIn = async () => {
     if (signingIn) return;
@@ -1027,26 +1021,26 @@ export default function ProcessPortal({ GlobalStyles }) {
   // totales consistentes con las respuestas actuales. El efecto de red
   // va FUERA del updater de estado (updater puro).
   const handleSaveToolProgress = (toolId, result) => {
-    if (!authUser) return;
+    if (!authUser) return Promise.resolve();
     const clean = cleanToolResult(result, false);
-    saveToolResult(authUser.uid, toolId, clean, progress.completedLessons || []).catch(() => {});
     setProgress((current) => ({
       ...current,
       toolResults: { ...(current.toolResults || {}), [toolId]: { ...(current.toolResults?.[toolId] || {}), ...clean } }
     }));
+    return saveToolResult(authUser.uid, toolId, clean, progress.completedLessons || []);
   };
 
   // Al terminar: guarda el resultado con completedAt y marca la lección.
   const handleCompleteTool = (toolId, result) => {
-    if (!authUser) return;
+    if (!authUser) return Promise.resolve();
     const clean = cleanToolResult(result, true);
     const nextCompleted = Array.from(new Set([...(progress.completedLessons || []), toolId]));
-    saveToolResult(authUser.uid, toolId, clean, nextCompleted).catch(() => {});
     setProgress((current) => ({
       ...current,
       completedLessons: Array.from(new Set([...(current.completedLessons || []), toolId])),
       toolResults: { ...(current.toolResults || {}), [toolId]: { ...(current.toolResults?.[toolId] || {}), ...clean } }
     }));
+    return saveToolResult(authUser.uid, toolId, clean, nextCompleted);
   };
 
   const frame = (content, dark = true) => (

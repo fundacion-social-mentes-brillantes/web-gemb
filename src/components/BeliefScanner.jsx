@@ -58,7 +58,9 @@ const RatingScale = ({ beliefId, value, onChange }) => (
 export default function BeliefScanner({ initialRatings, savedResult, onSaveProgress, onComplete, onBack }) {
   const [step, setStep] = useState(savedResult ? 'result' : 'intro');
   const [ratings, setRatings] = useState(initialRatings || {});
+  const [saveState, setSaveState] = useState('idle'); // idle | saving | saved | error
   const saveTimer = useRef(null);
+  const lastPayload = useRef(null);
 
   const result = useMemo(() => computeResult(ratings), [ratings]);
   const allAnswered = result.answered >= TOTAL_BELIEFS;
@@ -70,21 +72,50 @@ export default function BeliefScanner({ initialRatings, savedResult, onSaveProgr
     return map;
   }, []);
 
+  const track = (maybePromise) => {
+    setSaveState('saving');
+    Promise.resolve(maybePromise)
+      .then(() => setSaveState('saved'))
+      .catch(() => setSaveState('error'));
+  };
+
   const handleRate = (beliefId, score) => {
     setRatings((current) => {
       const next = { ...current, [beliefId]: score };
       if (saveTimer.current) window.clearTimeout(saveTimer.current);
-      saveTimer.current = window.setTimeout(() => onSaveProgress?.({ ratings: next, ...computeResult(next) }), 1000);
+      saveTimer.current = window.setTimeout(() => {
+        const payload = { ratings: next, ...computeResult(next) };
+        lastPayload.current = { payload, completed: false };
+        track(onSaveProgress?.(payload));
+      }, 900);
       return next;
     });
   };
 
   const handleFinish = () => {
     if (saveTimer.current) window.clearTimeout(saveTimer.current);
-    const finalResult = computeResult(ratings);
-    onComplete?.({ ratings, ...finalResult });
+    const payload = { ratings, ...computeResult(ratings) };
+    lastPayload.current = { payload, completed: true };
+    track(onComplete?.(payload));
     setStep('result');
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const retrySave = () => {
+    if (!lastPayload.current) return;
+    const { payload, completed } = lastPayload.current;
+    track(completed ? onComplete?.(payload) : onSaveProgress?.(payload));
+  };
+
+  const renderSaveBadge = () => {
+    if (saveState === 'idle') return null;
+    if (saveState === 'saving') return <span className="text-[11px] text-[#F3ECDD]/50">Guardando…</span>;
+    if (saveState === 'saved') return <span className="text-[11px] text-[#E4C878]">✓ Guardado</span>;
+    return (
+      <span className="text-[11px] text-[#e79a86]">
+        No se pudo guardar. <button type="button" onClick={retrySave} className="underline">Reintentar</button>
+      </span>
+    );
   };
 
   const wrap = (children) => (
@@ -173,6 +204,7 @@ export default function BeliefScanner({ initialRatings, savedResult, onSaveProgr
         </div>
 
         <div className="sticky bottom-0 border-t border-[#E4C878]/15 bg-[#14110A]/95 px-6 py-4 backdrop-blur">
+          <div className="mb-2 flex min-h-[16px] items-center justify-center">{renderSaveBadge()}</div>
           {!allAnswered && (
             <p className="mb-3 text-center text-xs text-[#F3ECDD]/55">Te faltan {TOTAL_BELIEFS - result.answered} por responder. Puedes ver tus resultados con lo que llevas o completarlas todas.</p>
           )}
@@ -192,39 +224,41 @@ export default function BeliefScanner({ initialRatings, savedResult, onSaveProgr
   // Siempre se calcula desde las respuestas (así las decodificaciones
   // traen su texto desde la configuración).
   const shown = result;
+  const strongWord = shown.totalHigh === 1 ? 'creencia te está frenando' : 'creencias te están frenando';
   return wrap(
     <div className="p-6 md:p-9">
       <div className="text-center">
         <Sparkles size={30} className="mx-auto text-[#E4C878]" />
-        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#E4C878]">Tu diagnóstico</p>
-        <h1 className="mt-1 font-heading text-3xl" style={{ color: GOLD }}>Convierte el diagnóstico en claridad</h1>
+        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#E4C878]">Resultado de tu escáner</p>
+        <h1 className="mt-1 font-heading text-2xl md:text-3xl" style={{ color: GOLD }}>Estas son tus creencias por transformar</h1>
       </div>
 
-      <div className="mt-7 grid grid-cols-3 gap-3">
-        <div className="rounded-2xl border border-[#E4C878]/20 bg-white/[0.03] p-4 text-center">
-          <p className="font-heading text-3xl" style={{ color: GOLD }}>{shown.totalHigh}</p>
-          <p className="mt-1 text-[11px] text-[#F3ECDD]/60">creencias fuertes (8–10)</p>
-        </div>
-        <div className="rounded-2xl border border-[#E4C878]/20 bg-white/[0.03] p-4 text-center">
-          <p className="font-heading text-3xl" style={{ color: GOLD }}>{shown.total10}</p>
-          <p className="mt-1 text-[11px] text-[#F3ECDD]/60">marcaste 10</p>
-        </div>
-        <div className="rounded-2xl border border-[#E4C878]/20 bg-white/[0.03] p-4 text-center">
-          <p className="font-heading text-3xl" style={{ color: GOLD }}>{shown.answered}</p>
-          <p className="mt-1 text-[11px] text-[#F3ECDD]/60">respondidas</p>
-        </div>
+      {/* Número protagonista + explicación en palabras simples */}
+      <div className="mt-6 rounded-[1.5rem] border border-[#E4C878]/30 bg-[#E4C878]/[0.06] p-6 text-center">
+        <p className="font-heading text-6xl leading-none" style={{ color: GOLD }}>{shown.totalHigh}</p>
+        <p className="mt-2 font-heading text-lg text-[#F3ECDD]">{strongWord}</p>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#F3ECDD]/70">
+          Son las que marcaste <strong className="text-[#E4C878]">alto (8, 9 o 10)</strong>: las ideas que más influyen hoy en tu relación con el dinero. Abajo te mostramos cómo transformar cada una, y tu coach te acompaña a trabajarlas.
+        </p>
       </div>
 
-      <p className="mt-5 rounded-2xl border border-[#E4C878]/15 bg-black/20 p-4 text-sm leading-relaxed text-[#F3ECDD]/75">
-        Cada creencia que marcaste entre 8 y 10 es una idea fuerte y activa. Abajo la transformamos en una creencia que te potencia. Tu coach podrá acompañarte para trabajarlas.
-      </p>
+      {/* Datos secundarios, discretos */}
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs text-[#F3ECDD]/55">
+        <span>Respondiste <strong className="text-[#E4C878]">{shown.answered} / {TOTAL_BELIEFS}</strong></span>
+        <span>·</span>
+        <span>Marcaste <strong className="text-[#E4C878]">10</strong> en <strong className="text-[#E4C878]">{shown.total10}</strong></span>
+      </div>
+      <div className="mt-3 flex min-h-[16px] justify-center">{renderSaveBadge()}</div>
 
       {shown.highBeliefs && shown.highBeliefs.length > 0 ? (
         <div className="mt-7">
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-2 flex items-center gap-2">
             <KeyRound size={18} className="text-[#E4C878]" />
             <h2 className="font-heading text-xl" style={{ color: GOLD }}>Decodificación de la creencia</h2>
           </div>
+          <p className="mb-4 text-sm leading-relaxed text-[#F3ECDD]/65">
+            Para cada creencia que te frena, aquí tienes una versión nueva que te potencia. Léela, repítela y trabájala con tu coach.
+          </p>
           <div className="space-y-4">
             {shown.highBeliefs.map((belief, i) => (
               <div key={belief.id} className="overflow-hidden rounded-2xl border border-[#E4C878]/20 bg-white/[0.02]">
