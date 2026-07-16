@@ -8,6 +8,7 @@ import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
 import AdminPanel from './components/AdminPanel';
 import AlexandraPage from './components/AlexandraPage';
+import PrivacyPage from './components/PrivacyPage';
 import ProcessPortal from './components/ProcessPortal';
 
 // Carga asíncrona de GSAP
@@ -195,6 +196,16 @@ const ALEXANDRA_SEO = {
     ],
     sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
   }
+};
+
+const PRIVACIDAD_PATH = "/politica-de-privacidad";
+
+const PRIVACIDAD_SEO = {
+  title: "Política de tratamiento de datos | Fundación Social Gimnasio Emocional Mentes Brillantes",
+  description:
+    "Conoce cómo la Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.",
+  url: `${SITE_URL}${PRIVACIDAD_PATH}`,
+  image: `${SITE_URL}/logo-gemb.png`
 };
 
 const PROCESO_PATH = "/mi-proceso";
@@ -1838,7 +1849,14 @@ const Footer = () => {
               <a href="/#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
             </div>
-            <div className="flex items-center gap-2 mt-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+            <div className="flex flex-col items-start md:items-end gap-2 mt-2 text-sm text-gray-300">
+              <a href="mailto:fundacionsocial@gimnasioemocionalmb.com" className="hover:text-white transition-colors">
+                fundacionsocial@gimnasioemocionalmb.com
+              </a>
+              <span>WhatsApp: +57 311 260 2355</span>
+              <span>Bogotá · Colombia</span>
+            </div>
+            <div className="flex items-center gap-2 mt-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <div className="w-2 h-2 rounded-full bg-[#00FF66] animate-pulse"></div>
               <span className="font-mono text-xs text-gray-400">Sistema emocional · Activo</span>
             </div>
@@ -1846,7 +1864,15 @@ const Footer = () => {
         </div>
 
         <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
-          <p>© {new Date().getFullYear()} GEMB. Todos los derechos reservados.</p>
+          <div className="flex flex-col gap-1 text-center md:text-left">
+            <p>© {new Date().getFullYear()} Fundación Social Gimnasio Emocional Mentes Brillantes · NIT 901.002.849-3</p>
+            <p>
+              Entidad sin ánimo de lucro ·{' '}
+              <a href="/politica-de-privacidad" className="underline decoration-white/20 underline-offset-4 hover:text-white transition-colors">
+                Política de tratamiento de datos
+              </a>
+            </p>
+          </div>
           <p className="max-w-xl text-center md:text-right">
             Marca final: vuelve al centro, entrena tu mente y elige de nuevo. Si estás en crisis o necesitas atención clínica inmediata, busca ayuda profesional en tu país.
           </p>
@@ -2328,11 +2354,14 @@ export default function App() {
   const isAdminRoute = currentHash === '#admin';
   const isAlexandraPage = currentPath === ALEXANDRA_PATH;
   const isProcesoPage = currentPath === PROCESO_PATH;
+  const isPrivacidadPage = currentPath === PRIVACIDAD_PATH;
   const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
   const activeSeo = isAdminRoute
     ? ADMIN_SEO
     : isProcesoPage
       ? PROCESO_SEO
+      : isPrivacidadPage
+      ? PRIVACIDAD_SEO
       : isAlexandraPage
       ? ALEXANDRA_SEO
       : currentProcessPage
@@ -2362,7 +2391,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAdminRoute || isAlexandraPage || isProcesoPage || currentProcessPage || gsapLoaded) return;
+    if (isAdminRoute || isAlexandraPage || isProcesoPage || isPrivacidadPage || currentProcessPage || gsapLoaded) return;
 
     const load = async () => {
       try {
@@ -2377,7 +2406,7 @@ export default function App() {
       setGsapLoaded(true);
     };
     load();
-  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, gsapLoaded]);
+  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, isPrivacidadPage, gsapLoaded]);
 
   if (isAdminRoute) {
     return (
@@ -2391,6 +2420,17 @@ export default function App() {
 
   if (isProcesoPage) {
     return <ProcessPortal GlobalStyles={GlobalStyles} />;
+  }
+
+  if (isPrivacidadPage) {
+    return (
+      <PrivacyPage
+        GlobalStyles={GlobalStyles}
+        Navbar={Navbar}
+        Footer={Footer}
+        onOpenTest={() => setInitialAssessmentOpen(true)}
+      />
+    );
   }
 
   if (isAlexandraPage) {

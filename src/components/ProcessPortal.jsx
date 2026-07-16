@@ -236,7 +236,13 @@ const ProfileForm = ({ defaultName, onSubmit, isSaving, error }) => {
       <div className="space-y-2.5 rounded-2xl border border-[#2E4036]/10 bg-[#F7F4ED] p-4 text-sm text-[#1A1A1A]/75">
         <label className="flex items-start gap-3">
           <input type="checkbox" checked={consent.privacyAccepted} onChange={(e) => setConsent((c) => ({ ...c, privacyAccepted: e.target.checked }))} className="mt-1 h-4 w-4 accent-[#CC5833]" />
-          <span>Acepto la política de tratamiento de datos personales.</span>
+          <span>
+            Acepto la{' '}
+            <a href="/politica-de-privacidad" target="_blank" rel="noopener noreferrer" className="underline decoration-[#CC5833]/40 underline-offset-2 hover:text-[#CC5833]">
+              política de tratamiento de datos personales
+            </a>
+            .
+          </span>
         </label>
         <label className="flex items-start gap-3">
           <input type="checkbox" checked={consent.sensitiveDataAccepted} onChange={(e) => setConsent((c) => ({ ...c, sensitiveDataAccepted: e.target.checked }))} className="mt-1 h-4 w-4 accent-[#CC5833]" />

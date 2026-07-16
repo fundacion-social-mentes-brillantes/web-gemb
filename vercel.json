@@ -67,6 +67,14 @@
     {
       "source": "/mi-proceso/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/politica-de-privacidad",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/politica-de-privacidad/",
+      "destination": "/index.html"
     }
   ]
 }

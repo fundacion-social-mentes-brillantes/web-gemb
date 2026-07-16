@@ -190,7 +190,18 @@ export default function LeadCaptureForm({
             className="mt-1 h-4 w-4 accent-[#CC5833]"
             required
           />
-          <span>Acepto la pol&iacute;tica de tratamiento de datos personales.</span>
+          <span>
+            Acepto la{' '}
+            <a
+              href="/politica-de-privacidad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-[#CC5833]/40 underline-offset-2 hover:text-[#CC5833]"
+            >
+              pol&iacute;tica de tratamiento de datos personales
+            </a>
+            .
+          </span>
         </label>
 
         <label className="flex items-start gap-3 text-sm text-[#1A1A1A]/78">
