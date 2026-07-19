@@ -8,6 +8,7 @@ import EnhancedTestEnneagramModal from './TestEnneagramModal';
 import TestInitialAssessmentModal from './TestInitialAssessmentModal';
 import AdminPanel from './components/AdminPanel';
 import AlexandraPage from './components/AlexandraPage';
+import FundacionPage from './components/FundacionPage';
 import PrivacyPage from './components/PrivacyPage';
 import ProcessPortal from './components/ProcessPortal';
 
@@ -194,6 +195,36 @@ const ALEXANDRA_SEO = {
       "Duelo y resignificación",
       "Construcción de paz"
     ],
+    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
+  }
+};
+
+const FUNDACION_PATH = "/fundacion";
+
+const FUNDACION_SEO = {
+  title: "La Fundación | Labor social de Gimnasio Emocional Mentes Brillantes",
+  description:
+    "Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas, prescripción social en salud y un modelo solidario que reinvierte el 100% de los excedentes en labor social desde 2016.",
+  url: `${SITE_URL}${FUNDACION_PATH}`,
+  image: `${SITE_URL}/logo-gemb.png`,
+  structuredData: {
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    name: "Fundación Social Gimnasio Emocional Mentes Brillantes",
+    alternateName: "GEMB",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo-gemb.png`,
+    foundingDate: "2016",
+    taxID: "901.002.849-3",
+    email: "fundacionsocial@gimnasioemocionalmb.com",
+    telephone: "+573112602355",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Bogotá",
+      addressCountry: "CO"
+    },
+    areaServed: "Colombia",
+    founder: { "@type": "Person", name: "Alexandra Ortega" },
     sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
   }
 };
@@ -1698,6 +1729,61 @@ const AlexandraFounderSection = () => (
   </section>
 );
 
+// --- LA FUNDACIÓN (resumen en home) ---
+
+const FundacionSection = () => (
+  <section id="fundacion" className="relative z-10 overflow-hidden bg-[#2E4036] px-6 py-24 text-[#F2F0E9] md:px-12 md:py-32">
+    <div className="pointer-events-none absolute -left-40 -top-40 h-[28rem] w-[28rem] rounded-full bg-[#E2C17D]/[0.10] blur-3xl"></div>
+    <div className="pointer-events-none absolute -bottom-40 -right-40 h-[26rem] w-[26rem] rounded-full bg-black/20 blur-3xl"></div>
+
+    <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+      <div>
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#E2C17D]">
+          Entidad sin ánimo de lucro · Desde 2016
+        </span>
+        <h2 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl">
+          Detrás de este método hay <span className="font-serif font-normal italic text-[#E2C17D]">una fundación</span>
+        </h2>
+        <p className="mt-6 max-w-2xl text-base font-light leading-relaxed text-white/80 md:text-lg">
+          La Fundación Social Gimnasio Emocional Mentes Brillantes realiza encuentros comunitarios gratuitos cada semana en Bogotá,
+          forma lideresas y funcionarias con la Secretaría Distrital de la Mujer, hace parte de la estrategia de prescripción social
+          Más Bienestar de la Secretaría Distrital de Salud, y reinvierte el 100% de los excedentes de sus servicios en esta labor social.
+        </p>
+
+        <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <a
+            href="/fundacion"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#E2C17D] px-8 py-4 text-sm font-bold text-[#2E4036] btn-magnetic shadow-[0_14px_34px_rgba(0,0,0,0.3)] transition-colors hover:bg-[#efd693]"
+          >
+            Conocer la labor social
+            <ArrowRight size={18} />
+          </a>
+          <a
+            href="/politica-de-privacidad"
+            className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-white"
+          >
+            Política de datos →
+          </a>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        {[
+          ['+5.000', 'personas al año, presencial'],
+          ['181', 'familias acompañadas'],
+          ['Semanal', 'encuentros gratuitos híbridos'],
+          ['100%', 'de excedentes reinvertidos']
+        ].map(([value, label]) => (
+          <div key={label} className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
+            <p className="font-heading text-3xl font-bold text-[#E2C17D]">{value}</p>
+            <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-white/55">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 // --- PRICING ---
 
 const Pricing = ({ onOpenTest }) => {
@@ -1845,6 +1931,7 @@ const Footer = () => {
               <a href="/#metodo" className="hover:text-white transition-colors">Método</a>
               <a href="/#procesos" className="hover:text-white transition-colors">Procesos</a>
               <a href="/sesion-coach" className="hover:text-white transition-colors">Sesión Coach</a>
+              <a href="/fundacion" className="hover:text-white transition-colors">La Fundación</a>
               <a href="/alexandra-ortega" className="hover:text-white transition-colors">Alexandra Ortega</a>
               <a href="/#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
@@ -2355,6 +2442,7 @@ export default function App() {
   const isAlexandraPage = currentPath === ALEXANDRA_PATH;
   const isProcesoPage = currentPath === PROCESO_PATH;
   const isPrivacidadPage = currentPath === PRIVACIDAD_PATH;
+  const isFundacionPage = currentPath === FUNDACION_PATH;
   const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
   const activeSeo = isAdminRoute
     ? ADMIN_SEO
@@ -2362,6 +2450,8 @@ export default function App() {
       ? PROCESO_SEO
       : isPrivacidadPage
       ? PRIVACIDAD_SEO
+      : isFundacionPage
+      ? FUNDACION_SEO
       : isAlexandraPage
       ? ALEXANDRA_SEO
       : currentProcessPage
@@ -2391,7 +2481,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAdminRoute || isAlexandraPage || isProcesoPage || isPrivacidadPage || currentProcessPage || gsapLoaded) return;
+    if (isAdminRoute || isAlexandraPage || isProcesoPage || isPrivacidadPage || isFundacionPage || currentProcessPage || gsapLoaded) return;
 
     const load = async () => {
       try {
@@ -2406,7 +2496,7 @@ export default function App() {
       setGsapLoaded(true);
     };
     load();
-  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, isPrivacidadPage, gsapLoaded]);
+  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, isPrivacidadPage, isFundacionPage, gsapLoaded]);
 
   if (isAdminRoute) {
     return (
@@ -2428,6 +2518,18 @@ export default function App() {
         GlobalStyles={GlobalStyles}
         Navbar={Navbar}
         Footer={Footer}
+        onOpenTest={() => setInitialAssessmentOpen(true)}
+      />
+    );
+  }
+
+  if (isFundacionPage) {
+    return (
+      <FundacionPage
+        GlobalStyles={GlobalStyles}
+        Navbar={Navbar}
+        Footer={Footer}
+        waNumber={WA_NUMBER}
         onOpenTest={() => setInitialAssessmentOpen(true)}
       />
     );
@@ -2508,6 +2610,9 @@ export default function App() {
 
         {/* Sección: ¿Quién es Alexandra Ortega? */}
         <AlexandraFounderSection />
+
+        {/* Sección: La Fundación (labor social) */}
+        <FundacionSection />
 
         <Pricing onOpenTest={() => setInitialAssessmentOpen(true)} />
       </main>

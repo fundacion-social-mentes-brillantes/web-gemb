@@ -75,6 +75,14 @@
     {
       "source": "/politica-de-privacidad/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/fundacion",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fundacion/",
+      "destination": "/index.html"
     }
   ]
 }
