@@ -512,8 +512,10 @@ const GoldenLogoLockup = ({ scrolled, inFooter = false }) => {
   return (
     <div className={`flex transition-all duration-700 origin-top-left ${isCompact ? 'scale-90' : 'scale-100'}`}>
       <img
-        src="/logo-gemb.png"
+        src="/logo-gemb.webp"
         alt="Gimnasio Emocional Mentes Brillantes"
+        width="447"
+        height="305"
         className={`transition-all duration-700 object-contain ${
           isCompact ? 'h-12 md:h-14' : 'h-24 md:h-32 drop-shadow-2xl'
         }`}
@@ -1951,8 +1953,10 @@ const ProcessPage = ({ page, onOpenTest }) => {
 
             <aside className="rounded-[2rem] border border-white/[0.12] bg-white/[0.055] p-7 shadow-2xl backdrop-blur-md md:p-8">
               <img
-                src="/logo-gemb.png"
+                src="/logo-gemb.webp"
                 alt="Gimnasio Emocional Mentes Brillantes"
+                width="447"
+                height="305"
                 className="mb-8 h-24 w-auto object-contain"
               />
               <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#E2C17D]">
