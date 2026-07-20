@@ -577,27 +577,27 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
   return (
     <>
       <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 flex justify-center ${scrolled ? 'pt-6 pointer-events-none' : 'pt-8 pointer-events-auto'}`}>
-        <div className={`transition-all duration-500 pointer-events-auto ${scrolled ? 'w-[95%] max-w-6xl glass-pill rounded-full py-3 px-4 md:px-6 shadow-sm' : 'w-full max-w-7xl px-6 md:px-12 bg-transparent'}`}>
+        <div className={`transition-all duration-500 pointer-events-auto ${scrolled ? 'w-[95%] max-w-[1440px] glass-pill rounded-full py-3 px-4 xl:px-6 shadow-sm' : 'w-full max-w-7xl px-6 xl:px-10 bg-transparent'}`}>
           <div className={`flex justify-between w-full relative ${scrolled ? 'items-center' : 'items-start'}`}>
 
             {/* IZQUIERDA: Logo Apilado */}
-            <div className="w-[45%] md:w-1/4 flex justify-start">
+            <div className={`flex shrink-0 justify-start ${scrolled ? 'w-[45%] xl:w-[132px]' : 'w-[45%] xl:w-[210px]'}`}>
               <a href="/" className="inline-block">
                 <GoldenLogoLockup scrolled={scrolled} />
               </a>
             </div>
 
             {/* CENTRO: Enlaces */}
-            <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center' : 'items-start pt-6'} ${useDarkNav ? 'text-[#2E4036]' : 'text-white/90'}`}>
-              <a href="/#metodo" className="hover:opacity-70 transition-opacity">Método</a>
+            <div className={`hidden min-w-0 flex-1 whitespace-nowrap xl:flex justify-center gap-2 2xl:gap-4 text-xs 2xl:text-sm font-medium transition-colors ${scrolled ? 'items-center' : 'items-start pt-6'} ${useDarkNav ? 'text-[#2E4036]' : 'text-white/90'}`}>
+              <a href="/#metodo" className="shrink-0 hover:opacity-70 transition-opacity">Método</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
-              <a href="/sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${useDarkNav ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
+              <a href="/sesion-coach" className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${useDarkNav ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
                 <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
 
               {/* Dropdown "Procesos" */}
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative shrink-0" ref={dropdownRef}>
                 <button
                   type="button"
                   aria-haspopup="menu"
@@ -639,14 +639,14 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
                 )}
               </div>
 
-              <a href="/fundacion" className="hover:opacity-70 transition-opacity flex items-center gap-1">
+              <a href="/fundacion" className="flex shrink-0 items-center gap-1 hover:opacity-70 transition-opacity">
                 <HeartHandshake size={13} className="text-[#E2C17D]" /> La Fundación
               </a>
-              <a href="/alexandra-ortega" className="hover:opacity-70 transition-opacity">Alexandra</a>
-              <a href="/#planes" className="hover:opacity-70 transition-opacity">Planes</a>
+              <a href="/alexandra-ortega" className="shrink-0 hover:opacity-70 transition-opacity">Alexandra</a>
+              <a href="/#planes" className="shrink-0 hover:opacity-70 transition-opacity">Planes</a>
               <a
                 href="/#admin"
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
                   useDarkNav
                     ? 'border-[#2E4036]/20 text-[#2E4036] hover:border-[#2E4036] hover:bg-[#2E4036] hover:text-white'
                     : 'border-white/35 text-white/90 hover:bg-white/12 hover:text-white backdrop-blur-sm'
@@ -658,10 +658,10 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
             </div>
 
             {/* DERECHA: Botón CTA */}
-            <div className={`w-[55%] md:w-1/4 flex justify-end ${scrolled ? 'items-center' : 'items-start pt-3'}`}>
+            <div className={`flex w-[55%] shrink-0 justify-end xl:ml-3 xl:w-auto ${scrolled ? 'items-center' : 'items-start pt-3'}`}>
               <button
                 onClick={onOpenTest}
-                className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${useDarkNav ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
+                className={`hidden whitespace-nowrap xl:flex items-center gap-2 px-5 2xl:px-6 py-3 rounded-full text-xs 2xl:text-sm font-bold transition-all btn-magnetic shadow-lg ${useDarkNav ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
                 Valoraci&oacute;n inicial de tu proceso
               </button>
@@ -669,7 +669,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
                 type="button"
                 aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
                 aria-expanded={mobileMenuOpen}
-                className="lg:hidden mt-2 rounded-full p-2 focus-visible:ring-2 focus-visible:ring-[#E2C17D]"
+                className="xl:hidden mt-2 rounded-full p-2 focus-visible:ring-2 focus-visible:ring-[#E2C17D]"
                 onClick={() => {
                   setDropdownOpen(false);
                   setMobileMenuOpen((open) => !open);
