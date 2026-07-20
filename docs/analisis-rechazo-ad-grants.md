@@ -1,5 +1,14 @@
 # Análisis del rechazo de Google Ad Grants — 20 de julio de 2026
 
+> **ESTADO (20/07/2026, tarde):** los puntos P0 y P1 de código YA ESTÁN IMPLEMENTADOS y
+> desplegados (commit `6ac6c04`): home con identidad de fundación primero (navbar, hero,
+> sección subida, planes solidarios, sin lenguaje de urgencia), GSAP empaquetado sin pantalla
+> de carga, code-splitting (JS inicial 455→~142 KB gzip), prerender de las 8 rutas públicas
+> (el HTML crudo ahora contiene el contenido; antes 0 caracteres) y sección de Transparencia
+> en /fundacion. Pendiente de materiales del usuario: fotos reales, enlaces/soportes de
+> reconocimientos e informes. Pendiente del usuario: pedir indexación en Search Console y
+> reenviar la solicitud de Ad Grants.
+
 Documento de diagnóstico para corregir el sitio **gimnasioemocionalmb.com** y reenviar la
 solicitud de activación de Google Ad Grants. Sirve como brief para cualquier persona o IA
 que trabaje en la corrección.
