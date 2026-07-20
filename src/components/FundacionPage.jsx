@@ -11,6 +11,9 @@ import {
    de la Fundación (julio 2026).
    ═══════════════════════════════════════════════════════════════ */
 
+const CONTACT_EMAIL = 'fundacionsocial@gimnasioemocionalmb.com';
+const CONTACT_PHONE = '+57 311 260 2355';
+
 const STATS = [
   { value: '2016', label: 'Labor continua desde' },
   { value: '+5.000', label: 'Personas al año, presencial' },
@@ -270,6 +273,48 @@ export default function FundacionPage(props) {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Transparencia ────────────────────────────────────── */}
+        <section className="px-6 py-20 md:px-12 md:py-24">
+          <div className="mx-auto max-w-5xl">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+              Transparencia
+            </span>
+            <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
+              Datos abiertos y <span className="font-serif font-normal italic text-[#2E4036]">verificables</span>
+            </h2>
+
+            <div className="mt-12 grid gap-4 md:grid-cols-2">
+              <div className="rounded-[2rem] border border-[#2E4036]/10 bg-white p-7">
+                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Identidad legal</h3>
+                <ul className="mt-4 space-y-2 text-sm font-light leading-relaxed text-[#1A1A1A]/75">
+                  <li><strong className="font-bold">Razón social:</strong> Fundación Social Mentes Brillantes</li>
+                  <li><strong className="font-bold">NIT:</strong> 901.002.849-3</li>
+                  <li><strong className="font-bold">Naturaleza:</strong> Entidad sin ánimo de lucro (ESAL) colombiana</li>
+                  <li><strong className="font-bold">Domicilio:</strong> Bogotá, Colombia</li>
+                  <li><strong className="font-bold">Labor continua desde:</strong> 2016</li>
+                </ul>
+              </div>
+              <div className="rounded-[2rem] border border-[#2E4036]/10 bg-white p-7">
+                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Validaciones externas</h3>
+                <ul className="mt-4 space-y-2 text-sm font-light leading-relaxed text-[#1A1A1A]/75">
+                  <li>Organización verificada en <strong className="font-bold">Google para Organizaciones sin Fines de Lucro</strong> (validación Goodstack, 2026).</li>
+                  <li>Registrada en <strong className="font-bold">TechSoup Colombia</strong> (programa de tecnología para ESAL).</li>
+                  <li>Inscrita y viabilizada en la estrategia <strong className="font-bold">Más Bienestar 2026</strong> de la Secretaría Distrital de Salud de Bogotá.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[2rem] border border-[#2E4036]/10 bg-[#F7F4ED] p-7 text-center">
+              <p className="text-sm font-light leading-relaxed text-[#1A1A1A]/75">
+                ¿Necesitas nuestro certificado de existencia, informes de gestión o soportes de la labor social?
+                Escríbenos a{' '}
+                <a href={`mailto:${CONTACT_EMAIL}`} className="font-bold text-[#2E4036] underline decoration-[#2E4036]/30 underline-offset-4">{CONTACT_EMAIL}</a>{' '}
+                o por WhatsApp al <strong className="font-bold">{CONTACT_PHONE}</strong> y te los compartimos.
+              </p>
             </div>
           </div>
         </section>

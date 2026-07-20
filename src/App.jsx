@@ -1,67 +1,29 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, lazy, Suspense } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn
+  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn, HeartHandshake
 } from 'lucide-react';
-import EnhancedTestEnneagramModal from './TestEnneagramModal';
-import TestInitialAssessmentModal from './TestInitialAssessmentModal';
-import AdminPanel from './components/AdminPanel';
-import AlexandraPage from './components/AlexandraPage';
-import FundacionPage from './components/FundacionPage';
-import PrivacyPage from './components/PrivacyPage';
-import ProcessPortal from './components/ProcessPortal';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Carga asíncrona de GSAP
-const loadScript = (src) => new Promise((resolve, reject) => {
-  if (document.querySelector(`script[src="${src}"]`)) {
-    resolve();
-    return;
-  }
-  const script = document.createElement('script');
-  script.src = src;
-  script.onload = resolve;
-  script.onerror = reject;
-  document.head.appendChild(script);
-});
+// Las páginas pesadas se cargan bajo demanda: el home no descarga Firebase,
+// jsPDF, el portal privado ni los tests hasta que se necesitan.
+const EnhancedTestEnneagramModal = lazy(() => import('./TestEnneagramModal'));
+const TestInitialAssessmentModal = lazy(() => import('./TestInitialAssessmentModal'));
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
+const AlexandraPage = lazy(() => import('./components/AlexandraPage'));
+const FundacionPage = lazy(() => import('./components/FundacionPage'));
+const PrivacyPage = lazy(() => import('./components/PrivacyPage'));
+const ProcessPortal = lazy(() => import('./components/ProcessPortal'));
 
-const createGsapFallback = () => {
-  const chain = {
-    from: () => chain,
-    to: () => chain
-  };
-
-  return {
-    context: (callback) => {
-      try {
-        callback?.();
-      } catch {
-        // Animations are optional; rendering should continue without GSAP.
-      }
-
-      return { revert: () => {} };
-    },
-    timeline: () => chain,
-    registerPlugin: () => {},
-    utils: {
-      toArray: () => []
-    }
-  };
-};
-
-const ensureGsapRuntime = () => {
-  if (!window.gsap) {
-    window.gsap = createGsapFallback();
-  }
-
-  if (!window.ScrollTrigger) {
-    window.ScrollTrigger = {};
-  }
-
-  if (typeof window.ScrollTrigger.create !== 'function') {
-    window.ScrollTrigger.create = () => ({ kill: () => {} });
-  }
-};
+// GSAP empaquetado (sin CDN externo ni pantalla de carga): disponible en
+// window.gsap para todos los componentes desde el primer render.
+gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  window.gsap = gsap;
+  window.ScrollTrigger = ScrollTrigger;
+}
 
 // --- ESTILOS GLOBALES Y FUENTES ---
 const GlobalStyles = () => (
@@ -141,19 +103,24 @@ const WA_NUMBER = "573112602355";
 const SITE_URL = "https://www.gimnasioemocionalmb.com";
 
 const HOME_SEO = {
-  title: "Gimnasio Emocional Mentes Brillantes | Entrenamiento emocional",
-  description: "GEMB es un espacio de conciencia, espiritualidad, transformación emocional, networking y entrenamiento interior para transformar tu mundo interior y tus resultados de vida.",
+  title: "Gimnasio Emocional Mentes Brillantes | Fundación Social Mentes Brillantes",
+  description: "Programa de entrenamiento emocional de la Fundación Social Mentes Brillantes (entidad sin ánimo de lucro, NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, procesos de transformación y prevención en salud mental desde 2016.",
   url: `${SITE_URL}/`,
   image: `${SITE_URL}/logo-gemb.png`,
   structuredData: {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Gimnasio Emocional Mentes Brillantes",
-    alternateName: "GEMB",
+    "@type": "NGO",
+    name: "Fundación Social Mentes Brillantes",
+    alternateName: ["Gimnasio Emocional Mentes Brillantes", "GEMB"],
     url: SITE_URL,
     logo: `${SITE_URL}/logo-gemb.png`,
-    sameAs: [SITE_URL],
-    description: "Espacio de formación, acompañamiento y entrenamiento emocional y espiritual."
+    foundingDate: "2016",
+    taxID: "901.002.849-3",
+    email: "fundacionsocial@gimnasioemocionalmb.com",
+    telephone: "+573112602355",
+    address: { "@type": "PostalAddress", addressLocality: "Bogotá", addressCountry: "CO" },
+    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"],
+    description: "Entidad sin ánimo de lucro que entrena inteligencia emocional y previene violencias mediante programas comunitarios gratuitos y procesos de acompañamiento; los excedentes financian su labor social."
   }
 };
 
@@ -666,6 +633,9 @@ const Navbar = ({ onOpenTest }) => {
                 )}
               </div>
 
+              <a href="/fundacion" className="hover:opacity-70 transition-opacity flex items-center gap-1">
+                <HeartHandshake size={13} className="text-[#E2C17D]" /> La Fundación
+              </a>
               <a href="/alexandra-ortega" className="hover:opacity-70 transition-opacity">Alexandra</a>
               <a href="/#planes" className="hover:opacity-70 transition-opacity">Planes</a>
               <a
@@ -718,6 +688,7 @@ const Navbar = ({ onOpenTest }) => {
               <a href="/entrega-de-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
               <a href="/curso-de-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
               <a href="/mi-proceso" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#CC5833] px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-[#b04a29] focus:outline-none"><LogIn size={16} className="text-white" /> Continuar mi proceso</a>
+              <a href="/fundacion" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><HeartHandshake size={16} className="text-[#E2C17D]" /> La Fundación</a>
               <a href="/alexandra-ortega" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><User size={16} className="text-[#E2C17D]" /> ¿Quién es Alexandra?</a>
               <a href="/#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
             </div>
@@ -764,8 +735,12 @@ const Hero = ({ onOpenTest }) => {
     <section ref={containerRef} className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pb-20 md:pb-28 pt-44">
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?q=80&w=2070&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?q=75&w=1400&auto=format&fit=crop"
           alt="Bosque sereno al amanecer"
+          width="1400"
+          height="933"
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover object-center scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#2E4036]/80 to-[#1A1A1A]/20"></div>
@@ -775,8 +750,12 @@ const Hero = ({ onOpenTest }) => {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-end h-full">
         <div className="grid lg:grid-cols-[1.08fr_0.72fr] gap-10 lg:gap-16 items-end">
           <div className="max-w-4xl">
-            <div className="hero-elem inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/85 backdrop-blur-sm mb-6">
-              <Sparkles size={14} className="text-[#E2C17D]" />
+            <a href="/fundacion" className="hero-elem inline-flex items-center gap-2 rounded-full border border-[#E2C17D]/40 bg-white/10 px-4 py-2 text-[11px] md:text-xs uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm mb-4 transition-colors hover:bg-white/20">
+              <HeartHandshake size={14} className="text-[#E2C17D]" />
+              Fundación Social Mentes Brillantes · Entidad sin ánimo de lucro
+            </a>
+            <div className="hero-elem mb-6 flex items-center gap-2 text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/70">
+              <Sparkles size={13} className="text-[#E2C17D]" />
               Valoración inicial + mapa de entrenamiento
             </div>
 
@@ -814,6 +793,12 @@ const Hero = ({ onOpenTest }) => {
                 Ver procesos
               </a>
             </div>
+
+            <p className="hero-elem mb-8 max-w-2xl text-xs md:text-sm leading-relaxed text-[#F2F0E9]/70">
+              GEMB es el programa de entrenamiento emocional de la <strong className="font-bold text-[#F2F0E9]/90">Fundación Social Mentes Brillantes</strong> (NIT 901.002.849-3).
+              Los excedentes financian encuentros comunitarios gratuitos y programas sociales en Bogotá.{' '}
+              <a href="/fundacion" className="font-bold text-[#E2C17D] underline decoration-[#E2C17D]/40 underline-offset-4 hover:text-white">Conoce la labor social →</a>
+            </p>
           </div>
 
           <div className="hero-elem hidden lg:block rounded-[2rem] border border-white/15 bg-black/20 p-6 backdrop-blur-md shadow-2xl">
@@ -1232,7 +1217,7 @@ const Manifesto = () => {
       <div
         className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=70&w=1200&auto=format&fit=crop")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
@@ -1591,11 +1576,8 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               </button>
 
               <div className="mt-4 flex flex-col gap-1">
-                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider flex items-center gap-1">
-                  <AlertCircle size={10} /> Cupos limitados por semana
-                </p>
                 <p className="text-xs text-white/40 mt-1">
-                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos, te enviamos horarios y confirmas tu cupo.
+                  <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos, te enviamos horarios y confirmas tu espacio.
                 </p>
               </div>
 
@@ -1604,8 +1586,10 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                   <ShieldCheck size={24} className="text-[#00FF66]" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">Garantía 100% (Proceso Completo)</h4>
-                  <p className="text-white/70 text-[11px] md:text-xs mt-1 leading-tight font-light">Aplica al completar todo el plan indicado.</p>
+                  <h4 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">Compromiso de acompañamiento</h4>
+                  <p className="text-white/70 text-[11px] md:text-xs mt-1 leading-tight font-light">
+                    Tu proceso sostiene la labor social gratuita de la Fundación. Condiciones del acompañamiento disponibles.
+                  </p>
                   <button onClick={onOpenGuarantee} className="text-[#E2C17D] text-[10px] uppercase tracking-widest font-mono mt-2 hover:text-white transition-colors underline decoration-[#E2C17D]/30 underline-offset-4">
                     Ver términos y condiciones
                   </button>
@@ -1668,6 +1652,8 @@ const AlexandraFounderSection = () => (
             alt="Alexandra Ortega, fundadora de Gimnasio Emocional Mentes Brillantes"
             width="800"
             height="800"
+            loading="lazy"
+            decoding="async"
             className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/70 via-transparent to-transparent opacity-80"></div>
@@ -1828,13 +1814,20 @@ const Pricing = ({ onOpenTest }) => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14 md:mb-20">
           <span className="font-mono text-xs font-bold text-[#CC5833] tracking-[0.22em] uppercase mb-4 block">
-            Planes
+            Planes con aporte solidario
           </span>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-5">
             Elige tu nivel de entrenamiento.
           </h2>
           <p className="text-[#1A1A1A]/62 font-serif italic text-xl max-w-2xl mx-auto">
             Puedes empezar con claridad, entrar al método por unos días o comprometerte con una transformación más profunda.
+          </p>
+          <p className="mx-auto mt-5 flex max-w-2xl items-center justify-center gap-2 rounded-full border border-[#2E4036]/15 bg-white px-5 py-2.5 text-xs md:text-sm text-[#2E4036]">
+            <HeartHandshake size={15} className="shrink-0 text-[#CC5833]" />
+            <span>
+              El 100% de los excedentes financia los programas sociales gratuitos de la Fundación.{' '}
+              <a href="/fundacion" className="font-bold underline decoration-[#CC5833]/40 underline-offset-2 hover:text-[#CC5833]">Ver cómo</a>
+            </span>
           </p>
         </div>
 
@@ -2427,8 +2420,16 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
 
 // --- APP PRINCIPAL ---
 
+// Pantalla mínima mientras se descarga el código de una sección (lazy).
+const RouteLoader = ({ dark = false }) => (
+  <div className={`min-h-[100dvh] flex items-center justify-center font-mono text-sm ${dark ? 'bg-[#0D0B07] text-[#E4C878]' : 'bg-[#F2F0E9] text-[#2E4036]'}`}>
+    Cargando…
+  </div>
+);
+
 export default function App() {
-  const [gsapLoaded, setGsapLoaded] = useState(false);
+  const [assessmentMounted, setAssessmentMounted] = useState(false);
+  const [enneagramMounted, setEnneagramMounted] = useState(false);
   const [isInitialAssessmentOpen, setInitialAssessmentOpen] = useState(false);
   const [isEnneagramOpen, setEnneagramOpen] = useState(false);
   const [isGuaranteeOpen, setGuaranteeOpen] = useState(false);
@@ -2480,84 +2481,101 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isAdminRoute || isAlexandraPage || isProcesoPage || isPrivacidadPage || isFundacionPage || currentProcessPage || gsapLoaded) return;
+  // Los modales de tests se montan solo la primera vez que se abren
+  // (así el home no descarga su código hasta que alguien los usa).
+  const openAssessment = () => {
+    setAssessmentMounted(true);
+    setInitialAssessmentOpen(true);
+  };
+  const openEnneagram = () => {
+    setEnneagramMounted(true);
+    setEnneagramOpen(true);
+  };
 
-    const load = async () => {
-      try {
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js');
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js');
-        ensureGsapRuntime();
-        window.gsap.registerPlugin(window.ScrollTrigger);
-      } catch {
-        ensureGsapRuntime();
-      }
-
-      setGsapLoaded(true);
-    };
-    load();
-  }, [currentProcessPage, isAdminRoute, isAlexandraPage, isProcesoPage, isPrivacidadPage, isFundacionPage, gsapLoaded]);
-
-  if (isAdminRoute) {
-    return (
-      <>
-        <GlobalStyles />
-        <div className="noise-overlay"></div>
-        <AdminPanel />
-      </>
-    );
-  }
-
-  if (isProcesoPage) {
-    return <ProcessPortal GlobalStyles={GlobalStyles} />;
-  }
-
-  if (isPrivacidadPage) {
-    return (
-      <PrivacyPage
-        GlobalStyles={GlobalStyles}
-        Navbar={Navbar}
-        Footer={Footer}
-        onOpenTest={() => setInitialAssessmentOpen(true)}
-      />
-    );
-  }
-
-  if (isFundacionPage) {
-    return (
-      <FundacionPage
-        GlobalStyles={GlobalStyles}
-        Navbar={Navbar}
-        Footer={Footer}
-        waNumber={WA_NUMBER}
-        onOpenTest={() => setInitialAssessmentOpen(true)}
-      />
-    );
-  }
-
-  if (isAlexandraPage) {
-    return (
-      <>
-        <AlexandraPage
-          GlobalStyles={GlobalStyles}
-          Navbar={Navbar}
-          Footer={Footer}
-          waNumber={WA_NUMBER}
-          onOpenTest={() => setInitialAssessmentOpen(true)}
-        />
-
+  const testModals = (
+    <Suspense fallback={null}>
+      {assessmentMounted && (
         <TestInitialAssessmentModal
           isOpen={isInitialAssessmentOpen}
           onClose={() => setInitialAssessmentOpen(false)}
-          onOpenEnneagram={() => setEnneagramOpen(true)}
+          onOpenEnneagram={openEnneagram}
           waNumber={WA_NUMBER}
         />
+      )}
+      {enneagramMounted && (
         <EnhancedTestEnneagramModal
           isOpen={isEnneagramOpen}
           onClose={() => setEnneagramOpen(false)}
           eneatypes={ENEATYPES}
           waNumber={WA_NUMBER}
         />
+      )}
+    </Suspense>
+  );
+
+  if (isAdminRoute) {
+    return (
+      <>
+        <GlobalStyles />
+        <div className="noise-overlay"></div>
+        <Suspense fallback={<RouteLoader />}>
+          <AdminPanel />
+        </Suspense>
+      </>
+    );
+  }
+
+  if (isProcesoPage) {
+    return (
+      <Suspense fallback={<RouteLoader dark />}>
+        <ProcessPortal GlobalStyles={GlobalStyles} />
+      </Suspense>
+    );
+  }
+
+  if (isPrivacidadPage) {
+    return (
+      <Suspense fallback={<RouteLoader />}>
+        <PrivacyPage
+          GlobalStyles={GlobalStyles}
+          Navbar={Navbar}
+          Footer={Footer}
+          onOpenTest={openAssessment}
+        />
+      </Suspense>
+    );
+  }
+
+  if (isFundacionPage) {
+    return (
+      <>
+        <Suspense fallback={<RouteLoader />}>
+          <FundacionPage
+            GlobalStyles={GlobalStyles}
+            Navbar={Navbar}
+            Footer={Footer}
+            waNumber={WA_NUMBER}
+            onOpenTest={openAssessment}
+          />
+        </Suspense>
+        {testModals}
+      </>
+    );
+  }
+
+  if (isAlexandraPage) {
+    return (
+      <>
+        <Suspense fallback={<RouteLoader />}>
+          <AlexandraPage
+            GlobalStyles={GlobalStyles}
+            Navbar={Navbar}
+            Footer={Footer}
+            waNumber={WA_NUMBER}
+            onOpenTest={openAssessment}
+          />
+        </Suspense>
+        {testModals}
       </>
     );
   }
@@ -2565,29 +2583,9 @@ export default function App() {
   if (currentProcessPage) {
     return (
       <>
-        <ProcessPage page={currentProcessPage} onOpenTest={() => setInitialAssessmentOpen(true)} />
-
-        <TestInitialAssessmentModal
-          isOpen={isInitialAssessmentOpen}
-          onClose={() => setInitialAssessmentOpen(false)}
-          onOpenEnneagram={() => setEnneagramOpen(true)}
-          waNumber={WA_NUMBER}
-        />
-        <EnhancedTestEnneagramModal
-          isOpen={isEnneagramOpen}
-          onClose={() => setEnneagramOpen(false)}
-          eneatypes={ENEATYPES}
-          waNumber={WA_NUMBER}
-        />
+        <ProcessPage page={currentProcessPage} onOpenTest={openAssessment} />
+        {testModals}
       </>
-    );
-  }
-
-  if (!gsapLoaded) {
-    return (
-      <div className="min-h-[100dvh] bg-[#F2F0E9] flex items-center justify-center font-mono text-sm text-[#2E4036]">
-        Cargando entorno visual...
-      </div>
     );
   }
 
@@ -2596,42 +2594,31 @@ export default function App() {
       <GlobalStyles />
       <div className="noise-overlay"></div>
 
-      <Navbar onOpenTest={() => setInitialAssessmentOpen(true)} />
+      <Navbar onOpenTest={openAssessment} />
 
       <main>
-        <Hero onOpenTest={() => setInitialAssessmentOpen(true)} />
+        <Hero onOpenTest={openAssessment} />
         <FeaturesSection />
         <Manifesto />
+
+        {/* La Fundación primero: misión y labor social antes de los procesos */}
+        <FundacionSection />
+
         <StackedCards />
         <NuestrosProcesosSection />
 
-        {/* Nueva sección: Sesión Guía Coach */}
+        {/* Sesión Guía Coach */}
         <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
 
-        {/* Sección: ¿Quién es Alexandra Ortega? */}
+        {/* ¿Quién es Alexandra Ortega? */}
         <AlexandraFounderSection />
 
-        {/* Sección: La Fundación (labor social) */}
-        <FundacionSection />
-
-        <Pricing onOpenTest={() => setInitialAssessmentOpen(true)} />
+        <Pricing onOpenTest={openAssessment} />
       </main>
 
       <Footer />
 
-      {/* Modales Inyectados */}
-      <TestInitialAssessmentModal
-        isOpen={isInitialAssessmentOpen}
-        onClose={() => setInitialAssessmentOpen(false)}
-        onOpenEnneagram={() => setEnneagramOpen(true)}
-        waNumber={WA_NUMBER}
-      />
-      <EnhancedTestEnneagramModal
-        isOpen={isEnneagramOpen}
-        onClose={() => setEnneagramOpen(false)}
-        eneatypes={ENEATYPES}
-        waNumber={WA_NUMBER}
-      />
+      {testModals}
       <GuaranteeModal isOpen={isGuaranteeOpen} onClose={() => setGuaranteeOpen(false)} />
     </>
   );

@@ -20,69 +20,21 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/curso-de-milagros",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/curso-de-milagros/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/sala-reduccion-ego",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/sala-reduccion-ego/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/entrega-de-pasos",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/entrega-de-pasos/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/sesion-coach",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/sesion-coach/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/alexandra-ortega",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/alexandra-ortega/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/mi-proceso",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/mi-proceso/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/politica-de-privacidad",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/politica-de-privacidad/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/fundacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/fundacion/",
-      "destination": "/index.html"
-    }
+    { "source": "/curso-de-milagros", "destination": "/curso-de-milagros/index.html" },
+    { "source": "/curso-de-milagros/", "destination": "/curso-de-milagros/index.html" },
+    { "source": "/sala-reduccion-ego", "destination": "/sala-reduccion-ego/index.html" },
+    { "source": "/sala-reduccion-ego/", "destination": "/sala-reduccion-ego/index.html" },
+    { "source": "/entrega-de-pasos", "destination": "/entrega-de-pasos/index.html" },
+    { "source": "/entrega-de-pasos/", "destination": "/entrega-de-pasos/index.html" },
+    { "source": "/sesion-coach", "destination": "/sesion-coach/index.html" },
+    { "source": "/sesion-coach/", "destination": "/sesion-coach/index.html" },
+    { "source": "/alexandra-ortega", "destination": "/alexandra-ortega/index.html" },
+    { "source": "/alexandra-ortega/", "destination": "/alexandra-ortega/index.html" },
+    { "source": "/fundacion", "destination": "/fundacion/index.html" },
+    { "source": "/fundacion/", "destination": "/fundacion/index.html" },
+    { "source": "/politica-de-privacidad", "destination": "/politica-de-privacidad/index.html" },
+    { "source": "/politica-de-privacidad/", "destination": "/politica-de-privacidad/index.html" },
+    { "source": "/mi-proceso", "destination": "/index.html" },
+    { "source": "/mi-proceso/", "destination": "/index.html" }
   ]
 }
