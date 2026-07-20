@@ -3,7 +3,7 @@ import { ShieldCheck, Mail, MessageCircle, MapPin } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════
    Política de tratamiento de datos personales
-   Fundación Social Gimnasio Emocional Mentes Brillantes
+   Fundación Social Mentes Brillantes
    (Ley 1581 de 2012 y Decreto 1377 de 2013 — Colombia)
    ═══════════════════════════════════════════════════════════════ */
 
@@ -26,7 +26,7 @@ export default function PrivacyPage(props) {
     <>
       <GlobalStyles />
       <div className="noise-overlay"></div>
-      <Navbar onOpenTest={onOpenTest} />
+      <Navbar onOpenTest={onOpenTest} darkAtTop />
 
       <main className="bg-[#F2F0E9] min-h-screen">
         <div className="mx-auto max-w-3xl px-6 pb-24 pt-32 md:pt-40">
@@ -38,7 +38,7 @@ export default function PrivacyPage(props) {
               Política de tratamiento de datos personales
             </h1>
             <p className="mt-3 text-sm text-[#1A1A1A]/60">
-              Fundación Social Gimnasio Emocional Mentes Brillantes · NIT 901.002.849-3
+              Fundación Social Mentes Brillantes · NIT 901.002.849-3
               <br />
               Última actualización: julio de 2026
             </p>
@@ -46,7 +46,7 @@ export default function PrivacyPage(props) {
 
           <Section number="1" title="Quiénes somos (responsable del tratamiento)">
             <p>
-              La <strong>Fundación Social Gimnasio Emocional Mentes Brillantes</strong> (en adelante, “la
+              La <strong>Fundación Social Mentes Brillantes</strong> (en adelante, “la
               Fundación”), identificada con NIT 901.002.849-3, con domicilio en Bogotá, Colombia, es la
               responsable del tratamiento de los datos personales recogidos a través de este sitio web
               (gimnasioemocionalmb.com) y de sus programas.

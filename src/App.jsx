@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
   Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
   Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn, HeartHandshake
 } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Las páginas pesadas se cargan bajo demanda: el home no descarga Firebase,
 // jsPDF, el portal privado ni los tests hasta que se necesitan.
@@ -17,20 +15,10 @@ const FundacionPage = lazy(() => import('./components/FundacionPage'));
 const PrivacyPage = lazy(() => import('./components/PrivacyPage'));
 const ProcessPortal = lazy(() => import('./components/ProcessPortal'));
 
-// GSAP empaquetado (sin CDN externo ni pantalla de carga): disponible en
-// window.gsap para todos los componentes desde el primer render.
-gsap.registerPlugin(ScrollTrigger);
-if (typeof window !== 'undefined') {
-  window.gsap = gsap;
-  window.ScrollTrigger = ScrollTrigger;
-}
-
 // --- ESTILOS GLOBALES Y FUENTES ---
 const GlobalStyles = () => (
   <style dangerouslySetInnerHTML={{
     __html: `
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Great+Vibes&display=swap');
-
     :root {
       --color-moss: #2E4036;
       --color-clay: #CC5833;
@@ -93,6 +81,19 @@ const GlobalStyles = () => (
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
     }
 
+    @keyframes hero-reveal {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-elem {
+      animation: hero-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-elem { animation: none; }
+    }
+
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--color-cream); }
     ::-webkit-scrollbar-thumb { background: var(--color-moss); border-radius: 4px; }
@@ -106,7 +107,7 @@ const HOME_SEO = {
   title: "Gimnasio Emocional Mentes Brillantes | Fundación Social Mentes Brillantes",
   description: "Programa de entrenamiento emocional de la Fundación Social Mentes Brillantes (entidad sin ánimo de lucro, NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, procesos de transformación y prevención en salud mental desde 2016.",
   url: `${SITE_URL}/`,
-  image: `${SITE_URL}/logo-gemb.png`,
+  image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
   structuredData: {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -114,6 +115,7 @@ const HOME_SEO = {
     alternateName: ["Gimnasio Emocional Mentes Brillantes", "GEMB"],
     url: SITE_URL,
     logo: `${SITE_URL}/logo-gemb.png`,
+    image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
     foundingDate: "2016",
     taxID: "901.002.849-3",
     email: "fundacionsocial@gimnasioemocionalmb.com",
@@ -151,7 +153,7 @@ const ALEXANDRA_SEO = {
     telephone: "+573208413878",
     worksFor: {
       "@type": "Organization",
-      name: "Fundación Social Gimnasio Emocional Mentes Brillantes",
+      name: "Fundación Social Mentes Brillantes",
       url: SITE_URL
     },
     knowsAbout: [
@@ -171,16 +173,17 @@ const FUNDACION_PATH = "/fundacion";
 const FUNDACION_SEO = {
   title: "La Fundación | Labor social de Gimnasio Emocional Mentes Brillantes",
   description:
-    "Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas, prescripción social en salud y un modelo solidario que reinvierte el 100% de los excedentes en labor social desde 2016.",
+    "Fundación Social Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas y un modelo solidario que reinvierte sus excedentes en labor social desde 2016.",
   url: `${SITE_URL}${FUNDACION_PATH}`,
-  image: `${SITE_URL}/logo-gemb.png`,
+  image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
   structuredData: {
     "@context": "https://schema.org",
     "@type": "NGO",
-    name: "Fundación Social Gimnasio Emocional Mentes Brillantes",
-    alternateName: "GEMB",
+    name: "Fundación Social Mentes Brillantes",
+    alternateName: ["Gimnasio Emocional Mentes Brillantes", "GEMB"],
     url: SITE_URL,
     logo: `${SITE_URL}/logo-gemb.png`,
+    image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
     foundingDate: "2016",
     taxID: "901.002.849-3",
     email: "fundacionsocial@gimnasioemocionalmb.com",
@@ -199,9 +202,9 @@ const FUNDACION_SEO = {
 const PRIVACIDAD_PATH = "/politica-de-privacidad";
 
 const PRIVACIDAD_SEO = {
-  title: "Política de tratamiento de datos | Fundación Social Gimnasio Emocional Mentes Brillantes",
+  title: "Política de tratamiento de datos | Fundación Social Mentes Brillantes",
   description:
-    "Conoce cómo la Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.",
+    "Conoce cómo la Fundación Social Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.",
   url: `${SITE_URL}${PRIVACIDAD_PATH}`,
   image: `${SITE_URL}/logo-gemb.png`
 };
@@ -519,11 +522,12 @@ const GoldenLogoLockup = ({ scrolled, inFooter = false }) => {
   );
 };
 
-const Navbar = ({ onOpenTest }) => {
+const Navbar = ({ onOpenTest, darkAtTop = false }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const useDarkNav = scrolled || darkAtTop;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -582,11 +586,11 @@ const Navbar = ({ onOpenTest }) => {
             </div>
 
             {/* CENTRO: Enlaces */}
-            <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center text-[#2E4036]' : 'items-start pt-6 text-white/90'}`}>
+            <div className={`w-2/4 hidden md:flex justify-center gap-4 lg:gap-6 text-xs lg:text-sm font-medium transition-colors ${scrolled ? 'items-center' : 'items-start pt-6'} ${useDarkNav ? 'text-[#2E4036]' : 'text-white/90'}`}>
               <a href="/#metodo" className="hover:opacity-70 transition-opacity">Método</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
-              <a href="/sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${scrolled ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
+              <a href="/sesion-coach" className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex items-center gap-1 ${useDarkNav ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
                 <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
 
@@ -600,7 +604,7 @@ const Navbar = ({ onOpenTest }) => {
                   onClick={() => setDropdownOpen((open) => !open)}
                   onKeyDown={handleProcessButtonKeyDown}
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#E2C17D] ${
-                    scrolled
+                    useDarkNav
                       ? 'text-[#2E4036] hover:bg-[#2E4036]/5'
                       : 'text-white/90 hover:bg-white/10 backdrop-blur-sm'
                   }`}
@@ -641,7 +645,7 @@ const Navbar = ({ onOpenTest }) => {
               <a
                 href="/#admin"
                 className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${
-                  scrolled
+                  useDarkNav
                     ? 'border-[#2E4036]/20 text-[#2E4036] hover:border-[#2E4036] hover:bg-[#2E4036] hover:text-white'
                     : 'border-white/35 text-white/90 hover:bg-white/12 hover:text-white backdrop-blur-sm'
                 }`}
@@ -655,7 +659,7 @@ const Navbar = ({ onOpenTest }) => {
             <div className={`w-[55%] md:w-1/4 flex justify-end ${scrolled ? 'items-center' : 'items-start pt-3'}`}>
               <button
                 onClick={onOpenTest}
-                className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${scrolled ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
+                className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all btn-magnetic shadow-lg ${useDarkNav ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
                 Valoraci&oacute;n inicial de tu proceso
               </button>
@@ -669,7 +673,7 @@ const Navbar = ({ onOpenTest }) => {
                   setMobileMenuOpen((open) => !open);
                 }}
               >
-                {mobileMenuOpen ? <X className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={scrolled ? 'text-[#2E4036]' : 'text-white'} size={28} />}
+                {mobileMenuOpen ? <X className={useDarkNav ? 'text-[#2E4036]' : 'text-white'} size={28} /> : <Menu className={useDarkNav ? 'text-[#2E4036]' : 'text-white'} size={28} />}
               </button>
             </div>
           </div>
@@ -714,34 +718,19 @@ const Navbar = ({ onOpenTest }) => {
 };
 
 const Hero = ({ onOpenTest }) => {
-  const containerRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const gsap = window.gsap;
-    let ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".hero-elem", {
-        y: 40,
-        opacity: 0,
-        duration: 1.2,
-        stagger: 0.2,
-        delay: 0.2
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={containerRef} className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pb-20 md:pb-28 pt-44">
+    <section className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pb-20 md:pb-28 pt-44">
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?q=75&w=1400&auto=format&fit=crop"
+          src="/hero-gemb-960.webp"
+          srcSet="/hero-gemb-640.webp 640w, /hero-gemb-960.webp 960w, /hero-gemb-1440.webp 1440w"
+          sizes="100vw"
           alt="Bosque sereno al amanecer"
-          width="1400"
-          height="933"
+          width="1440"
+          height="960"
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-center scale-105"
+          className="h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#2E4036]/80 to-[#1A1A1A]/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_72%,rgba(226,193,125,0.24),transparent_34%),radial-gradient(circle_at_78%_34%,rgba(204,88,51,0.18),transparent_28%)]"></div>
@@ -773,10 +762,10 @@ const Hero = ({ onOpenTest }) => {
             </p>
 
             <div className="hero-elem max-w-3xl space-y-4 mb-8">
-              <p className="text-[#F2F0E9]/92 text-base md:text-xl font-light leading-relaxed">
+              <p className="text-[rgba(242,240,233,0.92)] text-base md:text-xl font-light leading-relaxed">
                 GEMB une conciencia, oración, meditación, 12 Pasos, Un Curso de Milagros, Eneagrama y acompañamiento para que dejes de reaccionar desde el ego y empieces a entrenar desde la paz.
               </p>
-              <p className="text-[#F2F0E9]/[0.78] text-sm md:text-base leading-relaxed">
+              <p className="text-[rgba(242,240,233,0.78)] text-sm md:text-base leading-relaxed">
                 Si quieres cambiar los frutos, primero debes cambiar las raíces: la forma en que piensas, eliges, amas, pones límites y sostienes tus decisiones.
               </p>
             </div>
@@ -976,41 +965,16 @@ const FeatureTelemetry = () => {
 };
 
 const FeatureAgenda = () => {
-  const cursorRef = useRef(null);
-  const btnRef = useRef(null);
   const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-  const [activeDay, setActiveDay] = useState(2);
+  const activeDay = 2;
   const [isCopied, setIsCopied] = useState(false);
   const protocolText = "Protocolo de Entrenamiento GEMB:\n- Sala de Reducción del Ego (Sesión semanal)\n- Práctica: Meditación 15 min";
-
-  useLayoutEffect(() => {
-    const gsap = window.gsap;
-    let ctx = gsap.context(() => {
-      if (!isCopied) {
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-        tl.to(cursorRef.current, { x: 140, y: 30, duration: 1, ease: "power2.inOut" })
-          .to(cursorRef.current, { scale: 0.8, duration: 0.1, onComplete: () => setActiveDay(3) })
-          .to(cursorRef.current, { scale: 1, duration: 0.1 })
-          .to(cursorRef.current, { x: 80, y: 180, duration: 1, ease: "power2.inOut", delay: 0.5 })
-          .to(cursorRef.current, { scale: 0.8, duration: 0.1 })
-          .to(btnRef.current, { scale: 0.95, duration: 0.1 }, "<")
-          .to(cursorRef.current, { scale: 1, duration: 0.1 })
-          .to(btnRef.current, { scale: 1, duration: 0.1 }, "<")
-          .to(cursorRef.current, { x: 300, y: 300, duration: 1, ease: "power2.inOut", opacity: 0 });
-      }
-    });
-    return () => ctx.revert();
-  }, [isCopied]);
 
   const handleSaveProtocol = async () => {
     try {
       await navigator.clipboard.writeText(protocolText);
       setIsCopied(true);
-      if (cursorRef.current) cursorRef.current.style.display = 'none';
-      setTimeout(() => {
-        setIsCopied(false);
-        if (cursorRef.current) cursorRef.current.style.display = 'block';
-      }, 6000);
+      setTimeout(() => setIsCopied(false), 6000);
     } catch {
       const textArea = document.createElement("textarea");
       textArea.value = protocolText;
@@ -1065,7 +1029,7 @@ const FeatureAgenda = () => {
           </button>
         </div>
       ) : (
-        <button onClick={handleSaveProtocol} ref={btnRef} className="mt-6 w-full py-3 rounded-xl border-2 border-[#2E4036] text-[#2E4036] font-bold text-sm flex justify-center items-center gap-2 hover:bg-[#2E4036] hover:text-white transition-colors relative z-10">
+        <button onClick={handleSaveProtocol} className="mt-6 w-full py-3 rounded-xl border-2 border-[#2E4036] text-[#2E4036] font-bold text-sm flex justify-center items-center gap-2 hover:bg-[#2E4036] hover:text-white transition-colors relative z-10">
           <Copy size={16} /> Guardar protocolo
         </button>
       )}
@@ -1075,13 +1039,6 @@ const FeatureAgenda = () => {
           Protocolo copiado al portapapeles
         </div>
       )}
-
-      <div ref={cursorRef} className="absolute top-0 left-0 z-20 pointer-events-none" style={{ transform: 'translate(0px, 150px)' }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5.5 3.21V20.8C5.5 21.46 6.27 21.82 6.78 21.4L11.5 17H18.5C19.05 17 19.5 16.55 19.5 16V3.21C19.5 2.66 19.05 2.21 18.5 2.21H6.5C5.95 2.21 5.5 2.66 5.5 3.21Z" fill="#1A1A1A" />
-          <path d="M6 3V20L11.5 16H18V3H6Z" fill="white" />
-        </svg>
-      </div>
     </div>
   );
 };
@@ -1192,39 +1149,19 @@ const FeaturesSection = () => {
 // --- MANIFIESTO ---
 
 const Manifesto = () => {
-  const textRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const gsap = window.gsap;
-    let ctx = gsap.context(() => {
-      gsap.from(".manifesto-line", {
-        scrollTrigger: {
-          trigger: textRef.current,
-          start: "top 80%",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out"
-      });
-    }, textRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section id="eneatipos" className="relative py-32 md:py-48 bg-[#1A1A1A] overflow-hidden flex items-center min-h-[80vh]">
       <div
         className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=70&w=1200&auto=format&fit=crop")',
+          backgroundImage: 'url("/manifesto-gemb-1200.webp")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
         }}
       ></div>
 
-      <div ref={textRef} className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center">
         <h2 className="text-4xl md:text-6xl lg:text-7xl leading-tight mb-12">
           <span className="manifesto-line block font-heading font-bold text-[#F2F0E9]/50 mb-4">
             Lo normal es decir: "Estoy roto/a".
@@ -1246,8 +1183,6 @@ const Manifesto = () => {
 // --- ARCHIVO (TARJETAS APILADAS) ---
 
 const StackedCards = () => {
-  const containerRef = useRef(null);
-
   const cards = [
     {
       title: "Sala de Reducción del Ego",
@@ -1281,34 +1216,8 @@ const StackedCards = () => {
     }
   ];
 
-  useLayoutEffect(() => {
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    let ctx = gsap.context(() => {
-      const cardElements = gsap.utils.toArray('.stacked-card');
-
-      cardElements.forEach((card, i) => {
-        if (i < cardElements.length - 1) {
-          ScrollTrigger.create({
-            trigger: cardElements[i + 1],
-            start: "top bottom",
-            end: "top top",
-            scrub: true,
-            animation: gsap.to(card, {
-              scale: 0.9,
-              opacity: 0.5,
-              filter: "blur(10px)",
-              ease: "none"
-            })
-          });
-        }
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="archivo" ref={containerRef} className="relative bg-[#1A1A1A] pb-24">
+    <section id="archivo" className="relative bg-[#1A1A1A] pb-24">
       <style>{`
         @keyframes scan {
           0%, 100% { top: 0; }
@@ -1731,9 +1640,9 @@ const FundacionSection = () => (
           Detrás de este método hay <span className="font-serif font-normal italic text-[#E2C17D]">una fundación</span>
         </h2>
         <p className="mt-6 max-w-2xl text-base font-light leading-relaxed text-white/80 md:text-lg">
-          La Fundación Social Gimnasio Emocional Mentes Brillantes realiza encuentros comunitarios gratuitos cada semana en Bogotá,
-          forma lideresas y funcionarias con la Secretaría Distrital de la Mujer, hace parte de la estrategia de prescripción social
-          Más Bienestar de la Secretaría Distrital de Salud, y reinvierte el 100% de los excedentes de sus servicios en esta labor social.
+          La Fundación Social Mentes Brillantes realiza encuentros comunitarios gratuitos cada semana en Bogotá,
+          acompaña procesos de formación emocional y participa en articulaciones comunitarias e institucionales. Los excedentes
+          de sus servicios sostienen esta labor social y amplían el acceso a espacios de bienestar.
         </p>
 
         <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -1753,18 +1662,33 @@ const FundacionSection = () => (
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {[
-          ['+5.000', 'personas al año, presencial'],
-          ['181', 'familias acompañadas'],
-          ['Semanal', 'encuentros gratuitos híbridos'],
-          ['100%', 'de excedentes reinvertidos']
-        ].map(([value, label]) => (
-          <div key={label} className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
-            <p className="font-heading text-3xl font-bold text-[#E2C17D]">{value}</p>
-            <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-white/55">{label}</p>
-          </div>
-        ))}
+      <div>
+        <figure className="overflow-hidden rounded-lg border border-white/15 bg-black/20 shadow-2xl">
+          <img
+            src="/impacto/comunidad-gemb.webp"
+            alt="Comunidad de Gimnasio Emocional Mentes Brillantes en un encuentro presencial"
+            width="1440"
+            height="960"
+            loading="lazy"
+            decoding="async"
+            className="aspect-[3/2] w-full object-cover"
+          />
+          <figcaption className="border-t border-white/10 px-5 py-4 text-xs leading-relaxed text-white/65">
+            Archivo visual GEMB · encuentro presencial de la comunidad.
+          </figcaption>
+        </figure>
+        <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+          {[
+            ['2016', 'labor continua'],
+            ['Semanal', 'encuentros'],
+            ['Bogotá', 'nodo presencial']
+          ].map(([value, label]) => (
+            <div key={label} className="border-t border-white/15 px-2 pt-4">
+              <p className="font-heading text-lg font-bold text-[#E2C17D]">{value}</p>
+              <p className="mt-1 text-[10px] uppercase tracking-[0.08em] text-white/55">{label}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -1825,7 +1749,7 @@ const Pricing = ({ onOpenTest }) => {
           <p className="mx-auto mt-5 flex max-w-2xl items-center justify-center gap-2 rounded-full border border-[#2E4036]/15 bg-white px-5 py-2.5 text-xs md:text-sm text-[#2E4036]">
             <HeartHandshake size={15} className="shrink-0 text-[#CC5833]" />
             <span>
-              El 100% de los excedentes financia los programas sociales gratuitos de la Fundación.{' '}
+              Compromiso institucional: los excedentes se reinvierten en los programas sociales gratuitos de la Fundación.{' '}
               <a href="/fundacion" className="font-bold underline decoration-[#CC5833]/40 underline-offset-2 hover:text-[#CC5833]">Ver cómo</a>
             </span>
           </p>
@@ -1945,7 +1869,7 @@ const Footer = () => {
 
         <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
           <div className="flex flex-col gap-1 text-center md:text-left">
-            <p>© {new Date().getFullYear()} Fundación Social Gimnasio Emocional Mentes Brillantes · NIT 901.002.849-3</p>
+            <p>© {new Date().getFullYear()} Fundación Social Mentes Brillantes · NIT 901.002.849-3</p>
             <p>
               Entidad sin ánimo de lucro ·{' '}
               <a href="/politica-de-privacidad" className="underline decoration-white/20 underline-offset-4 hover:text-white transition-colors">

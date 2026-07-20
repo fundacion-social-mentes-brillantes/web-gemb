@@ -14,6 +14,8 @@ import {
    ═══════════════════════════════════════════════════════════════ */
 
 const AX_STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
   .ax-script { font-family: 'Great Vibes', cursive; }
 
   .ax-reveal {
@@ -1007,7 +1009,7 @@ const AlexandraPage = (props) => {
             </ul>
 
             <p className="ax-reveal mt-10 text-xs text-[#F2F0E9]/45">
-              Alexandra Ortega · Fundación Social Gimnasio Emocional Mentes Brillantes · NIT 901.002.849-3
+              Alexandra Ortega · Fundación Social Mentes Brillantes · NIT 901.002.849-3
             </p>
           </div>
         </section>

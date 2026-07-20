@@ -6,7 +6,7 @@
  * rastreadores y revisores que no ejecutan JavaScript vean el contenido
  * institucional (hoy el HTML crudo llega vacío por ser una SPA).
  *
- * React reemplaza este contenido al hidratar (createRoot().render()), así
+ * React reemplaza este resumen estático al iniciar (createRoot().render()), así
  * que el usuario final ve la app completa; el bloque estático solo existe
  * durante la carga y para clientes sin JS.
  *
@@ -54,7 +54,7 @@ const NAV = `
   <a href="/alexandra-ortega">Alexandra Ortega</a>
 </nav>`;
 
-const NGO_JSONLD = `<script type="application/ld+json">{"@context":"https://schema.org","@type":"NGO","name":"Fundación Social Mentes Brillantes","alternateName":["Gimnasio Emocional Mentes Brillantes","GEMB"],"url":"${SITE}","logo":"${SITE}/logo-gemb.png","foundingDate":"2016","taxID":"901.002.849-3","email":"fundacionsocial@gimnasioemocionalmb.com","telephone":"+573112602355","address":{"@type":"PostalAddress","addressLocality":"Bogotá","addressCountry":"CO"},"sameAs":["https://www.instagram.com/gimnasioemocional_mb"]}</script>`;
+const NGO_JSONLD = `<script id="gemb-jsonld" type="application/ld+json">{"@context":"https://schema.org","@type":"NGO","name":"Fundación Social Mentes Brillantes","alternateName":["Gimnasio Emocional Mentes Brillantes","GEMB"],"url":"${SITE}","logo":"${SITE}/logo-gemb.png","image":"${SITE}/impacto/comunidad-gemb.webp","foundingDate":"2016","taxID":"901.002.849-3","email":"fundacionsocial@gimnasioemocionalmb.com","telephone":"+573112602355","address":{"@type":"PostalAddress","addressLocality":"Bogotá","addressCountry":"CO"},"sameAs":["https://www.instagram.com/gimnasioemocional_mb"]}</script>`;
 
 const ROUTES = [
   {
@@ -62,6 +62,7 @@ const ROUTES = [
     title: 'Gimnasio Emocional Mentes Brillantes | Fundación Social Mentes Brillantes',
     description:
       'Programa de entrenamiento emocional de la Fundación Social Mentes Brillantes (entidad sin ánimo de lucro, NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, procesos de transformación y prevención en salud mental desde 2016.',
+    image: `${SITE}/impacto/comunidad-gemb.webp`,
     jsonld: NGO_JSONLD,
     body: `
 <div class="prerender">
@@ -73,14 +74,11 @@ const ROUTES = [
   y empieces a entrenar desde la paz.</p>
   <h2>Una fundación detrás del método</h2>
   <p>Somos una entidad sin ánimo de lucro con labor continua desde 2016: realizamos encuentros comunitarios
-  gratuitos cada semana en la Biblioteca Pública Carlos E. Restrepo de Bogotá (con transmisión virtual), formamos
-  lideresas sociales y funcionarias junto a la Secretaría Distrital de la Mujer, y hacemos parte de la estrategia de
-  prescripción social Más Bienestar de la Secretaría Distrital de Salud. Impactamos a más de 5.000 personas al año
-  y acompañamos directamente a 181 familias. <a href="/fundacion">Conoce la labor social de la Fundación</a>.</p>
+  gratuitos cada semana en Bogotá (con alcance virtual), acompañamos procesos de formación y participamos en
+  articulaciones comunitarias e institucionales. <a href="/fundacion">Conoce la memoria visual y las fuentes públicas de la Fundación</a>.</p>
   <h2>Cómo nos sostenemos</h2>
-  <p>Los espacios comunitarios son 100% gratuitos. Los procesos personales y los talleres contratados por empresas
-  aplican tarifas cuyos excedentes se reinvierten por completo en la labor social: becas, espacios gratuitos y
-  materiales educativos de libre acceso.</p>
+  <p>Los espacios comunitarios son gratuitos. Los procesos personales y los talleres contratados por empresas
+  contribuyen a sostener la labor social, las becas, los encuentros y los materiales educativos.</p>
   <h2>Procesos de entrenamiento</h2>
   <ul>
     <li><a href="/sesion-coach">Sesión Coach</a> — guía personal para mirar tu historia y ordenar tu mundo interior.</li>
@@ -96,7 +94,8 @@ const ROUTES = [
     path: '/fundacion',
     title: 'La Fundación | Labor social de Gimnasio Emocional Mentes Brillantes',
     description:
-      'Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas, prescripción social en salud y un modelo solidario que reinvierte el 100% de los excedentes en labor social desde 2016.',
+      'Fundación Social Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas y un modelo solidario que reinvierte sus excedentes en labor social desde 2016.',
+    image: `${SITE}/impacto/comunidad-gemb.webp`,
     jsonld: NGO_JSONLD,
     body: `
 <div class="prerender">
@@ -105,38 +104,39 @@ const ROUTES = [
   <p>La <strong>Fundación Social Mentes Brillantes</strong> (NIT 901.002.849-3, Bogotá, Colombia) entrega herramientas
   de inteligencia emocional, prevención de violencias y empoderamiento social a comunidades de Bogotá y a una
   comunidad digital dentro y fuera del país, con enfoque de género y diferencial.</p>
+  <img src="/impacto/comunidad-gemb.webp" alt="Comunidad de Gimnasio Emocional Mentes Brillantes en un encuentro presencial" width="1440" height="960">
   <h2>Labor social gratuita</h2>
   <ul>
     <li>Encuentros comunitarios híbridos y gratuitos cada semana en la Biblioteca Pública Carlos E. Restrepo: Sala de Reducción del Ego y Mentoría de Pasos.</li>
     <li>Talleres de oratoria, comunicación asertiva y liderazgo con sororidad para lideresas y funcionarias, con la Secretaría Distrital de la Mujer y el COLMYG.</li>
     <li>Ferias de servicios y fechas emblemáticas en el Congreso de la República, alcaldías locales de Antonio Nariño y Kennedy y la CIOM.</li>
     <li>Huertas urbanas con enfoque de género (2025, presupuestos participativos) en la Huerta Comunitaria La Siempre Viva.</li>
-    <li>Prescripción social: inscritos y viabilizados en la estrategia Más Bienestar 2026 de la Secretaría Distrital de Salud.</li>
+    <li>Articulación comunitaria relacionada con el modelo MAS Bienestar y la estrategia de prescripción social de Bogotá.</li>
     <li>Certificación de multiplicadoras de bienestar que replican la metodología en organizaciones como Fundación Calma y Escuela Shama.</li>
   </ul>
   <h2>Impacto</h2>
-  <p>Labor continua desde 2016 · Más de 5.000 personas al año de forma presencial · 181 familias acompañadas
-  directamente · Encuentros gratuitos semanales.</p>
+  <p>Labor continua desde 2016, encuentros comunitarios semanales, nodo presencial en Bogotá y alcance digital.</p>
   <h2>Reconocimientos</h2>
-  <p>Destacados por el Ministerio del Interior en su revista institucional "Defensoras de nuestra Colombia" (2025).
-  Ponentes en la Cumbre Global de Salud Mental 2025 y 2026. Organización viabilizada por la Secretaría Distrital de
-  Salud de Bogotá.</p>
+  <p>Participación documentada en el lanzamiento de la revista <a href="https://www.mininterior.gov.co/noticias/defensoras-de-nuestra-colombia-la-revista-de-mininterior-que-reconoce-la-labor-de-las-lideresas-sociales/">Defensoras de Nuestra Colombia</a>
+  en el Congreso de la República y en la Cumbre Global de Salud Mental 2025. GEMB también figura en un
+  <a href="https://www.sdmujer.gov.co/sites/default/files/2022-05/documentos/total-de-organizaciones-postuladas-VTJ_.pdf">listado público de organizaciones</a>
+  de la Secretaría Distrital de la Mujer.</p>
   <h2>Cómo nos sostenemos</h2>
-  <p>Modelo solidario de subsidios cruzados: los servicios comunitarios son 100% gratuitos y el 100% de los
-  excedentes de los procesos y talleres corporativos se reinvierte en la labor social — becas, espacios gratuitos,
-  tecnología y materiales educativos.</p>
+  <p>Modelo solidario de subsidios cruzados: los servicios comunitarios son gratuitos y los excedentes de los
+  procesos y talleres corporativos sostienen la labor social, las becas, los espacios gratuitos y los materiales educativos.</p>
   <h2>Transparencia</h2>
-  <p>Verificados en Google para Organizaciones sin Fines de Lucro y TechSoup Colombia. Solicita certificados e
-  informes a fundacionsocial@gimnasioemocionalmb.com.</p>
+  <p>Razón social: Fundación Social Mentes Brillantes · NIT 901.002.849-3 · ESAL colombiana con domicilio en Bogotá.
+  Consulta la <a href="https://www.saludcapital.gov.co/Paginas2/Noticia_Portal_Detalle.aspx?IP=2622">fuente oficial sobre prescripción social</a>
+  o solicita certificados administrativos a fundacionsocial@gimnasioemocionalmb.com.</p>
   ${NAV}
   ${FOOTER}
 </div>`
   },
   {
     path: '/politica-de-privacidad',
-    title: 'Política de tratamiento de datos | Fundación Social Gimnasio Emocional Mentes Brillantes',
+    title: 'Política de tratamiento de datos | Fundación Social Mentes Brillantes',
     description:
-      'Conoce cómo la Fundación Social Gimnasio Emocional Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.',
+      'Conoce cómo la Fundación Social Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.',
     body: `
 <div class="prerender">
   <h1>Política de tratamiento de datos personales</h1>
@@ -241,7 +241,12 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 let written = 0;
 for (const route of ROUTES) {
   const url = `${SITE}${route.path === '/' ? '/' : route.path}`;
+  const image = route.image || `${SITE}/logo-gemb.png`;
   let html = template;
+
+  if (route.path !== '/') {
+    html = html.replace(/\s*<link\s+id="gemb-hero-preload"[\s\S]*?\/>/, '');
+  }
 
   // Título y metas (el template trae los del home; se sustituyen por ruta).
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${route.title}</title>`);
@@ -250,13 +255,15 @@ for (const route of ROUTES) {
   html = html.replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`);
   html = html.replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${esc(route.title)}$2`);
   html = html.replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(route.description)}$2`);
+  html = html.replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${image}$2`);
   html = html.replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${esc(route.title)}$2`);
   html = html.replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${esc(route.description)}$2`);
+  html = html.replace(/(<meta name="twitter:image" content=")[^"]*(")/, `$1${image}$2`);
 
   // Estilos del bloque estático + JSON-LD en <head>.
   html = html.replace('</head>', `${BASE_STYLE}\n${route.jsonld || ''}\n</head>`);
 
-  // Contenido estático dentro de #root (React lo reemplaza al hidratar).
+  // Contenido estático dentro de #root (React lo reemplaza al iniciar).
   html = html.replace('<div id="root"></div>', `<div id="root">${route.body}</div>`);
 
   const outDir = route.path === '/' ? dist : join(dist, route.path.slice(1));

@@ -1,13 +1,12 @@
 # Análisis del rechazo de Google Ad Grants — 20 de julio de 2026
 
-> **ESTADO (20/07/2026, tarde):** los puntos P0 y P1 de código YA ESTÁN IMPLEMENTADOS y
-> desplegados (commit `6ac6c04`): home con identidad de fundación primero (navbar, hero,
-> sección subida, planes solidarios, sin lenguaje de urgencia), GSAP empaquetado sin pantalla
-> de carga, code-splitting (JS inicial 455→~142 KB gzip), prerender de las 8 rutas públicas
-> (el HTML crudo ahora contiene el contenido; antes 0 caracteres) y sección de Transparencia
-> en /fundacion. Pendiente de materiales del usuario: fotos reales, enlaces/soportes de
-> reconocimientos e informes. Pendiente del usuario: pedir indexación en Search Console y
-> reenviar la solicitud de Ad Grants.
+> **ESTADO (20/07/2026, tarde):** los puntos P0 y P1 de código están implementados. El home
+> presenta primero la identidad de la Fundación, GSAP salió por completo de la ruta crítica,
+> el JavaScript inicial bajó de ~455 a ~96 KB gzip y las ocho rutas públicas tienen HTML
+> prerenderizado. `/fundacion` ya integra fotografías del archivo institucional y enlaces a
+> fuentes públicas del Ministerio del Interior, la Secretaría Distrital de Salud y la
+> Secretaría Distrital de la Mujer. Queda solicitar indexación en Search Console y reenviar
+> la solicitud de Ad Grants después de verificar la publicación final.
 
 Documento de diagnóstico para corregir el sitio **gimnasioemocionalmb.com** y reenviar la
 solicitud de activación de Google Ad Grants. Sirve como brief para cualquier persona o IA
@@ -46,7 +45,10 @@ Conclusión: el revisor **sí tuvo disponible** la página de la Fundación, la 
 el footer legal. El rechazo NO se explica por la ausencia de esos elementos → las causas están
 en otra parte.
 
-## 3. Causas probables, en orden
+## 3. Causas probables, en orden (diagnóstico previo a la corrección)
+
+Los siguientes puntos describen el sitio que recibió el rechazo. Se conservan como historial
+del diagnóstico; el estado corregido se resume al inicio de este documento.
 
 ### 🔴 Causa 1 (probabilidad alta): el sitio se percibe como negocio de coaching, no como el sitio de una fundación
 
@@ -93,11 +95,11 @@ vea completo. Es un motivo de rechazo documentado para SPAs.
 
 - Nombre registrado ante Google: **"Fundación Social Mentes Brillantes"** (ID 901002849-3).
 - Marca dominante del sitio: **"Gimnasio Emocional Mentes Brillantes"**; el footer dice
-  "Fundación Social Gimnasio Emocional Mentes Brillantes".
+  "Fundación Social Mentes Brillantes".
 - El NIT coincide, pero el revisor debe "conectar" ambos nombres. Conviene que el nombre
   registrado aparezca idéntico y visible (p. ej. en el hero/badge del home y en el `<title>`).
 
-## 4. Plan de corrección priorizado
+## 4. Plan de corrección ejecutado
 
 ### P0 — Antes de reenviar (obligatorio)
 
@@ -108,8 +110,8 @@ vea completo. Es un motivo de rechazo documentado para SPAs.
 3. Subir la sección `FundacionSection` (idealmente justo después del Método o del Manifiesto,
    antes de las secciones de venta).
 4. Reencuadrar la sección "Planes": título tipo "Procesos con aporte solidario" + línea
-   visible "el 100% de los excedentes financia la labor social gratuita de la Fundación"
-   (enlazando a /fundacion).
+   visible que explique la reinversión de excedentes en la labor social gratuita de la
+   Fundación (enlazando a /fundacion).
 5. Eliminar o suavizar "Garantía 100%" y "Cupos limitados por semana" (lenguaje de scarcity
    marketing que refuerza la percepción comercial).
 6. `<title>`/meta description del home: incluir "Fundación Social Mentes Brillantes".
@@ -135,11 +137,12 @@ vea completo. Es un motivo de rechazo documentado para SPAs.
 **D. Señales de confianza arriba del fold**
 - Chip "Entidad sin ánimo de lucro · NIT 901.002.849-3" cerca del hero.
 
-### P2 — Opcional, suma pero no bloquea
+### P2 — Evidencia y transparencia
 
-- Página "Transparencia" con certificado ESAL/RUES descargable.
-- Sección "Cómo participar / voluntariado / donaciones".
-- Testimonios de la labor comunitaria con fotos reales.
+- Implementado: sección de identidad y fuentes verificables, memoria visual con fotos reales
+  y CTA para participar o articular proyectos.
+- Pendiente cuando la Fundación decida publicarlos: certificado ESAL/RUES e informes de
+  gestión descargables.
 
 ## 5. Reenvío de la solicitud
 

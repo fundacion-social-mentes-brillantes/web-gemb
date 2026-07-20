@@ -5,8 +5,8 @@ import {
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════
-   La Fundación — labor social de la Fundación Social Gimnasio
-   Emocional Mentes Brillantes (entidad sin ánimo de lucro).
+   La Fundación — labor social de la Fundación Social Mentes
+   Brillantes (entidad sin ánimo de lucro).
    Contenido basado en la información entregada por la dirección
    de la Fundación (julio 2026).
    ═══════════════════════════════════════════════════════════════ */
@@ -16,9 +16,9 @@ const CONTACT_PHONE = '+57 311 260 2355';
 
 const STATS = [
   { value: '2016', label: 'Labor continua desde' },
-  { value: '+5.000', label: 'Personas al año, presencial' },
-  { value: '181', label: 'Familias acompañadas' },
-  { value: 'Semanal', label: 'Encuentros gratuitos híbridos' }
+  { value: 'Semanal', label: 'Encuentros comunitarios' },
+  { value: 'Bogotá', label: 'Nodo presencial' },
+  { value: 'Híbrido', label: 'Alcance presencial y digital' }
 ];
 
 const SOCIAL_WORK = [
@@ -45,7 +45,7 @@ const SOCIAL_WORK = [
   {
     icon: Stethoscope,
     title: 'Prescripción social en salud',
-    text: 'Estamos inscritos y viabilizados en la estrategia Más Bienestar 2026 de la Secretaría Distrital de Salud de Bogotá: profesionales de la salud pueden referir pacientes a nuestros espacios de apoyo psicoemocional gratuito.'
+    text: 'GEMB participa en procesos de articulación relacionados con el modelo MAS Bienestar y la prescripción social de Bogotá, que conecta a las personas con recursos comunitarios para fortalecer su bienestar integral.'
   },
   {
     icon: GraduationCap,
@@ -56,19 +56,84 @@ const SOCIAL_WORK = [
 
 const RECOGNITIONS = [
   {
+    year: '2023',
+    title: 'Defensoras de Nuestra Colombia',
+    text: 'Participación documentada de integrantes de GEMB en el lanzamiento de la revista del Ministerio del Interior, realizado en el Congreso de la República.',
+    href: 'https://www.mininterior.gov.co/noticias/defensoras-de-nuestra-colombia-la-revista-de-mininterior-que-reconoce-la-labor-de-las-lideresas-sociales/',
+    image: '/impacto/congreso-republica.webp',
+    imageAlt: 'Memoria visual de integrantes de GEMB en el Congreso de la República'
+  },
+  {
     year: '2025',
-    title: 'Ministerio del Interior',
-    text: 'Labor destacada en la revista institucional "Defensoras de nuestra Colombia" por la protección y prevención de violencias de género y la construcción de cultura de paz.'
-  },
-  {
-    year: '2025 · 2026',
     title: 'Cumbre Global de Salud Mental',
-    text: 'Seleccionados dos años consecutivos como ponentes, presentando el modelo como referente de inclusión social.'
+    text: 'Participación de GEMB como modelo de prevención y protección en salud mental, conservada en la memoria visual institucional.',
+    image: '/impacto/cumbre-salud-mental.webp',
+    imageAlt: 'Participación de GEMB en la Cumbre Global de Salud Mental 2025'
   },
   {
-    year: '2026',
-    title: 'Secretaría Distrital de Salud',
-    text: 'Organización inscrita, certificada y viabilizada en la estrategia Más Bienestar de prescripción social, junto a la Alcaldía Local de Antonio Nariño.'
+    year: 'Registro público',
+    title: 'Secretaría Distrital de la Mujer',
+    text: 'Gimnasio Emocional Mentes Brillantes aparece en el listado público de organizaciones postuladas a iniciativas distritales para mujeres.',
+    href: 'https://www.sdmujer.gov.co/sites/default/files/2022-05/documentos/total-de-organizaciones-postuladas-VTJ_.pdf',
+    image: '/impacto/reconocimiento-liderazgo.webp',
+    imageAlt: 'Memoria visual de reconocimientos al liderazgo y la prevención de violencias'
+  }
+];
+
+const IMPACT_GALLERY = [
+  {
+    src: '/impacto/comunidad-gemb.webp',
+    alt: 'Grupo de participantes de Gimnasio Emocional Mentes Brillantes en un encuentro presencial',
+    title: 'Comunidad que entrena junta',
+    text: 'Encuentro presencial de formación y acompañamiento GEMB.'
+  },
+  {
+    src: '/impacto/formacion-lideresas.webp',
+    alt: 'Mujeres participantes mostrando reconocimientos de un proceso de formación',
+    title: 'Formación de lideresas',
+    text: 'Procesos para multiplicar herramientas de bienestar en familias y territorios.'
+  },
+  {
+    src: '/impacto/entrenamiento-comunitario.webp',
+    alt: 'Encuentro comunitario de mujeres en un espacio de formación emocional',
+    title: 'Encuentros comunitarios',
+    text: 'Práctica, conversación y construcción colectiva en espacios seguros.'
+  },
+  {
+    src: '/impacto/encuentro-mujeres.webp',
+    alt: 'Grupo de mujeres reunidas al aire libre durante una actividad de bienestar',
+    title: 'Redes de apoyo',
+    text: 'Actividades que fortalecen vínculos, liderazgo y cuidado comunitario.'
+  },
+  {
+    src: '/impacto/construccion-paz.webp',
+    alt: 'Actividad comunitaria intercultural de construcción de paz y diversidad',
+    title: 'Paz desde la diversidad',
+    text: 'Herramientas emocionales compartidas en contextos culturales y comunitarios.'
+  },
+  {
+    src: '/impacto/congreso-republica.webp',
+    alt: 'Memoria visual de la participación de integrantes de GEMB en el Congreso de la República',
+    title: 'Participación ciudadana',
+    text: 'Presencia en espacios de reconocimiento a lideresas y defensoras de derechos.'
+  }
+];
+
+const PUBLIC_SOURCES = [
+  {
+    title: 'Modelo MAS Bienestar y prescripción social',
+    source: 'Secretaría Distrital de Salud de Bogotá',
+    href: 'https://www.saludcapital.gov.co/Paginas2/Noticia_Portal_Detalle.aspx?IP=2622'
+  },
+  {
+    title: 'Revista Defensoras de Nuestra Colombia',
+    source: 'Ministerio del Interior',
+    href: 'https://www.mininterior.gov.co/noticias/defensoras-de-nuestra-colombia-la-revista-de-mininterior-que-reconoce-la-labor-de-las-lideresas-sociales/'
+  },
+  {
+    title: 'Listado de organizaciones postuladas',
+    source: 'Secretaría Distrital de la Mujer',
+    href: 'https://www.sdmujer.gov.co/sites/default/files/2022-05/documentos/total-de-organizaciones-postuladas-VTJ_.pdf'
   }
 ];
 
@@ -100,7 +165,7 @@ export default function FundacionPage(props) {
   const { GlobalStyles, Navbar, Footer, waNumber, onOpenTest } = props;
 
   const handleWA = () => {
-    const text = encodeURIComponent('Hola, quiero conocer la labor social de la Fundación Social Gimnasio Emocional Mentes Brillantes.');
+    const text = encodeURIComponent('Hola, quiero conocer la labor social de la Fundación Social Mentes Brillantes.');
     window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank');
   };
 
@@ -108,7 +173,7 @@ export default function FundacionPage(props) {
     <>
       <GlobalStyles />
       <div className="noise-overlay"></div>
-      <Navbar onOpenTest={onOpenTest} />
+      <Navbar onOpenTest={onOpenTest} darkAtTop />
 
       <main className="bg-[#F2F0E9]">
         {/* ── Hero ─────────────────────────────────────────────── */}
@@ -124,7 +189,7 @@ export default function FundacionPage(props) {
               Una fundación que entrena <span className="font-serif font-normal italic text-[#2E4036]">bienestar emocional</span> en comunidad
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base font-light leading-relaxed text-[#1A1A1A]/75 md:text-lg">
-              La <strong className="font-bold">Fundación Social Gimnasio Emocional Mentes Brillantes</strong> (NIT 901.002.849-3, Bogotá, Colombia)
+              La <strong className="font-bold">Fundación Social Mentes Brillantes</strong> (NIT 901.002.849-3, Bogotá, Colombia)
               entrega herramientas de inteligencia emocional, prevención de violencias y empoderamiento social a comunidades de Bogotá
               y a una comunidad digital dentro y fuera del país, con enfoque de género y diferencial.
             </p>
@@ -164,6 +229,49 @@ export default function FundacionPage(props) {
                   </article>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* Memoria visual */}
+        <section className="bg-[#1A1A1A] px-6 py-20 text-[#F2F0E9] md:px-12 md:py-28">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid items-end gap-6 md:grid-cols-[1fr_0.8fr]">
+              <div>
+                <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#E2C17D]">
+                  Memoria visual
+                </span>
+                <h2 className="max-w-3xl font-heading text-3xl font-bold md:text-5xl">
+                  La labor social se demuestra <span className="font-serif font-normal italic text-[#E2C17D]">con hechos</span>
+                </h2>
+              </div>
+              <p className="text-sm font-light leading-relaxed text-white/65 md:text-base">
+                Esta selección pertenece al archivo visual compartido por la Fundación y documenta encuentros, procesos de formación,
+                redes de apoyo y participación ciudadana desarrollados durante su trayectoria.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {IMPACT_GALLERY.map((item, index) => (
+                <figure
+                  key={item.src}
+                  className={`overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] ${index === 0 ? 'md:col-span-2 lg:col-span-2' : ''}`}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    width={index === 0 ? 1440 : 800}
+                    height={index === 0 ? 960 : 600}
+                    loading="lazy"
+                    decoding="async"
+                    className={`w-full object-cover ${index === 0 ? 'aspect-[16/9]' : 'aspect-[4/3]'}`}
+                  />
+                  <figcaption className="border-t border-white/10 p-5">
+                    <h3 className="font-heading text-base font-bold text-white">{item.title}</h3>
+                    <p className="mt-2 text-sm font-light leading-relaxed text-white/60">{item.text}</p>
+                  </figcaption>
+                </figure>
+              ))}
             </div>
           </div>
         </section>
@@ -229,7 +337,7 @@ export default function FundacionPage(props) {
               Los espacios comunitarios — encuentros semanales, talleres territoriales, meditación y alfabetización emocional —
               son <strong className="font-bold text-white">100% gratuitos</strong> para la población vulnerable. Los procesos de certificación
               y los talleres contratados por empresas e instituciones aplican tarifa plena, y{' '}
-              <strong className="font-bold text-white">el 100% de los excedentes se reinvierte en la labor social</strong>: becas para mujeres
+              como compromiso institucional, <strong className="font-bold text-white">los excedentes se reinvierten en la labor social</strong>: becas para mujeres
               sin recursos, sostenimiento de los espacios gratuitos, tecnología para la comunidad digital y materiales educativos de libre acceso.
             </p>
             <p className="mt-5 font-serif text-xl italic text-[#E2C17D] md:text-2xl">
@@ -249,14 +357,35 @@ export default function FundacionPage(props) {
             </h2>
 
             <div className="mt-14 grid gap-6 md:grid-cols-3">
-              {RECOGNITIONS.map(({ year, title, text }) => (
-                <article key={title} className="rounded-[2rem] border border-[#2E4036]/10 bg-[#F7F4ED] p-7">
+              {RECOGNITIONS.map(({ year, title, text, href, image, imageAlt }) => (
+                <article key={title} className="overflow-hidden rounded-lg border border-[#2E4036]/10 bg-[#F7F4ED]">
+                  <img
+                    src={image}
+                    alt={imageAlt}
+                    width="548"
+                    height="365"
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[3/2] w-full object-cover"
+                  />
+                  <div className="p-7">
                   <div className="mb-4 flex items-center justify-between">
                     <Award size={22} className="text-[#CC5833]" />
                     <span className="font-mono text-xs font-bold text-[#2E4036]">{year}</span>
                   </div>
                   <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">{title}</h3>
                   <p className="mt-3 text-sm font-light leading-relaxed text-[#1A1A1A]/70">{text}</p>
+                  {href && (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#2E4036] underline decoration-[#2E4036]/25 underline-offset-4"
+                    >
+                      Consultar fuente pública <ArrowRight size={14} />
+                    </a>
+                  )}
+                  </div>
                 </article>
               ))}
             </div>
@@ -284,7 +413,7 @@ export default function FundacionPage(props) {
               Transparencia
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
-              Datos abiertos y <span className="font-serif font-normal italic text-[#2E4036]">verificables</span>
+              Identidad y fuentes <span className="font-serif font-normal italic text-[#2E4036]">verificables</span>
             </h2>
 
             <div className="mt-12 grid gap-4 md:grid-cols-2">
@@ -299,19 +428,31 @@ export default function FundacionPage(props) {
                 </ul>
               </div>
               <div className="rounded-[2rem] border border-[#2E4036]/10 bg-white p-7">
-                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Validaciones externas</h3>
-                <ul className="mt-4 space-y-2 text-sm font-light leading-relaxed text-[#1A1A1A]/75">
-                  <li>Organización verificada en <strong className="font-bold">Google para Organizaciones sin Fines de Lucro</strong> (validación Goodstack, 2026).</li>
-                  <li>Registrada en <strong className="font-bold">TechSoup Colombia</strong> (programa de tecnología para ESAL).</li>
-                  <li>Inscrita y viabilizada en la estrategia <strong className="font-bold">Más Bienestar 2026</strong> de la Secretaría Distrital de Salud de Bogotá.</li>
-                </ul>
+                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Fuentes públicas relacionadas</h3>
+                <div className="mt-4 divide-y divide-[#2E4036]/10">
+                  {PUBLIC_SOURCES.map((source) => (
+                    <a
+                      key={source.href}
+                      href={source.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between gap-4 py-4 text-left transition-colors first:pt-0 last:pb-0 hover:text-[#CC5833]"
+                    >
+                      <span>
+                        <strong className="block text-sm font-bold">{source.title}</strong>
+                        <span className="mt-1 block text-xs text-[#1A1A1A]/55">{source.source}</span>
+                      </span>
+                      <ArrowRight size={16} className="shrink-0" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className="mt-6 rounded-[2rem] border border-[#2E4036]/10 bg-[#F7F4ED] p-7 text-center">
               <p className="text-sm font-light leading-relaxed text-[#1A1A1A]/75">
-                ¿Necesitas nuestro certificado de existencia, informes de gestión o soportes de la labor social?
-                Escríbenos a{' '}
+                Los certificados administrativos y soportes internos se comparten con entidades aliadas y procesos de debida diligencia.
+                Si necesitas verificarlos, escríbenos a{' '}
                 <a href={`mailto:${CONTACT_EMAIL}`} className="font-bold text-[#2E4036] underline decoration-[#2E4036]/30 underline-offset-4">{CONTACT_EMAIL}</a>{' '}
                 o por WhatsApp al <strong className="font-bold">{CONTACT_PHONE}</strong> y te los compartimos.
               </p>
