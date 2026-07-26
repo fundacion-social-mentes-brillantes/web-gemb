@@ -34,6 +34,8 @@
     { "source": "/fundacion/", "destination": "/fundacion/index.html" },
     { "source": "/politica-de-privacidad", "destination": "/politica-de-privacidad/index.html" },
     { "source": "/politica-de-privacidad/", "destination": "/politica-de-privacidad/index.html" },
+    { "source": "/contacto", "destination": "/contacto/index.html" },
+    { "source": "/contacto/", "destination": "/contacto/index.html" },
     { "source": "/mi-proceso", "destination": "/index.html" },
     { "source": "/mi-proceso/", "destination": "/index.html" }
   ]

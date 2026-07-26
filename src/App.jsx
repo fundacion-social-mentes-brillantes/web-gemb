@@ -1,9 +1,25 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
   Menu, X, ArrowRight, Activity, ScanLine,
-  Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star, Calendar,
-  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn, HeartHandshake
+  Settings2, CheckCircle2, MessageCircle, Copy, AlertCircle, Star,
+  Clock, User, Target, ShieldCheck, ChevronDown, BookOpen, Compass, Sparkles, LogIn, HeartHandshake, Mail, Users
 } from 'lucide-react';
+import {
+  WA_NUMBER,
+  SITE_URL,
+  ADMIN_SEO,
+  ALEXANDRA_PATH,
+  FUNDACION_PATH,
+  CONTACTO_PATH,
+  PRIVACIDAD_PATH,
+  PROCESO_PATH,
+  PROCESS_PAGES,
+  PROCESS_PAGE_BY_PATH,
+  normalizePath,
+  setMetaTag,
+  setCanonical,
+  getSeoForPath
+} from './siteConfig';
 
 // Las páginas pesadas se cargan bajo demanda: el home no descarga Firebase,
 // jsPDF, el portal privado ni los tests hasta que se necesitan.
@@ -12,6 +28,7 @@ const TestInitialAssessmentModal = lazy(() => import('./TestInitialAssessmentMod
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const AlexandraPage = lazy(() => import('./components/AlexandraPage'));
 const FundacionPage = lazy(() => import('./components/FundacionPage'));
+const ContactoPage = lazy(() => import('./components/ContactoPage'));
 const PrivacyPage = lazy(() => import('./components/PrivacyPage'));
 const ProcessPortal = lazy(() => import('./components/ProcessPortal'));
 
@@ -99,369 +116,6 @@ const GlobalStyles = () => (
     ::-webkit-scrollbar-thumb { background: var(--color-moss); border-radius: 4px; }
   `}} />
 );
-
-const WA_NUMBER = "573112602355";
-const SITE_URL = "https://www.gimnasioemocionalmb.com";
-
-const HOME_SEO = {
-  title: "Gimnasio Emocional Mentes Brillantes | Fundación Social Mentes Brillantes",
-  description: "Programa de entrenamiento emocional de la Fundación Social Mentes Brillantes (entidad sin ánimo de lucro, NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, procesos de transformación y prevención en salud mental desde 2016.",
-  url: `${SITE_URL}/`,
-  image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
-  structuredData: {
-    "@context": "https://schema.org",
-    "@type": "NGO",
-    name: "Fundación Social Mentes Brillantes",
-    alternateName: ["Gimnasio Emocional Mentes Brillantes", "GEMB"],
-    url: SITE_URL,
-    logo: `${SITE_URL}/logo-gemb.png`,
-    image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
-    foundingDate: "2016",
-    taxID: "901.002.849-3",
-    email: "fundacionsocial@gimnasioemocionalmb.com",
-    telephone: "+573112602355",
-    address: { "@type": "PostalAddress", addressLocality: "Bogotá", addressCountry: "CO" },
-    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"],
-    description: "Entidad sin ánimo de lucro que entrena inteligencia emocional y previene violencias mediante programas comunitarios gratuitos y procesos de acompañamiento; los excedentes financian su labor social."
-  }
-};
-
-const ADMIN_SEO = {
-  title: "Panel privado | Gimnasio Emocional Mentes Brillantes",
-  description: "Acceso privado al panel administrativo de Gimnasio Emocional Mentes Brillantes.",
-  url: `${SITE_URL}/#admin`,
-  image: `${SITE_URL}/logo-gemb.png`,
-  robots: "noindex, nofollow"
-};
-
-const ALEXANDRA_PATH = "/alexandra-ortega";
-
-const ALEXANDRA_SEO = {
-  title: "Alexandra Ortega | Fundadora de Gimnasio Emocional Mentes Brillantes",
-  description: "Conoce a Alexandra Ortega: psicóloga, coach ontológica y fundadora de la técnica Gimnasio Emocional Mentes Brillantes (GEMB). Tallerista, conferencista y formadora en salud mental con trayectoria continua desde 2016.",
-  url: `${SITE_URL}${ALEXANDRA_PATH}`,
-  image: `${SITE_URL}/alexandra-sq.jpg`,
-  structuredData: {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Alexandra Ortega",
-    jobTitle: "Psicóloga, Coach Ontológica, Tallerista, Conferencista y Formadora en Salud Mental",
-    description: "Fundadora de la técnica Gimnasio Emocional Mentes Brillantes (GEMB), con trayectoria continua desde 2016 en inteligencia emocional, prevención en salud mental, liderazgo consciente, enfoque de género y construcción de paz territorial.",
-    image: `${SITE_URL}/alexandra-sq.jpg`,
-    url: `${SITE_URL}${ALEXANDRA_PATH}`,
-    email: "mailto:yaosproactiva@hotmail.com",
-    telephone: "+573208413878",
-    worksFor: {
-      "@type": "Organization",
-      name: "Fundación Social Mentes Brillantes",
-      url: SITE_URL
-    },
-    knowsAbout: [
-      "Inteligencia emocional",
-      "Prevención en salud mental",
-      "Liderazgo consciente",
-      "Enfoque de género",
-      "Duelo y resignificación",
-      "Construcción de paz"
-    ],
-    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
-  }
-};
-
-const FUNDACION_PATH = "/fundacion";
-
-const FUNDACION_SEO = {
-  title: "La Fundación | Labor social de Gimnasio Emocional Mentes Brillantes",
-  description:
-    "Fundación Social Mentes Brillantes (NIT 901.002.849-3): encuentros comunitarios gratuitos en Bogotá, formación a lideresas y un modelo solidario que reinvierte sus excedentes en labor social desde 2016.",
-  url: `${SITE_URL}${FUNDACION_PATH}`,
-  image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
-  structuredData: {
-    "@context": "https://schema.org",
-    "@type": "NGO",
-    name: "Fundación Social Mentes Brillantes",
-    alternateName: ["Gimnasio Emocional Mentes Brillantes", "GEMB"],
-    url: SITE_URL,
-    logo: `${SITE_URL}/logo-gemb.png`,
-    image: `${SITE_URL}/impacto/comunidad-gemb.webp`,
-    foundingDate: "2016",
-    taxID: "901.002.849-3",
-    email: "fundacionsocial@gimnasioemocionalmb.com",
-    telephone: "+573112602355",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Bogotá",
-      addressCountry: "CO"
-    },
-    areaServed: "Colombia",
-    founder: { "@type": "Person", name: "Alexandra Ortega" },
-    sameAs: ["https://www.instagram.com/gimnasioemocional_mb"]
-  }
-};
-
-const PRIVACIDAD_PATH = "/politica-de-privacidad";
-
-const PRIVACIDAD_SEO = {
-  title: "Política de tratamiento de datos | Fundación Social Mentes Brillantes",
-  description:
-    "Conoce cómo la Fundación Social Mentes Brillantes (NIT 901.002.849-3) protege y trata tus datos personales según la Ley 1581 de 2012.",
-  url: `${SITE_URL}${PRIVACIDAD_PATH}`,
-  image: `${SITE_URL}/logo-gemb.png`
-};
-
-const PROCESO_PATH = "/mi-proceso";
-
-const PROCESO_SEO = {
-  title: "Mi Proceso | Gimnasio Emocional Mentes Brillantes",
-  description: "Área privada para continuar tu proceso con Gimnasio Emocional Mentes Brillantes.",
-  url: `${SITE_URL}${PROCESO_PATH}`,
-  image: `${SITE_URL}/logo-gemb.png`,
-  robots: "noindex, nofollow"
-};
-
-const PROCESS_PAGES = [
-  {
-    path: "/curso-de-milagros",
-    icon: BookOpen,
-    label: "Curso de Milagros",
-    eyebrow: "Estudio espiritual y práctica diaria",
-    title: "Un Curso de Milagros en Colombia | Gimnasio Emocional Mentes Brillantes",
-    description: "Estudia y practica Un Curso de Milagros con Gimnasio Emocional Mentes Brillantes. Un recorrido espiritual para sanar la percepción, elegir de nuevo y volver al amor.",
-    h1: "Un Curso de Milagros: un entrenamiento de la mente para volver al amor",
-    lead: "Cada año abrimos un recorrido de estudio y práctica de Un Curso de Milagros para observar la mente, sanar la percepción, soltar el juicio y elegir de nuevo desde el amor.",
-    quote: "No buscamos memorizar ideas espirituales; buscamos entrenar una mirada más limpia, amorosa y responsable en la vida diaria.",
-    keywords: ["Un Curso de Milagros", "Curso de Milagros Colombia", "estudio espiritual", "despertar de conciencia"],
-    whatsappMessage: "Hola, quiero información sobre el recorrido de Un Curso de Milagros en Gimnasio Emocional Mentes Brillantes.",
-    sections: [
-      {
-        title: "Qué es este recorrido",
-        body: "Es un espacio de estudio, práctica y acompañamiento espiritual donde usamos las enseñanzas de Un Curso de Milagros como entrenamiento de la mente. La intención es aprender a mirar las situaciones desde menos miedo, menos culpa y más amor.",
-        bullets: ["Lectura y comprensión guiada", "Práctica interior aplicada a la vida cotidiana", "Observación del juicio, la culpa y la defensa", "Elección consciente de una percepción más amorosa"]
-      },
-      {
-        title: "Como lo vivimos en GEMB",
-        body: "Dentro de Gimnasio Emocional Mentes Brillantes lo vivimos como una disciplina espiritual acompañada. Integramos conversación honesta, silencio, oración, práctica emocional y ejemplos reales para que la teoría baje a decisiones concretas.",
-        bullets: ["Encuentros de estudio y reflexión", "Prácticas para elegir de nuevo", "Acompañamiento desde una mirada humana y espiritual", "Lenguaje claro para personas que están comenzando"]
-      },
-      {
-        title: "Para quien es",
-        body: "Es para personas que sienten el llamado a sanar su percepción, revisar sus reacciones, dejar de vivir desde la culpa o el ataque y cultivar una relación más serena con Dios, consigo mismas y con los demás.",
-        bullets: ["Quienes buscan un grupo de estudio espiritual", "Personas en proceso de despertar de conciencia", "Quienes quieren unir espiritualidad con práctica emocional", "Personas nuevas o con experiencia previa en UCDM"]
-      },
-      {
-        title: "Qué puedes esperar",
-        body: "Puedes esperar profundidad, constancia y una invitación a practicar. No es un espacio para discutir quién tiene la razón, sino para mirar dónde la mente se separa del amor y entrenar una respuesta diferente.",
-        bullets: ["Mayor claridad sobre tus pensamientos", "Herramientas para soltar juicio y culpa", "Un lenguaje amoroso para volver al centro", "Comunidad de práctica y acompañamiento"]
-      }
-    ],
-    practice: "Durante siete días, observa un juicio recurrente y escribe: qué creo que está pasando, qué miedo hay debajo y cómo podría elegir mirar esto desde el amor.",
-    disclaimer: "Este espacio no representa a la organización oficial de Un Curso de Milagros; es un grupo de estudio, práctica y acompañamiento espiritual desarrollado dentro de Gimnasio Emocional Mentes Brillantes.",
-    faq: [
-      ["¿Necesito experiencia previa?", "No. Puedes llegar sin experiencia. El recorrido está pensado para estudiar, preguntar y practicar paso a paso."],
-      ["¿Es un curso religioso?", "No se presenta como una religión. Es un camino espiritual de entrenamiento de la mente, vivido con respeto por el proceso de cada persona."],
-      ["¿Cuándo inicia?", "Abrimos recorridos por ciclos. Lo mejor es escribir por WhatsApp para recibir fechas, horarios y modalidad vigente."],
-      ["¿Es presencial o virtual?", "La modalidad puede variar según el ciclo. Te confirmamos los encuentros disponibles cuando solicitas información."],
-      ["¿Cómo pido información?", "Puedes escribir por WhatsApp desde esta página y pedir detalles del próximo recorrido de Un Curso de Milagros."]
-    ]
-  },
-  {
-    path: "/sala-reduccion-ego",
-    icon: Activity,
-    label: "Sala de Reducción del Ego",
-    eyebrow: "Practica grupal de conciencia",
-    title: "Sala de Reducción del Ego | Gimnasio Emocional Mentes Brillantes",
-    description: "Participa en la Sala de Reducción del Ego de Gimnasio Emocional Mentes Brillantes, un espacio de entrenamiento emocional y espiritual para reconocer el ego, rendir el control y volver a la conciencia.",
-    h1: "Sala de Reducción del Ego: un espacio para reconocer, rendir y transformar",
-    lead: "La Sala de Reducción del Ego es un espacio de entrenamiento emocional y espiritual donde aprendemos a observar las reacciones que nacen del miedo, el control, el juicio o la necesidad de tener la razón.",
-    quote: "En lugar de pelear con el ego, aprendemos a reconocerlo, rendirlo y volver a una mirada más consciente, amorosa y responsable.",
-    keywords: ["Sala de Reducción del Ego", "reducción del ego", "entrenamiento emocional", "conciencia emocional"],
-    whatsappMessage: "Hola, quiero información sobre la Sala de Reducción del Ego de Gimnasio Emocional Mentes Brillantes.",
-    sections: [
-      {
-        title: "Qué es la Sala de Reducción del Ego",
-        body: "Es un espacio grupal, profundo y humano para entrenar la observación interior. Miramos las formas del ego sin vergüenza y sin dramatizar: control, defensa, orgullo, culpa, miedo, victimismo, juicio y reacción automática.",
-        bullets: ["Reconocer el impulso antes de actuar", "Rendir el control desde la honestidad", "Practicar serenidad y responsabilidad", "Volver a la esencia real sin castigo"]
-      },
-      {
-        title: "Qué trabajamos en la sala",
-        body: "Trabajamos situaciones reales de la vida: conversaciones difíciles, límites, heridas, comparación, necesidad de aprobación, enojo, culpa o deseo de tener siempre la razón. La sala convierte la reacción en material de conciencia.",
-        bullets: ["Control y necesidad de razón", "Juicio, ataque y defensa", "Culpa, miedo y orgullo espiritual", "Entrega, oración y poder superior"]
-      },
-      {
-        title: "Para quien es",
-        body: "Es para personas que quieren crecer con honestidad, practicar humildad emocional y salir del piloto automático. No necesitas saber nombrar todo lo que sientes; basta con llegar con disposición a mirar.",
-        bullets: ["Personas nuevas en GEMB", "Quienes repiten conflictos o reacciones", "Quienes desean entrenar conciencia emocional", "Quienes buscan una práctica espiritual aterrizada"]
-      },
-      {
-        title: "Qué pasa en una sesión",
-        body: "La experiencia combina apertura, compartir consciente, escucha, dirección, práctica interior y cierre. El ambiente cuida la dignidad de cada persona y no se plantea como terapia clínica.",
-        bullets: ["Se abre un tema de trabajo", "Se comparte desde la experiencia", "Se observa el patrón del ego", "Se cierra con práctica, serenidad y dirección"]
-      }
-    ],
-    practice: "Antes de reaccionar, respira y nombra en voz baja: ¿estoy defendiendo, controlando o queriendo tener la razón? Esa pausa ya abre una puerta.",
-    faq: [
-      ["¿Qué significa reducir el ego?", "Significa observar sus mecanismos de miedo, defensa y control para dejar de obedecerlos automáticamente."],
-      ["¿Es terapia?", "No. Es un espacio de formación, acompañamiento y entrenamiento emocional/espiritual. No reemplaza atención clínica cuando se necesita."],
-      ["¿Puedo asistir si soy nuevo?", "Sí. La sala está pensada para recibir personas nuevas con orientación clara y un ambiente cuidado."],
-      ["¿Qué se hace en una sala?", "Se trabaja un tema, se comparte con honestidad, se reconoce el patrón y se practica una forma más consciente de responder."],
-      ["¿Cómo pido información?", "Puedes escribir por WhatsApp desde esta página y pedir fechas, modalidad y condiciones de participación."]
-    ]
-  },
-  {
-    path: "/entrega-de-pasos",
-    icon: Compass,
-    label: "Entrega de Pasos",
-    eyebrow: "Escritura, honestidad y reparacion",
-    title: "Entrega de Pasos | Proceso emocional y espiritual GEMB",
-    description: "La Entrega de Pasos en Gimnasio Emocional Mentes Brillantes es un proceso de escritura, honestidad y reparación interior para ordenar la historia personal y avanzar con más paz.",
-    h1: "Entrega de Pasos: escribir, reconocer y soltar lo que ya no necesitas cargar",
-    lead: "La Entrega de Pasos es un camino de escritura, honestidad y reparacion interior. A traves de los pasos, la persona deja de cargar sola su historia y empieza a ordenar lo vivido.",
-    quote: "Escribir no cambia el pasado, pero puede cambiar la forma en que lo cargas, lo comprendes y eliges avanzar.",
-    keywords: ["Entrega de Pasos", "12 pasos", "recuperación emocional", "reparación interior"],
-    whatsappMessage: "Hola, quiero información sobre la Entrega de Pasos en Gimnasio Emocional Mentes Brillantes.",
-    sections: [
-      {
-        title: "Qué es la Entrega de Pasos",
-        body: "Es un proceso acompañado de escritura, reconocimiento y entrega interior, inspirado en caminos de recuperación emocional y espiritual. No se trata de exponerte ni de forzarte, sino de ordenar tu historia con verdad y cuidado.",
-        bullets: ["Mirar patrones emocionales", "Reconocer heridas y decisiones antiguas", "Soltar cargas que ya no necesitas llevar", "Abrir espacio para responsabilidad y libertad"]
-      },
-      {
-        title: "Por que escribir ayuda a sanar",
-        body: "La escritura permite sacar del cuerpo y de la mente aquello que se repite en silencio. Cuando una persona escribe con guía, puede ver conexiones, nombrar dolores y dejar de vivir gobernada por historias incompletas.",
-        bullets: ["Ordena lo vivido", "Reduce confusion interna", "Muestra patrones repetidos", "Ayuda a preparar reparaciones posibles"]
-      },
-      {
-        title: "Cómo se acompaña el proceso",
-        body: "El acompañamiento ofrece dirección, preguntas, tiempos y contención. La persona avanza paso a paso, sin prisa artificial, con respeto por su historia y por el momento emocional en el que se encuentra.",
-        bullets: ["Orientación para escribir", "Revisión de patrones y aprendizajes", "Cuidado de la confidencialidad", "Enfoque en responsabilidad, paz y reparación"]
-      },
-      {
-        title: "Para quien es",
-        body: "Es para quienes sienten que cargan historias, culpas, duelos, resentimientos o ciclos que necesitan ser mirados con honestidad para avanzar con más libertad.",
-        bullets: ["Personas que quieren ordenar su historia", "Quienes buscan recuperación emocional", "Quienes desean reparar vínculos desde la conciencia", "Quienes necesitan una ruta profunda y acompañada"]
-      }
-    ],
-    practice: "Escribe una línea diaria durante una semana: hoy reconozco que ya no quiero cargar solo/a con... Luego observa qué emoción aparece.",
-    faq: [
-      ["¿Debo tener experiencia previa?", "No. El proceso puede iniciar desde cero, con guía para comprender qué se escribe y cómo avanzar."],
-      ["¿Qué son los pasos?", "Son una ruta de honestidad, reconocimiento, entrega y reparación interior que ayuda a ordenar la historia personal."],
-      ["¿Tengo que compartir mi historia?", "No se fuerza a nadie. El proceso cuida el ritmo personal y se comparte lo necesario dentro del acompañamiento."],
-      ["¿Es confidencial?", "Sí. La confidencialidad y el respeto por la historia de cada persona son parte esencial del proceso."],
-      ["¿Cómo inicio?", "Puedes escribir por WhatsApp para recibir orientación sobre el primer encuentro y la forma de comenzar."]
-    ]
-  },
-  {
-    path: "/sesion-coach",
-    icon: User,
-    label: "Sesión Coach",
-    eyebrow: "Puerta de entrada al proceso GEMB",
-    title: "Sesión Coach Emocional | Gimnasio Emocional Mentes Brillantes",
-    description: "Agenda una Sesión Coach con Gimnasio Emocional Mentes Brillantes para mirar tu historia, ordenar tu mundo interior y recibir guía en tu proceso emocional.",
-    h1: "Sesión Coach: una guía privada para ordenar tu mundo interior",
-    lead: "La Sesión Coach es un espacio privado de guía emocional donde miramos tu historia con honestidad, identificamos patrones que se repiten y ordenamos el mundo interior.",
-    quote: "La claridad no llega solo por pensar más; llega cuando miras tu historia con dirección, honestidad y una práctica que puedas sostener.",
-    keywords: ["sesión coach emocional", "coach emocional", "guía emocional", "Alexandra Ortega"],
-    whatsappMessage: "Hola, quiero agendar una Sesión Coach con Gimnasio Emocional Mentes Brillantes.",
-    sections: [
-      {
-        title: "Qué es una Sesión Coach",
-        body: "Es la puerta principal de Gimnasio Emocional Mentes Brillantes: un encuentro privado para mirar lo que estás viviendo, ordenar tu mundo interior y recibir una ruta de avance. Puede ser guiada por Alexandra Ortega o por coaches formados en la técnica GEMB.",
-        bullets: ["Lectura honesta de tu momento actual", "Identificación de patrones emocionales", "Dirección para tomar decisiones con más conciencia", "Primer mapa de proceso y práctica"]
-      },
-      {
-        title: "Qué puedes trabajar",
-        body: "Puedes trabajar relaciones, límites, duelos, cansancio emocional, culpa, miedo, repetición de conflictos, falta de dirección, dependencia emocional o dificultad para sostener cambios.",
-        bullets: ["Historia personal y patrones repetidos", "Orden emocional y espiritual", "Límites, decisiones y coherencia", "Ruta hacia sala, pasos, UCDM o seguimiento"]
-      },
-      {
-        title: "Como se vive una sesion",
-        body: "La sesión combina escucha, preguntas precisas, lectura del patrón y orientación práctica. No prometemos curas ni resultados médicos; ofrecemos una guía clara para que puedas entrenar una forma diferente de responder.",
-        bullets: ["Conversacion privada y cuidada", "Claridad sobre el patron principal", "Practicas para la vida real", "Siguiente paso sugerido dentro de GEMB"]
-      },
-      {
-        title: "Para quien es",
-        body: "Es para personas que necesitan ordenar lo que sienten y quieren iniciar un proceso serio, humano y espiritual. También es ideal si no sabes por dónde empezar dentro de GEMB.",
-        bullets: ["Quienes buscan guía emocional", "Personas que repiten ciclos y quieren claridad", "Quienes necesitan un primer mapa de proceso", "Personas que desean acompañamiento sin enfoque clínico"]
-      }
-    ],
-    practice: "Antes de la sesión, escribe tres situaciones que se repiten en tu vida y que ya no quieres seguir resolviendo desde la misma reacción.",
-    faq: [
-      ["¿Es terapia psicológica?", "No. Es una guía emocional y espiritual de entrenamiento interior. No reemplaza atención psicológica, médica o psiquiátrica cuando sea necesaria."],
-      ["¿Quién guía la sesión?", "Puede guiarla Alexandra Ortega o un miembro del equipo de coaches formados en la técnica GEMB."],
-      ["¿Cuánto dura?", "La duración se confirma al agendar, según la modalidad disponible y el tipo de acompañamiento."],
-      ["¿Puedo tomarla online?", "Sí, cuando hay modalidad virtual disponible. Te confirmamos opciones y horarios por WhatsApp."],
-      ["¿Cómo agendo?", "Escribe por WhatsApp desde esta página y solicita disponibilidad para tu Sesión Coach."]
-    ]
-  }
-];
-
-const PROCESS_PAGE_BY_PATH = PROCESS_PAGES.reduce((pages, page) => {
-  pages[page.path] = page;
-  return pages;
-}, {});
-
-const normalizePath = (path) => {
-  const cleanPath = path.replace(/\/+$/, "");
-  return cleanPath || "/";
-};
-
-const setMetaTag = ({ name, property, content }) => {
-  const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
-  let tag = document.head.querySelector(selector);
-
-  if (!tag) {
-    tag = document.createElement("meta");
-    if (name) tag.setAttribute("name", name);
-    if (property) tag.setAttribute("property", property);
-    document.head.appendChild(tag);
-  }
-
-  tag.setAttribute("content", content);
-};
-
-const setCanonical = (href) => {
-  let link = document.head.querySelector('link[rel="canonical"]');
-
-  if (!link) {
-    link = document.createElement("link");
-    link.setAttribute("rel", "canonical");
-    document.head.appendChild(link);
-  }
-
-  link.setAttribute("href", href);
-};
-
-const getProcessStructuredData = (page) => [
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: page.label,
-    serviceType: "Entrenamiento emocional y espiritual",
-    url: `${SITE_URL}${page.path}`,
-    description: page.description,
-    provider: {
-      "@type": "Organization",
-      name: "Gimnasio Emocional Mentes Brillantes",
-      url: SITE_URL
-    },
-    areaServed: {
-      "@type": "Country",
-      name: "Colombia"
-    }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: page.faq.map(([question, answer]) => ({
-      "@type": "Question",
-      name: question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: answer
-      }
-    }))
-  }
-];
 
 const useSeoMeta = (seo) => {
   const structuredDataJson = seo?.structuredData ? JSON.stringify(seo.structuredData) : "";
@@ -643,6 +297,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
                 <HeartHandshake size={13} className="text-[#E2C17D]" /> La Fundación
               </a>
               <a href="/alexandra-ortega" className="shrink-0 hover:opacity-70 transition-opacity">Alexandra</a>
+              <a href="/contacto" className="shrink-0 hover:opacity-70 transition-opacity">Contacto</a>
               <a href="/#planes" className="shrink-0 hover:opacity-70 transition-opacity">Planes</a>
               <a
                 href="/#admin"
@@ -696,6 +351,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
               <a href="/mi-proceso" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#CC5833] px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-[#b04a29] focus:outline-none"><LogIn size={16} className="text-white" /> Continuar mi proceso</a>
               <a href="/fundacion" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><HeartHandshake size={16} className="text-[#E2C17D]" /> La Fundación</a>
               <a href="/alexandra-ortega" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><User size={16} className="text-[#E2C17D]" /> ¿Quién es Alexandra?</a>
+              <a href="/contacto" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Mail size={16} className="text-[#E2C17D]" /> Contacto</a>
               <a href="/#planes" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading hover:bg-white/10 focus:bg-white/10 focus:outline-none">Planes</a>
             </div>
           </div>
@@ -780,8 +436,8 @@ const Hero = ({ onOpenTest }) => {
                 Valoración inicial de tu proceso
                 <ArrowRight size={18} />
               </button>
-              <a href="#procesos" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center transition-colors backdrop-blur-sm">
-                Ver procesos
+              <a href="#participa" className="border border-[#F2F0E9]/30 text-[#F2F0E9] hover:bg-[#F2F0E9]/10 px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 transition-colors backdrop-blur-sm">
+                <Users size={18} /> Participar gratis
               </a>
             </div>
 
@@ -1626,6 +1282,73 @@ const AlexandraFounderSection = () => (
   </section>
 );
 
+// --- PARTICIPA GRATIS (acceso libre a los programas sociales) ---
+
+const ParticipaSection = () => (
+  <section id="participa" className="relative z-10 bg-white px-6 py-24 md:px-12 md:py-28">
+    <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-3xl text-center">
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+          Acceso libre · Sin costo
+        </span>
+        <h2 className="font-heading text-3xl font-bold leading-tight text-[#1A1A1A] md:text-5xl">
+          Puedes empezar <span className="font-serif font-normal italic text-[#2E4036]">sin pagar nada</span>
+        </h2>
+        <p className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed text-[#1A1A1A]/72 md:text-lg">
+          Los programas sociales de la Fundación son gratuitos y abiertos a cualquier persona. No necesitas
+          inscripción previa, ni un proceso pago, ni pertenecer a la comunidad.
+        </p>
+      </div>
+
+      <div className="mt-14 grid gap-6 md:grid-cols-3">
+        {[
+          {
+            icon: Users,
+            title: 'Encuentros comunitarios',
+            text: 'Sala de Reducción del Ego y Mentoría de Pasos cada semana, presencial en la Biblioteca Pública Carlos E. Restrepo (Bogotá) y con conexión virtual desde cualquier país.'
+          },
+          {
+            icon: HeartHandshake,
+            title: 'Talleres en el territorio',
+            text: 'Formación en alfabetización emocional, prevención de violencias y liderazgo, en articulación con alcaldías locales, secretarías distritales y bibliotecas públicas.'
+          },
+          {
+            icon: Compass,
+            title: 'Herramientas de autoconocimiento',
+            text: 'La valoración inicial y el test de eneagrama del sitio son gratuitos: te devuelven una lectura de tu patrón emocional sin ningún costo.'
+          }
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+            <article key={item.title} className="rounded-[2rem] border border-[#2E4036]/10 bg-[#F7F4ED] p-7">
+              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2E4036] text-[#E2C17D]">
+                <Icon size={22} />
+              </div>
+              <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">{item.title}</h3>
+              <p className="mt-3 text-sm font-light leading-relaxed text-[#1A1A1A]/70">{item.text}</p>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href="/contacto"
+          className="inline-flex items-center gap-2 rounded-full bg-[#2E4036] px-8 py-4 text-sm font-bold text-white btn-magnetic shadow-[0_14px_34px_rgba(46,64,54,0.3)] transition-colors hover:bg-[#243328]"
+        >
+          Cómo participar gratis <ArrowRight size={18} />
+        </a>
+        <a
+          href="/contacto"
+          className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#CC5833] transition-colors hover:text-[#2E4036]"
+        >
+          Apoyar la labor social →
+        </a>
+      </div>
+    </div>
+  </section>
+);
+
 // --- LA FUNDACIÓN (resumen en home) ---
 
 const FundacionSection = () => (
@@ -1851,6 +1574,7 @@ const Footer = () => {
               <a href="/#procesos" className="hover:text-white transition-colors">Procesos</a>
               <a href="/sesion-coach" className="hover:text-white transition-colors">Sesión Coach</a>
               <a href="/fundacion" className="hover:text-white transition-colors">La Fundación</a>
+              <a href="/contacto" className="hover:text-white transition-colors">Contacto</a>
               <a href="/alexandra-ortega" className="hover:text-white transition-colors">Alexandra Ortega</a>
               <a href="/#planes" className="hover:text-white transition-colors">Planes</a>
               <a href="/#admin" className="hover:text-white transition-colors">Panel privado</a>
@@ -2355,14 +2079,50 @@ const RouteLoader = ({ dark = false }) => (
   </div>
 );
 
-export default function App() {
+/* Árbol del home. Se exporta para que el prerender (SSR) genere exactamente
+   el mismo HTML que ve la persona en el navegador — sin resúmenes paralelos. */
+export const HomePage = ({ onOpenTest, onOpenGuarantee }) => (
+  <>
+    <GlobalStyles />
+    <div className="noise-overlay"></div>
+
+    <Navbar onOpenTest={onOpenTest} />
+
+    <main>
+      <Hero onOpenTest={onOpenTest} />
+      <FeaturesSection />
+      <Manifesto />
+
+      {/* La Fundación primero: misión, acceso gratuito y labor social */}
+      <FundacionSection />
+      <ParticipaSection />
+
+      <StackedCards />
+      <NuestrosProcesosSection />
+
+      {/* Sesión Guía Coach */}
+      <CoachSessionSection onOpenGuarantee={onOpenGuarantee} />
+
+      {/* ¿Quién es Alexandra Ortega? */}
+      <AlexandraFounderSection />
+
+      <Pricing onOpenTest={onOpenTest} />
+    </main>
+
+    <Footer />
+  </>
+);
+
+export { GlobalStyles, Navbar, Footer, ProcessPage };
+
+export default function App({ initialPath }) {
   const [assessmentMounted, setAssessmentMounted] = useState(false);
   const [enneagramMounted, setEnneagramMounted] = useState(false);
   const [isInitialAssessmentOpen, setInitialAssessmentOpen] = useState(false);
   const [isEnneagramOpen, setEnneagramOpen] = useState(false);
   const [isGuaranteeOpen, setGuaranteeOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(() =>
-    typeof window !== 'undefined' ? normalizePath(window.location.pathname) : '/'
+    typeof window !== 'undefined' ? normalizePath(window.location.pathname) : normalizePath(initialPath || '/')
   );
   const [currentHash, setCurrentHash] = useState(() =>
     typeof window !== 'undefined' ? window.location.hash : ''
@@ -2372,26 +2132,9 @@ export default function App() {
   const isProcesoPage = currentPath === PROCESO_PATH;
   const isPrivacidadPage = currentPath === PRIVACIDAD_PATH;
   const isFundacionPage = currentPath === FUNDACION_PATH;
+  const isContactoPage = currentPath === CONTACTO_PATH;
   const currentProcessPage = PROCESS_PAGE_BY_PATH[currentPath];
-  const activeSeo = isAdminRoute
-    ? ADMIN_SEO
-    : isProcesoPage
-      ? PROCESO_SEO
-      : isPrivacidadPage
-      ? PRIVACIDAD_SEO
-      : isFundacionPage
-      ? FUNDACION_SEO
-      : isAlexandraPage
-      ? ALEXANDRA_SEO
-      : currentProcessPage
-      ? {
-          title: currentProcessPage.title,
-          description: currentProcessPage.description,
-          url: `${SITE_URL}${currentProcessPage.path}`,
-          image: `${SITE_URL}/logo-gemb.png`,
-          structuredData: getProcessStructuredData(currentProcessPage)
-        }
-      : HOME_SEO;
+  const activeSeo = isAdminRoute ? ADMIN_SEO : getSeoForPath(currentPath);
 
   useSeoMeta(activeSeo);
 
@@ -2491,6 +2234,22 @@ export default function App() {
     );
   }
 
+  if (isContactoPage) {
+    return (
+      <>
+        <Suspense fallback={<RouteLoader />}>
+          <ContactoPage
+            GlobalStyles={GlobalStyles}
+            Navbar={Navbar}
+            Footer={Footer}
+            onOpenTest={openAssessment}
+          />
+        </Suspense>
+        {testModals}
+      </>
+    );
+  }
+
   if (isAlexandraPage) {
     return (
       <>
@@ -2519,32 +2278,7 @@ export default function App() {
 
   return (
     <>
-      <GlobalStyles />
-      <div className="noise-overlay"></div>
-
-      <Navbar onOpenTest={openAssessment} />
-
-      <main>
-        <Hero onOpenTest={openAssessment} />
-        <FeaturesSection />
-        <Manifesto />
-
-        {/* La Fundación primero: misión y labor social antes de los procesos */}
-        <FundacionSection />
-
-        <StackedCards />
-        <NuestrosProcesosSection />
-
-        {/* Sesión Guía Coach */}
-        <CoachSessionSection onOpenGuarantee={() => setGuaranteeOpen(true)} />
-
-        {/* ¿Quién es Alexandra Ortega? */}
-        <AlexandraFounderSection />
-
-        <Pricing onOpenTest={openAssessment} />
-      </main>
-
-      <Footer />
+      <HomePage onOpenTest={openAssessment} onOpenGuarantee={() => setGuaranteeOpen(true)} />
 
       {testModals}
       <GuaranteeModal isOpen={isGuaranteeOpen} onClose={() => setGuaranteeOpen(false)} />
