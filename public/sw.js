@@ -1,7 +1,9 @@
-const CACHE_NAME = 'gemb-pwa-v1';
+// Subir la versión invalida la caché anterior en el evento activate.
+const CACHE_NAME = 'gemb-pwa-v2';
+
+// Solo assets estáticos: el HTML nunca se precachea, para que el contenido
+// institucional que ve una persona (o un revisor) sea siempre el publicado.
 const APP_SHELL = [
-  '/',
-  '/index.html',
   '/manifest.webmanifest',
   '/logo-gemb.png',
   '/icons/icon-192.png',
@@ -41,9 +43,24 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  if (request.mode === 'navigate') {
+  // Documentos HTML: siempre desde la red (la caché solo cubre estar sin
+  // conexión). Así nadie ve una versión anterior del contenido publicado.
+  const isDocument =
+    request.mode === 'navigate' ||
+    request.destination === 'document' ||
+    (request.headers.get('accept') || '').includes('text/html');
+
+  if (isDocument) {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/index.html'))
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.ok && networkResponse.type === 'basic') {
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(request).then((hit) => hit || caches.match('/')))
     );
     return;
   }
