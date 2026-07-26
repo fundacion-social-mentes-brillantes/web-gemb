@@ -1,4 +1,50 @@
-# Análisis del rechazo de Google Ad Grants — 20 de julio de 2026
+# Análisis de los rechazos de Google Ad Grants — julio de 2026
+
+## Segundo rechazo (20 jul, 4:11 p.m.) y su causa raíz
+
+Cronología verificada:
+
+| Hora (Colombia) | Evento |
+|---|---|
+| 19 jul 2:56 p.m. | Solicitud #1 recibida |
+| 20 jul 8:16 a.m. | **Rechazo #1** (política de sitios web) |
+| 20 jul 3:16–3:47 p.m. | Correcciones desplegadas |
+| 20 jul 3:57 p.m. | Solicitud #2 recibida |
+| 20 jul **4:11 p.m.** | **Rechazo #2 — 14 minutos después** |
+
+Catorce minutos no alcanzan para una revisión humana: fue un **chequeo
+automatizado**. La auditoría encontró qué pudo dispararlo:
+
+**Divergencia material entre el HTML servido y la página real.** El prerender
+implementado el 19 de julio no renderizaba la app: insertaba en `#root` un
+**resumen escrito a mano** que React destruía al arrancar. Medición del 21 de
+julio sobre producción: el HTML servido tenía 1.674 caracteres de un texto y la
+página real 8.013 de otro; **12 de 13 frases del HTML servido no existían en la
+página**. La política de Google Ads considera cloaking mostrar a un rastreador
+contenido que difiere materialmente del que ve la persona — y es exactamente el
+tipo de discrepancia que un chequeo automático detecta.
+
+**Corregido** (commit `540a3fe`) sustituyendo ese resumen por **SSG real**:
+`src/entry-server.jsx` renderiza las páginas con los mismos componentes React
+que ve el visitante y `main.jsx` hidrata sobre ese HTML. Verificado en
+producción: `/fundacion` y `/contacto` con **0 frases divergentes**, y las 9
+rutas con contenido y título propios.
+
+Hallazgos adicionales de esa auditoría, ya corregidos:
+
+- **No había forma de participar sin pagar.** La política pide que se vea que la
+  organización sirve al público, no solo a quien paga. Se añadió `/contacto`
+  (cómo asistir gratis, voluntariado, donación, articulaciones) y la sección
+  "Puedes empezar sin pagar nada" en el home; el segundo botón del hero pasó de
+  "Ver procesos" a "Participar gratis".
+- **No existía página de contacto** con dirección, canales y horarios.
+- **El service worker servía HTML obsoleto** (2,4 KB cacheados frente a 89 KB
+  publicados) a peticiones que no fueran de navegación. Corregido en `e55372c`:
+  caché v2, sin HTML en el precache y documentos siempre desde la red.
+
+---
+
+# Análisis del primer rechazo — 20 de julio de 2026
 
 > **ESTADO (20/07/2026, tarde):** los puntos P0 y P1 de código están implementados. El home
 > presenta primero la identidad de la Fundación, GSAP salió por completo de la ruta crítica,
