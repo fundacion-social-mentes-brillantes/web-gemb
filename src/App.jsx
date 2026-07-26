@@ -246,7 +246,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
               <a href="/#metodo" className="shrink-0 hover:opacity-70 transition-opacity">Método</a>
 
               {/* Botón pequeño premium en el Navbar para la sesión Coach */}
-              <a href="/sesion-coach" className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${useDarkNav ? 'border-[#CC5833] text-[#CC5833] hover:bg-[#CC5833] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
+              <a href="/sesion-coach" className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-bold transition-all ${useDarkNav ? 'border-[#B04A29] text-[#B04A29] hover:bg-[#9E3F26] hover:text-white shadow-sm' : 'border-white/50 text-white hover:bg-white hover:text-[#1A1A1A] backdrop-blur-sm'}`}>
                 <Star size={12} className="fill-current text-[#CC5833]" /> Sesión Coach
               </a>
 
@@ -316,7 +316,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
             <div className={`flex w-[55%] shrink-0 justify-end xl:ml-3 xl:w-auto ${scrolled ? 'items-center' : 'items-start pt-3'}`}>
               <button
                 onClick={onOpenTest}
-                className={`hidden whitespace-nowrap xl:flex items-center gap-2 px-5 2xl:px-6 py-3 rounded-full text-xs 2xl:text-sm font-bold transition-all btn-magnetic shadow-lg ${useDarkNav ? 'bg-[#CC5833] text-white hover:bg-[#b04a29]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
+                className={`hidden whitespace-nowrap xl:flex items-center gap-2 px-5 2xl:px-6 py-3 rounded-full text-xs 2xl:text-sm font-bold transition-all btn-magnetic shadow-lg ${useDarkNav ? 'bg-[#B04A29] text-white hover:bg-[#9E3F26]' : 'bg-white text-[#1A1A1A] hover:bg-gray-100'}`}
               >
                 Valoraci&oacute;n inicial de tu proceso
               </button>
@@ -348,7 +348,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
               <a href="/sala-reduccion-ego" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Activity size={16} className="text-[#CC5833]" /> Sala del Ego</a>
               <a href="/entrega-de-pasos" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Compass size={16} className="text-[#E2C17D]" /> Entrega de Pasos</a>
               <a href="/curso-de-milagros" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><BookOpen size={16} className="text-[#E2C17D]" /> Curso de Milagros</a>
-              <a href="/mi-proceso" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#CC5833] px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-[#b04a29] focus:outline-none"><LogIn size={16} className="text-white" /> Continuar mi proceso</a>
+              <a href="/mi-proceso" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl bg-[#B04A29] px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-[#9E3F26] focus:outline-none"><LogIn size={16} className="text-white" /> Continuar mi proceso</a>
               <a href="/fundacion" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><HeartHandshake size={16} className="text-[#E2C17D]" /> La Fundación</a>
               <a href="/alexandra-ortega" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><User size={16} className="text-[#E2C17D]" /> ¿Quién es Alexandra?</a>
               <a href="/contacto" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-5 py-3 text-lg font-heading flex items-center justify-center gap-2 hover:bg-white/10 focus:bg-white/10 focus:outline-none"><Mail size={16} className="text-[#E2C17D]" /> Contacto</a>
@@ -365,7 +365,7 @@ const Navbar = ({ onOpenTest, darkAtTop = false }) => {
           </a>
           <button
             onClick={() => { onOpenTest(); setMobileMenuOpen(false); }}
-            className="bg-[#CC5833] text-white px-7 py-3.5 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
+            className="bg-[#B04A29] text-white px-7 py-3.5 rounded-full font-semibold mt-4 shadow-[0_0_20px_rgba(204,88,51,0.3)]"
           >
             Valoraci&oacute;n inicial de tu proceso
           </button>
@@ -431,7 +431,7 @@ const Hero = ({ onOpenTest }) => {
             <div className="hero-elem flex flex-col sm:flex-row gap-4 mb-8">
               <button
                 onClick={onOpenTest}
-                className="bg-[#CC5833] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_26px_rgba(204,88,51,0.35)]"
+                className="bg-[#B04A29] text-white px-8 py-4 rounded-full font-semibold btn-magnetic flex items-center justify-center gap-2 shadow-[0_0_26px_rgba(204,88,51,0.35)]"
               >
                 Valoración inicial de tu proceso
                 <ArrowRight size={18} />
@@ -543,7 +543,7 @@ const FeatureDeck = () => {
               className="absolute inset-0 bg-white rounded-2xl p-6 shadow-xl border border-gray-100 transition-all duration-700 ease-in-out flex flex-col justify-center"
               style={{ transform, opacity, zIndex, transformOrigin: 'bottom center' }}
             >
-              <span className="font-mono text-xs text-[#CC5833] font-bold tracking-widest mb-2 block">ENEATIPO</span>
+              <span className="font-mono text-xs text-[#B04A29] font-bold tracking-widest mb-2 block">ENEATIPO</span>
               <h4 className="font-heading text-2xl font-bold text-[#1A1A1A] mb-2">{card.title}</h4>
               <p className="text-gray-500 text-sm italic font-serif">"{card.insight}"</p>
             </div>
@@ -603,7 +603,7 @@ const FeatureTelemetry = () => {
         <p className="text-[#00FF66]/80 mb-2">{'>'} sys.diagnose()</p>
         <p className="min-h-[3rem] text-gray-300">
           {text}
-          <span className="inline-block w-2 h-4 bg-[#CC5833] ml-1 animate-pulse"></span>
+          <span className="inline-block w-2 h-4 bg-[#B04A29] ml-1 animate-pulse"></span>
         </p>
       </div>
 
@@ -612,7 +612,7 @@ const FeatureTelemetry = () => {
           <span>Claridad</span> <span className="text-[#00FF66]">↑ 85%</span>
         </div>
         <div className="flex justify-between items-center opacity-70">
-          <span>Ruido mental</span> <span className="text-[#CC5833]">↓ 20%</span>
+          <span>Ruido mental</span> <span className="text-[#E8734A]">↓ 20%</span>
         </div>
         <div className="flex justify-between items-center opacity-70">
           <span>Liderazgo emocional</span> <span className="text-[#00FF66]">↑ 92%</span>
@@ -662,7 +662,7 @@ const FeatureAgenda = () => {
 
       <div className="space-y-3 flex-1">
         <div className="p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex items-start gap-3">
-          <div className="w-2 h-2 rounded-full bg-[#CC5833] mt-1.5"></div>
+          <div className="w-2 h-2 rounded-full bg-[#B04A29] mt-1.5"></div>
           <div>
             <p className="text-sm font-bold text-[#1A1A1A]">Sala de Reducción del Ego</p>
             <p className="text-xs text-gray-500">Sesión semanal en vivo</p>
@@ -737,7 +737,7 @@ const FeaturesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-end mb-16 md:mb-20">
           <div>
-            <span className="font-mono text-xs font-bold text-[#CC5833] tracking-[0.22em] uppercase mb-4 block">
+            <span className="font-mono text-xs font-bold text-[#B04A29] tracking-[0.22em] uppercase mb-4 block">
               El Método
             </span>
             <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] max-w-3xl leading-tight">
@@ -1001,7 +1001,7 @@ const NuestrosProcesosSection = () => {
                   <div className="w-14 h-14 bg-white/[0.07] rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-[#E2C17D]/40 transition-colors">
                     {proceso.icon}
                   </div>
-                  <a href={proceso.route} aria-label={`Conocer ${proceso.title}`} className="font-mono text-[10px] text-white/45 hover:text-[#E2C17D] transition-colors">
+                  <a href={proceso.route} aria-label={`Conocer ${proceso.title}`} className="font-mono text-[10px] text-white/70 hover:text-[#E2C17D] transition-colors">
                     Ver ruta
                   </a>
                 </div>
@@ -1020,6 +1020,7 @@ const NuestrosProcesosSection = () => {
 
                 <a
                   href={proceso.route}
+                  aria-label={`Conocer el proceso ${proceso.title}`}
                   className="mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#E2C17D] transition-colors hover:text-white"
                 >
                   Conocer proceso
@@ -1030,7 +1031,7 @@ const NuestrosProcesosSection = () => {
                   type="button"
                   aria-label={`${proceso.cta}: ${proceso.title}`}
                   onClick={() => handleWA(proceso.message)}
-                  className="mt-auto w-full py-4 rounded-full border border-white/20 group-hover:border-transparent group-hover:bg-[#CC5833] text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 group-hover:shadow-[0_8px_25px_rgba(204,88,51,0.35)]"
+                  className="mt-auto w-full py-4 rounded-full border border-white/20 group-hover:border-transparent group-hover:bg-[#B04A29] text-white font-bold text-xs tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 group-hover:shadow-[0_8px_25px_rgba(204,88,51,0.35)]"
                 >
                   <MessageCircle size={14} className="text-white" />
                   {proceso.cta}
@@ -1071,7 +1072,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
           </div>
 
           <div className="flex-1 relative z-10 w-full">
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full bg-[#CC5833] px-5 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_22px_rgba(204,88,51,0.32)]">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full bg-[#B04A29] px-5 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_22px_rgba(204,88,51,0.32)]">
               <Star size={14} className="fill-current" /> Servicio principal · 1:1
             </div>
 
@@ -1113,7 +1114,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                     key={pain.id}
                     onClick={() => setSelectedPain(pain)}
                     className={`text-left px-5 py-3 rounded-xl text-sm transition-all duration-300 border ${selectedPain?.id === pain.id
-                        ? 'bg-[#CC5833] border-[#CC5833] text-white shadow-lg font-medium'
+                        ? 'bg-[#B04A29] border-[#CC5833] text-white shadow-lg font-medium'
                         : 'bg-transparent border-white/20 text-white/70 hover:border-white/50 hover:bg-white/5'
                       }`}
                   >
@@ -1143,7 +1144,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
               </button>
 
               <div className="mt-4 flex flex-col gap-1">
-                <p className="text-xs text-white/40 mt-1">
+                <p className="text-xs text-white/55 mt-1">
                   <span className="font-bold text-white/60">Al hacer clic:</span> te pedimos 3 datos, te enviamos horarios y confirmas tu espacio.
                 </p>
               </div>
@@ -1153,7 +1154,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                   <ShieldCheck size={24} className="text-[#00FF66]" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">Compromiso de acompañamiento</h4>
+                  <h3 className="text-[#F2F0E9] font-bold text-sm md:text-base flex items-center gap-2">Compromiso de acompañamiento</h3>
                   <p className="text-white/70 text-[11px] md:text-xs mt-1 leading-tight font-light">
                     Tu proceso sostiene la labor social gratuita de la Fundación. Condiciones del acompañamiento disponibles.
                   </p>
@@ -1178,7 +1179,7 @@ const CoachSessionSection = ({ onOpenGuarantee }) => {
                 "Una forma más honesta de medir avance: decisiones, paz, coherencia y práctica diaria."
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4 group">
-                  <div className="w-7 h-7 rounded-full bg-[#2E4036] flex items-center justify-center shrink-0 mt-0.5 border border-[#00FF66]/30 group-hover:bg-[#CC5833] transition-colors duration-300">
+                  <div className="w-7 h-7 rounded-full bg-[#2E4036] flex items-center justify-center shrink-0 mt-0.5 border border-[#00FF66]/30 group-hover:bg-[#B04A29] transition-colors duration-300">
                     <CheckCircle2 size={14} className="text-[#00FF66] group-hover:text-white transition-colors" />
                   </div>
                   <span className="text-[#F2F0E9]/80 font-light leading-relaxed text-sm md:text-base group-hover:text-white transition-colors">
@@ -1228,20 +1229,20 @@ const AlexandraFounderSection = () => (
             <span className="rounded-full bg-white/15 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-md">
               Fundadora GEMB
             </span>
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#CC5833] text-white shadow-lg transition-transform duration-500 group-hover:rotate-45">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#B04A29] text-white shadow-lg transition-transform duration-500 group-hover:rotate-45">
               <ArrowRight size={18} />
             </span>
           </div>
         </a>
         <div className="absolute -right-4 -top-5 rounded-2xl border border-[#2E4036]/10 bg-white px-5 py-3.5 shadow-[0_18px_38px_rgba(46,64,54,0.16)] md:-right-8">
           <p className="font-heading text-2xl font-bold text-[#2E4036]">+176</p>
-          <p className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/55">mujeres formadas</p>
+          <p className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/70">mujeres formadas</p>
         </div>
       </div>
 
       {/* Texto */}
       <div>
-        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]61463">
           La fundadora
         </span>
         <h2 className="font-heading text-4xl font-bold leading-tight tracking-tight text-[#1A1A1A] md:text-5xl lg:text-6xl">
@@ -1272,7 +1273,7 @@ const AlexandraFounderSection = () => (
           </a>
           <a
             href="/alexandra-ortega#trayectoria-alexandra"
-            className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#CC5833] transition-colors hover:text-[#2E4036]"
+            className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#B04A29] transition-colors hover:text-[#2E4036]"
           >
             Ver su trayectoria desde 2016 →
           </a>
@@ -1288,7 +1289,7 @@ const ParticipaSection = () => (
   <section id="participa" className="relative z-10 bg-white px-6 py-24 md:px-12 md:py-28">
     <div className="mx-auto max-w-7xl">
       <div className="mx-auto max-w-3xl text-center">
-        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]63945">
           Acceso libre · Sin costo
         </span>
         <h2 className="font-heading text-3xl font-bold leading-tight text-[#1A1A1A] md:text-5xl">
@@ -1340,7 +1341,7 @@ const ParticipaSection = () => (
         </a>
         <a
           href="/contacto"
-          className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#CC5833] transition-colors hover:text-[#2E4036]"
+          className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#B04A29] transition-colors hover:text-[#2E4036]"
         >
           Apoyar la labor social →
         </a>
@@ -1462,13 +1463,13 @@ const Pricing = ({ onOpenTest }) => {
       <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-[#2E4036]/10 to-transparent"></div>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14 md:mb-20">
-          <span className="font-mono text-xs font-bold text-[#CC5833] tracking-[0.22em] uppercase mb-4 block">
+          <span className="font-mono text-xs font-bold text-[#B04A29] tracking-[0.22em] uppercase mb-4 block">
             Planes con aporte solidario
           </span>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-5">
             Elige tu nivel de entrenamiento.
           </h2>
-          <p className="text-[#1A1A1A]/62 font-serif italic text-xl max-w-2xl mx-auto">
+          <p className="text-[#1A1A1A]/70 font-serif italic text-xl max-w-2xl mx-auto">
             Puedes empezar con claridad, entrar al método por unos días o comprometerte con una transformación más profunda.
           </p>
           <p className="mx-auto mt-5 flex max-w-2xl items-center justify-center gap-2 rounded-full border border-[#2E4036]/15 bg-white px-5 py-2.5 text-xs md:text-sm text-[#2E4036]">
@@ -1494,17 +1495,17 @@ const Pricing = ({ onOpenTest }) => {
                 }`}
               >
                 {isFeatured && (
-                  <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-[#CC5833] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(204,88,51,0.28)]">
+                  <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-[#B04A29] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(204,88,51,0.28)]">
                     <Star size={13} className="fill-current" />
                     Recomendado
                   </div>
                 )}
 
-                <p className={`font-mono text-[10px] uppercase tracking-[0.2em] mb-3 ${isFeatured ? 'text-[#E2C17D]' : 'text-[#CC5833]'}`}>
+                <p className={`font-mono text-[10px] uppercase tracking-[0.2em] mb-3 ${isFeatured ? 'text-[#E2C17D]' : 'text-[#B04A29]'}`}>
                   {plan.subtitle}
                 </p>
                 <h3 className="font-heading font-bold text-3xl mb-4">{plan.title}</h3>
-                <p className={`text-sm leading-relaxed mb-8 ${isFeatured ? 'text-[#F2F0E9]/72' : 'text-[#1A1A1A]/62'}`}>
+                <p className={`text-sm leading-relaxed mb-8 ${isFeatured ? 'text-[#F2F0E9]/72' : 'text-[#1A1A1A]/70'}`}>
                   {plan.description}
                 </p>
 
@@ -1522,7 +1523,7 @@ const Pricing = ({ onOpenTest }) => {
                   onClick={plan.action}
                   className={`w-full py-4 rounded-full font-bold btn-magnetic transition-colors flex justify-center items-center gap-2 ${
                     isFeatured
-                      ? 'bg-[#CC5833] text-white shadow-[0_0_22px_rgba(204,88,51,0.35)] hover:bg-[#b84d2d]'
+                      ? 'bg-[#B04A29] text-white shadow-[0_0_22px_rgba(204,88,51,0.35)] hover:bg-[#b84d2d]'
                       : 'border border-[#2E4036] text-[#2E4036] hover:bg-[#2E4036] hover:text-white'
                   }`}
                 >
@@ -1561,7 +1562,7 @@ const Footer = () => {
             <button
               type="button"
               onClick={handleWA}
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-bold text-white btn-magnetic"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-bold text-[#0B3D1E] btn-magnetic"
             >
               <MessageCircle size={18} />
               Escribir por WhatsApp
@@ -1593,7 +1594,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono">
+        <div className="relative border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 font-mono">
           <div className="flex flex-col gap-1 text-center md:text-left">
             <p>© {new Date().getFullYear()} Fundación Social Mentes Brillantes · NIT 901.002.849-3</p>
             <p>
@@ -1659,7 +1660,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
                 <button
                   type="button"
                   onClick={handleWA}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-bold text-white shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-bold text-[#0B3D1E] shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
                 >
                   <MessageCircle size={18} />
                   Pedir información por WhatsApp
@@ -1706,7 +1707,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.76fr_1.24fr]">
             <div className="lg:sticky lg:top-32 lg:self-start">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]85094">
                 Lectura del proceso
               </span>
               <h2 className="mt-4 font-heading text-4xl font-bold leading-tight text-[#2E4036] md:text-5xl">
@@ -1764,7 +1765,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
                 <button
                   type="button"
                   onClick={handleWA}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#CC5833] px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#b84d2d]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#B04A29] px-6 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#b84d2d]"
                 >
                   <MessageCircle size={17} />
                   Hablar con GEMB
@@ -1783,8 +1784,8 @@ const ProcessPage = ({ page, onOpenTest }) => {
 
         {page.disclaimer && (
           <section className="px-6 pt-14 md:px-12">
-            <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#CC5833]/[0.18] bg-[#CC5833]/[0.08] p-6 text-sm leading-relaxed text-[#1A1A1A]/70 md:p-7">
-              <strong className="text-[#CC5833]">Nota sobre este espacio:</strong> {page.disclaimer}
+            <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#CC5833]/[0.18] bg-[#B04A29]/[0.08] p-6 text-sm leading-relaxed text-[#1A1A1A]/70 md:p-7">
+              <strong className="text-[#B04A29]">Nota sobre este espacio:</strong> {page.disclaimer}
             </div>
           </section>
         )}
@@ -1792,7 +1793,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 max-w-3xl">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]89504">
                 Preguntas frecuentes
               </span>
               <h2 className="mt-4 font-heading text-4xl font-bold text-[#2E4036]">
@@ -1819,7 +1820,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
           <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#2E4036]/10 bg-white p-7 shadow-[0_18px_50px_rgba(46,64,54,0.08)] md:p-9">
             <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
               <div>
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]90788">
                   Enlaces internos
                 </span>
                 <h2 className="mt-4 font-heading text-3xl font-bold text-[#2E4036]">
@@ -1847,7 +1848,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
             </div>
           </div>
 
-          <p className="mx-auto mt-8 max-w-4xl text-center text-xs leading-relaxed text-[#1A1A1A]/[0.52]">
+          <p className="mx-auto mt-8 max-w-4xl text-center text-xs leading-relaxed text-[#1A1A1A]/70">
             Los espacios de Gimnasio Emocional Mentes Brillantes son procesos de formación, acompañamiento y entrenamiento emocional/espiritual. No reemplazan atención médica, psicológica o psiquiátrica cuando esta sea necesaria.
           </p>
         </section>
@@ -2024,7 +2025,7 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
       <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-md" onClick={onClose}></div>
 
       <div className="relative bg-[#F2F0E9] w-full max-w-2xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
+        <button onClick={onClose} className="absolute top-6 right-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
 
@@ -2032,14 +2033,14 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
           <div className="w-16 h-16 bg-[#2E4036] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
             <ShieldCheck className="text-[#00FF66]" size={32} />
           </div>
-          <span className="font-mono text-xs font-bold text-[#CC5833] tracking-widest mb-2">COMPROMISO MUTUO</span>
+          <span className="font-mono text-xs font-bold text-[#B04A29] tracking-widest mb-2">COMPROMISO MUTUO</span>
           <h2 className="font-heading font-bold text-3xl md:text-4xl text-[#1A1A1A] leading-tight">Garantía de Satisfacción</h2>
         </div>
 
         <div className="space-y-6 mb-8 animate-[fadeIn_0.5s_ease-out_0.1s]">
           {guaranteeItems.map((item, i) => (
             <div key={i} className="flex items-start gap-4">
-              <div className="w-6 h-6 rounded-full bg-[#CC5833]/10 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-6 h-6 rounded-full bg-[#B04A29]/10 flex items-center justify-center shrink-0 mt-0.5">
                 <CheckCircle2 size={16} className="text-[#CC5833]" />
               </div>
               <div className="text-[#1A1A1A]/80 text-sm md:text-base font-medium leading-relaxed flex-1">{item}</div>

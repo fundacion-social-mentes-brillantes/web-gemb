@@ -409,7 +409,7 @@ const AlexandraPage = (props) => {
           <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(46,64,54,0.97),rgba(26,26,26,0.98)_52%,rgba(204,88,51,0.35))]"></div>
           <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
           <div className="ax-float absolute -left-32 top-24 h-96 w-96 rounded-full bg-[#E2C17D]/[0.14] blur-3xl"></div>
-          <div className="ax-float absolute -right-24 bottom-10 h-[28rem] w-[28rem] rounded-full bg-[#CC5833]/[0.16] blur-3xl" style={{ animationDelay: '-3.5s' }}></div>
+          <div className="ax-float absolute -right-24 bottom-10 h-[28rem] w-[28rem] rounded-full bg-[#B04A29]/[0.16] blur-3xl" style={{ animationDelay: '-3.5s' }}></div>
 
           <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_0.8fr]">
             <div>
@@ -442,7 +442,7 @@ const AlexandraPage = (props) => {
                 <button
                   type="button"
                   onClick={() => handleWA('Hola, quiero contactar a Alexandra Ortega, fundadora de Gimnasio Emocional Mentes Brillantes.')}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-bold text-white shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-bold text-[#0B3D1E] shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
                 >
                   <MessageCircle size={18} />
                   Hablar con Alexandra
@@ -521,7 +521,7 @@ const AlexandraPage = (props) => {
               {PILLARS.map((pillar) => (
                 <span
                   key={pillar}
-                  className="rounded-full border border-[#2E4036]/20 bg-white px-4 py-2 text-xs font-medium text-[#2E4036] transition-all hover:-translate-y-0.5 hover:border-[#CC5833] hover:bg-[#CC5833] hover:text-white"
+                  className="rounded-full border border-[#2E4036]/20 bg-white px-4 py-2 text-xs font-medium text-[#2E4036] transition-all hover:-translate-y-0.5 hover:border-[#CC5833] hover:bg-[#B04A29] hover:text-white"
                 >
                   {pillar}
                 </span>
@@ -556,7 +556,7 @@ const AlexandraPage = (props) => {
                       }`}
                     >
                       <span className={`font-heading text-xl font-bold ${isActive ? 'text-[#E2C17D]' : ''}`}>{item.year}</span>
-                      <span className={`hidden text-[11px] font-medium uppercase tracking-[0.14em] lg:block ${isActive ? 'text-white/75' : 'text-[#1A1A1A]/50'}`}>
+                      <span className={`hidden text-[11px] font-medium uppercase tracking-[0.14em] lg:block ${isActive ? 'text-white/75' : 'text-[#1A1A1A]/70'}`}>
                         {item.tag}
                       </span>
                     </button>
@@ -570,7 +570,7 @@ const AlexandraPage = (props) => {
                   <span className="pointer-events-none absolute -right-6 -top-10 font-heading text-[7rem] font-bold text-[#2E4036]/[0.07] md:text-[10rem]">
                     {milestone.year}
                   </span>
-                  <span className="relative inline-flex items-center gap-2 rounded-full bg-[#CC5833]/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#CC5833]">
+                  <span className="relative inline-flex items-center gap-2 rounded-full bg-[#B04A29]/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#B04A29]">
                     {milestone.tag}
                   </span>
                   <h3 className="relative mt-5 font-heading text-2xl font-bold text-[#1A1A1A] md:text-3xl">{milestone.title}</h3>
@@ -583,7 +583,7 @@ const AlexandraPage = (props) => {
                         style={{ width: `${((activeMilestone + 1) / TIMELINE.length) * 100}%` }}
                       ></div>
                     </div>
-                    <span className="font-mono text-xs text-[#1A1A1A]/50">
+                    <span className="font-mono text-xs text-[#1A1A1A]/70">
                       {activeMilestone + 1} / {TIMELINE.length}
                     </span>
                   </div>
@@ -644,7 +644,7 @@ const AlexandraPage = (props) => {
                     key={area.title}
                     className="ax-reveal group rounded-[1.8rem] border border-[#2E4036]/10 bg-white p-7 shadow-[0_14px_36px_rgba(46,64,54,0.06)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_22px_48px_rgba(46,64,54,0.12)]"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2E4036]/[0.07] text-[#2E4036] transition-all duration-500 group-hover:bg-[#CC5833] group-hover:text-white">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2E4036]/[0.07] text-[#2E4036] transition-all duration-500 group-hover:bg-[#B04A29] group-hover:text-white">
                       <AreaIcon size={22} />
                     </div>
                     <h3 className="mt-5 font-heading text-lg font-bold text-[#1A1A1A]">{area.title}</h3>
@@ -685,7 +685,7 @@ const AlexandraPage = (props) => {
                       onClick={() => setAudience(isActive ? null : item.id)}
                       className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                         isActive
-                          ? 'border-[#CC5833] bg-[#CC5833] text-white shadow-[0_10px_24px_rgba(204,88,51,0.3)]'
+                          ? 'border-[#CC5833] bg-[#B04A29] text-white shadow-[0_10px_24px_rgba(204,88,51,0.3)]'
                           : 'border-[#2E4036]/20 bg-white text-[#2E4036] hover:border-[#CC5833]/60'
                       }`}
                     >
@@ -711,12 +711,12 @@ const AlexandraPage = (props) => {
                     } ${dimmed ? 'opacity-45' : 'opacity-100'}`}
                   >
                     {recommended && (
-                      <span className="absolute -top-2.5 right-4 inline-flex items-center gap-1 rounded-full bg-[#CC5833] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white">
+                      <span className="absolute -top-2.5 right-4 inline-flex items-center gap-1 rounded-full bg-[#B04A29] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white">
                         <Star size={9} className="fill-current" /> Recomendado
                       </span>
                     )}
                     <h3 className="font-heading text-sm font-bold leading-snug text-[#1A1A1A]">{service.title}</h3>
-                    <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/60">{service.text}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/70">{service.text}</p>
                   </article>
                 );
               })}
@@ -726,7 +726,7 @@ const AlexandraPage = (props) => {
               <button
                 type="button"
                 onClick={() => handleWA(activeAudience ? activeAudience.message : 'Hola, quiero solicitar una propuesta de talleres, conferencias o formación con Alexandra Ortega.')}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#CC5833] px-9 py-4 text-sm font-bold text-white shadow-[0_14px_34px_rgba(204,88,51,0.32)] transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#B04A29] px-9 py-4 text-sm font-bold text-white shadow-[0_14px_34px_rgba(204,88,51,0.32)] transition-transform hover:scale-[1.02]"
               >
                 <MessageCircle size={18} />
                 {activeAudience ? `Solicitar propuesta para ${activeAudience.label.toLowerCase()}` : 'Solicitar una propuesta'}
@@ -760,7 +760,7 @@ const AlexandraPage = (props) => {
                       className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left md:px-8"
                     >
                       <span className="flex items-center gap-4">
-                        <span className={`font-mono text-xs font-bold ${isOpen ? 'text-[#CC5833]' : 'text-[#2E4036]/45'}`}>0{index + 1}</span>
+                        <span className={`font-mono text-xs font-bold ${isOpen ? 'text-[#B04A29]' : 'text-[#2E4036]/45'}`}>0{index + 1}</span>
                         <span className="font-heading text-lg font-bold text-[#1A1A1A] md:text-xl">{item.title}</span>
                       </span>
                       <ChevronDown size={20} className={`shrink-0 text-[#2E4036] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -858,8 +858,8 @@ const AlexandraPage = (props) => {
           </div>
 
           <div className="mx-auto mt-12 max-w-7xl">
-            <aside className="ax-reveal rounded-[2rem] border border-[#CC5833]/[0.2] bg-[#CC5833]/[0.06] p-7 md:p-9">
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+            <aside className="ax-reveal rounded-[2rem] border border-[#CC5833]/[0.2] bg-[#B04A29]/[0.06] p-7 md:p-9">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#B04A29]">
                 Círculo de Estado Abierto de Bogotá · 2026
               </p>
               <p className="mt-4 leading-relaxed text-[#1A1A1A]/75">
@@ -913,14 +913,14 @@ const AlexandraPage = (props) => {
                     </span>
                     <span>
                       <strong className="block font-heading text-base font-bold text-[#1A1A1A]">{item.title}</strong>
-                      <span className="text-sm text-[#1A1A1A]/55">{item.detail}</span>
+                      <span className="text-sm text-[#1A1A1A]/70">{item.detail}</span>
                     </span>
                   </li>
                 ))}
               </ul>
 
               <aside className="ax-reveal rounded-[2rem] border border-[#2E4036]/10 bg-white p-8 text-center md:p-10">
-                <p className="flex items-center justify-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#CC5833]">
+                <p className="flex items-center justify-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#B04A29]">
                   <BookOpen size={14} /> Publicaciones
                 </p>
                 <h3 className="mt-4 font-heading text-3xl font-bold text-[#2E4036]">
@@ -938,7 +938,7 @@ const AlexandraPage = (props) => {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-8 font-serif text-lg italic text-[#1A1A1A]/60">
+                <p className="mt-8 font-serif text-lg italic text-[#1A1A1A]/70">
                   Palabras que entrenan la mente y abrazan el corazón.
                 </p>
               </aside>
@@ -962,7 +962,7 @@ const AlexandraPage = (props) => {
               <button
                 type="button"
                 onClick={() => handleWA('Hola, quiero contactar a Alexandra Ortega, fundadora de Gimnasio Emocional Mentes Brillantes.')}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-white shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-[#0B3D1E] shadow-[0_14px_32px_rgba(37,211,102,0.24)] transition-transform hover:scale-[1.02]"
               >
                 <MessageCircle size={18} />
                 Escribir por WhatsApp

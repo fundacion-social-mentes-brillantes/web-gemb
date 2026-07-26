@@ -200,7 +200,7 @@ export default function FundacionPage(props) {
             {STATS.map((s) => (
               <div key={s.label} className="rounded-3xl border border-[#2E4036]/10 bg-white p-6 text-center shadow-[0_18px_38px_rgba(46,64,54,0.08)]">
                 <p className="font-heading text-3xl font-bold text-[#2E4036]">{s.value}</p>
-                <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/55">{s.label}</p>
+                <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70">{s.label}</p>
               </div>
             ))}
           </div>
@@ -209,7 +209,7 @@ export default function FundacionPage(props) {
         {/* ── Labor social ─────────────────────────────────────── */}
         <section className="bg-white px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]10201">
               Labor social gratuita
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-5xl">
@@ -280,7 +280,7 @@ export default function FundacionPage(props) {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-7xl items-start gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
-              <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+              <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]13984">
                 A quién servimos
               </span>
               <h2 className="font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
@@ -289,7 +289,7 @@ export default function FundacionPage(props) {
               <ul className="mt-8 space-y-4">
                 {SERVE.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-[15px] font-light leading-relaxed text-[#1A1A1A]/75">
-                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#CC5833]"></span>
+                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#B04A29]"></span>
                     {item}
                   </li>
                 ))}
@@ -349,7 +349,7 @@ export default function FundacionPage(props) {
         {/* ── Reconocimientos ──────────────────────────────────── */}
         <section className="bg-white px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]18436">
               Reconocimientos
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-5xl">
@@ -392,7 +392,7 @@ export default function FundacionPage(props) {
 
             {/* Aliados */}
             <div className="mt-16 text-center">
-              <p className="mb-6 font-mono text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/50">
+              <p className="mb-6 font-mono text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/70">
                 Hemos trabajado en articulación con
               </p>
               <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-2.5">
@@ -409,7 +409,7 @@ export default function FundacionPage(props) {
         {/* ── Transparencia ────────────────────────────────────── */}
         <section className="px-6 py-20 md:px-12 md:py-24">
           <div className="mx-auto max-w-5xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#CC5833]">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]21332">
               Transparencia
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
@@ -440,7 +440,7 @@ export default function FundacionPage(props) {
                     >
                       <span>
                         <strong className="block text-sm font-bold">{source.title}</strong>
-                        <span className="mt-1 block text-xs text-[#1A1A1A]/55">{source.source}</span>
+                        <span className="mt-1 block text-xs text-[#1A1A1A]/70">{source.source}</span>
                       </span>
                       <ArrowRight size={16} className="shrink-0" />
                     </a>
@@ -473,13 +473,13 @@ export default function FundacionPage(props) {
               <button
                 type="button"
                 onClick={handleWA}
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-white btn-magnetic shadow-lg"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-8 py-4 text-sm font-bold text-[#0B3D1E] btn-magnetic shadow-lg"
               >
                 <MessageCircle size={18} /> Escribir por WhatsApp
               </button>
               <a
                 href="/#procesos"
-                className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#CC5833] transition-colors hover:text-[#2E4036]"
+                className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-[#B04A29] transition-colors hover:text-[#2E4036]"
               >
                 Conocer los procesos <ArrowRight size={16} />
               </a>

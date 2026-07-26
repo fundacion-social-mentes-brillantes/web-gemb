@@ -166,7 +166,7 @@ export default function ContactoPage(props) {
               <button
                 type="button"
                 onClick={() => openWA('Hola, quiero el horario y el enlace de los encuentros comunitarios gratuitos de la Fundación.')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-[#20bd5a]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-3.5 text-sm font-bold text-[#0B3D1E] shadow-lg transition-colors hover:bg-[#20bd5a]"
               >
                 <MessageCircle size={17} /> Pedir horario por WhatsApp
               </button>

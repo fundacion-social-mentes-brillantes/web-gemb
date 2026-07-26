@@ -37,7 +37,7 @@ export default function PrivacyPage(props) {
             <h1 className="font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
               Política de tratamiento de datos personales
             </h1>
-            <p className="mt-3 text-sm text-[#1A1A1A]/60">
+            <p className="mt-3 text-sm text-[#1A1A1A]/70">
               Fundación Social Mentes Brillantes · NIT 901.002.849-3
               <br />
               Última actualización: julio de 2026
