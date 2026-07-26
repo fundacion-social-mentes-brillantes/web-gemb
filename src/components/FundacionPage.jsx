@@ -66,7 +66,7 @@ const RECOGNITIONS = [
   {
     year: '2025',
     title: 'Cumbre Global de Salud Mental',
-    text: 'Participación de GEMB como modelo de prevención y protección en salud mental, conservada en la memoria visual institucional.',
+    text: 'Participación de GEMB como modelo de prevención y protección en salud mental. El soporte de esta participación se comparte a solicitud, escribiéndonos al correo institucional.',
     image: '/impacto/cumbre-salud-mental.webp',
     imageAlt: 'Participación de GEMB en la Cumbre Global de Salud Mental 2025'
   },
@@ -350,10 +350,10 @@ export default function FundacionPage(props) {
         <section className="bg-white px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
             <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]18436">
-              Reconocimientos
+              Participación institucional
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-5xl">
-              Validación <span className="font-serif font-normal italic text-[#2E4036]">institucional</span>
+              Espacios en los que <span className="font-serif font-normal italic text-[#2E4036]">hemos participado</span>
             </h2>
 
             <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -382,7 +382,7 @@ export default function FundacionPage(props) {
                       rel="noreferrer"
                       className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#2E4036] underline decoration-[#2E4036]/25 underline-offset-4"
                     >
-                      Consultar fuente pública <ArrowRight size={14} />
+                      Consultar la fuente sobre este espacio <ArrowRight size={14} />
                     </a>
                   )}
                   </div>
@@ -393,7 +393,7 @@ export default function FundacionPage(props) {
             {/* Aliados */}
             <div className="mt-16 text-center">
               <p className="mb-6 font-mono text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/70">
-                Hemos trabajado en articulación con
+                Entidades y organizaciones con las que hemos trabajado
               </p>
               <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-2.5">
                 {ALLIES.map((ally) => (
@@ -428,7 +428,7 @@ export default function FundacionPage(props) {
                 </ul>
               </div>
               <div className="rounded-[2rem] border border-[#2E4036]/10 bg-white p-7">
-                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Fuentes públicas relacionadas</h3>
+                <h3 className="font-heading text-lg font-bold text-[#1A1A1A]">Fuentes públicas de contexto</h3>
                 <div className="mt-4 divide-y divide-[#2E4036]/10">
                   {PUBLIC_SOURCES.map((source) => (
                     <a

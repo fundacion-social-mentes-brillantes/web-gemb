@@ -178,12 +178,12 @@ export const PROCESS_PAGES = [
         bullets: ["Lectura y comprensión guiada", "Práctica interior aplicada a la vida cotidiana", "Observación del juicio, la culpa y la defensa", "Elección consciente de una percepción más amorosa"]
       },
       {
-        title: "Como lo vivimos en GEMB",
+        title: "Cómo lo vivimos en GEMB",
         body: "Dentro de Gimnasio Emocional Mentes Brillantes lo vivimos como una disciplina espiritual acompañada. Integramos conversación honesta, silencio, oración, práctica emocional y ejemplos reales para que la teoría baje a decisiones concretas.",
         bullets: ["Encuentros de estudio y reflexión", "Prácticas para elegir de nuevo", "Acompañamiento desde una mirada humana y espiritual", "Lenguaje claro para personas que están comenzando"]
       },
       {
-        title: "Para quien es",
+        title: "Para quién es",
         body: "Es para personas que sienten el llamado a sanar su percepción, revisar sus reacciones, dejar de vivir desde la culpa o el ataque y cultivar una relación más serena con Dios, consigo mismas y con los demás.",
         bullets: ["Quienes buscan un grupo de estudio espiritual", "Personas en proceso de despertar de conciencia", "Quienes quieren unir espiritualidad con práctica emocional", "Personas nuevas o con experiencia previa en UCDM"]
       },
@@ -227,7 +227,7 @@ export const PROCESS_PAGES = [
         bullets: ["Control y necesidad de razón", "Juicio, ataque y defensa", "Culpa, miedo y orgullo espiritual", "Entrega, oración y poder superior"]
       },
       {
-        title: "Para quien es",
+        title: "Para quién es",
         body: "Es para personas que quieren crecer con honestidad, practicar humildad emocional y salir del piloto automático. No necesitas saber nombrar todo lo que sientes; basta con llegar con disposición a mirar.",
         bullets: ["Personas nuevas en GEMB", "Quienes repiten conflictos o reacciones", "Quienes desean entrenar conciencia emocional", "Quienes buscan una práctica espiritual aterrizada"]
       },
@@ -265,7 +265,7 @@ export const PROCESS_PAGES = [
         bullets: ["Mirar patrones emocionales", "Reconocer heridas y decisiones antiguas", "Soltar cargas que ya no necesitas llevar", "Abrir espacio para responsabilidad y libertad"]
       },
       {
-        title: "Por que escribir ayuda a sanar",
+        title: "Por qué escribir ayuda a sanar",
         body: "La escritura permite sacar del cuerpo y de la mente aquello que se repite en silencio. Cuando una persona escribe con guía, puede ver conexiones, nombrar dolores y dejar de vivir gobernada por historias incompletas.",
         bullets: ["Ordena lo vivido", "Reduce confusion interna", "Muestra patrones repetidos", "Ayuda a preparar reparaciones posibles"]
       },
@@ -275,7 +275,7 @@ export const PROCESS_PAGES = [
         bullets: ["Orientación para escribir", "Revisión de patrones y aprendizajes", "Cuidado de la confidencialidad", "Enfoque en responsabilidad, paz y reparación"]
       },
       {
-        title: "Para quien es",
+        title: "Para quién es",
         body: "Es para quienes sienten que cargan historias, culpas, duelos, resentimientos o ciclos que necesitan ser mirados con honestidad para avanzar con más libertad.",
         bullets: ["Personas que quieren ordenar su historia", "Quienes buscan recuperación emocional", "Quienes desean reparar vínculos desde la conciencia", "Quienes necesitan una ruta profunda y acompañada"]
       }
@@ -313,12 +313,12 @@ export const PROCESS_PAGES = [
         bullets: ["Historia personal y patrones repetidos", "Orden emocional y espiritual", "Límites, decisiones y coherencia", "Ruta hacia sala, pasos, UCDM o seguimiento"]
       },
       {
-        title: "Como se vive una sesion",
+        title: "Cómo se vive una sesión",
         body: "La sesión combina escucha, preguntas precisas, lectura del patrón y orientación práctica. No prometemos curas ni resultados médicos; ofrecemos una guía clara para que puedas entrenar una forma diferente de responder.",
         bullets: ["Conversacion privada y cuidada", "Claridad sobre el patron principal", "Practicas para la vida real", "Siguiente paso sugerido dentro de GEMB"]
       },
       {
-        title: "Para quien es",
+        title: "Para quién es",
         body: "Es para personas que necesitan ordenar lo que sienten y quieren iniciar un proceso serio, humano y espiritual. También es ideal si no sabes por dónde empezar dentro de GEMB.",
         bullets: ["Quienes buscan guía emocional", "Personas que repiten ciclos y quieren claridad", "Quienes necesitan un primer mapa de proceso", "Personas que desean acompañamiento sin enfoque clínico"]
       }

@@ -34,9 +34,33 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 const replaceMeta = (html, pattern, value) =>
   pattern.test(html) ? html.replace(pattern, value) : html;
 
+// Contenido que debe aparecer sí o sí en el HTML de cada ruta. Si falta, el
+// árbol no se resolvió y publicar sería peor que no prerenderizar.
+const CONTENIDO_ESPERADO = {
+  '/': 'Fundación Social Mentes Brillantes',
+  '/fundacion': '901.002.849-3',
+  '/contacto': 'Carlos E. Restrepo',
+  '/politica-de-privacidad': 'Ley 1581',
+  '/alexandra-ortega': 'Alexandra Ortega'
+};
+
 let written = 0;
 for (const route of ROUTES) {
-  const { html: appHtml, seo } = render(route);
+  const { html: appHtml, seo } = await render(route);
+
+  // Salvaguardas: `<!--$!-->` marca un Suspense que cayó al fallback (se
+  // publicaría el spinner dentro de #root) y la falta de `<!--$-->` significa
+  // que no se emitieron los límites que el cliente espera al hidratar.
+  if (appHtml.includes('<!--$!-->')) {
+    throw new Error(`[prerender] ${route}: un Suspense cayó al fallback; no se publica HTML con spinner.`);
+  }
+  if (!appHtml.includes('<!--$-->')) {
+    throw new Error(`[prerender] ${route}: faltan los límites de Suspense que el cliente espera al hidratar.`);
+  }
+  const esperado = CONTENIDO_ESPERADO[route];
+  if (esperado && !appHtml.includes(esperado)) {
+    throw new Error(`[prerender] ${route}: falta el contenido esperado ("${esperado}") en el HTML renderizado.`);
+  }
   const url = `${seo.url || ''}`;
   let page = template;
 

@@ -595,8 +595,7 @@ const FeatureTelemetry = () => {
   return (
     <div className="h-full bg-[#1A1A1A] text-[#F2F0E9] rounded-2xl p-6 flex flex-col font-mono text-sm relative overflow-hidden">
       <div className="flex items-center gap-2 mb-6">
-        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-        <span className="text-xs opacity-50 tracking-widest uppercase">En Vivo</span>
+        <span className="text-xs tracking-widest uppercase text-white/60">Ejemplo del proceso</span>
       </div>
 
       <div className="flex-1">
@@ -607,16 +606,13 @@ const FeatureTelemetry = () => {
         </p>
       </div>
 
-      <div className="mt-auto pt-4 border-t border-white/10 space-y-2">
-        <div className="flex justify-between items-center opacity-70">
-          <span>Claridad</span> <span className="text-[#00FF66]">↑ 85%</span>
-        </div>
-        <div className="flex justify-between items-center opacity-70">
-          <span>Ruido mental</span> <span className="text-[#E8734A]">↓ 20%</span>
-        </div>
-        <div className="flex justify-between items-center opacity-70">
-          <span>Liderazgo emocional</span> <span className="text-[#00FF66]">↑ 92%</span>
-        </div>
+      <div className="mt-auto space-y-2 border-t border-white/10 pt-4">
+        {['Patrón emocional identificado', 'Práctica sugerida', 'Ruta de acompañamiento'].map((paso) => (
+          <div key={paso} className="flex items-center gap-2 text-white/70">
+            <CheckCircle2 size={13} className="shrink-0 text-[#E2C17D]" />
+            <span>{paso}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -1237,6 +1233,7 @@ const AlexandraFounderSection = () => (
         <div className="absolute -right-4 -top-5 rounded-2xl border border-[#2E4036]/10 bg-white px-5 py-3.5 shadow-[0_18px_38px_rgba(46,64,54,0.16)] md:-right-8">
           <p className="font-heading text-2xl font-bold text-[#2E4036]">+176</p>
           <p className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/70">mujeres formadas</p>
+          <p className="mt-1 text-[9px] leading-tight text-[#1A1A1A]/55">Registro interno de la Fundación, 2016–2026</p>
         </div>
       </div>
 
@@ -2025,7 +2022,7 @@ const GuaranteeModal = ({ isOpen, onClose }) => {
       <div className="absolute inset-0 bg-[#1A1A1A]/80 backdrop-blur-md" onClick={onClose}></div>
 
       <div className="relative bg-[#F2F0E9] w-full max-w-2xl rounded-[2.5rem] p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-6 right-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
+        <button onClick={onClose} aria-label="Cerrar" className="absolute top-6 right-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
 

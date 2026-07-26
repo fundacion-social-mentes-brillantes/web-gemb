@@ -169,7 +169,7 @@ export default function TestInitialAssessmentModal({
       <div className="absolute inset-0 bg-[#1A1A1A]/88 backdrop-blur-md" onClick={handleClose}></div>
 
       <div className={`relative bg-[#F2F0E9] w-full ${step === 'result' ? 'max-w-4xl' : 'max-w-2xl'} rounded-[2.5rem] p-5 sm:p-8 md:p-10 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto`}>
-        <button onClick={handleClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
+        <button onClick={handleClose} aria-label="Cerrar" className="absolute top-6 right-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
 

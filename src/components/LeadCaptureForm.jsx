@@ -98,7 +98,7 @@ export default function LeadCaptureForm({
               <ShieldCheck size={26} />
             </div>
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#CC5833] mb-2">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#B04A29] mb-2">
                 Datos para tu resultado
               </p>
               <h3 className="font-heading text-3xl md:text-4xl text-[#1A1A1A] leading-tight">
@@ -146,7 +146,7 @@ export default function LeadCaptureForm({
             required
           />
           {whatsappTouched && !whatsappIsValid && (
-            <p className="text-xs text-[#CC5833]">
+            <p className="text-xs text-[#B04A29]">
               Usa minimo 8 digitos. Puedes incluir espacios y +.
             </p>
           )}

@@ -13,7 +13,7 @@ const CONTACT_PHONE = '+57 311 260 2355';
 const Section = ({ number, title, children }) => (
   <section className="mb-10">
     <h2 className="font-heading text-xl md:text-2xl font-bold text-[#2E4036] mb-3">
-      <span className="font-mono text-sm text-[#CC5833] mr-2">{number}.</span>
+      <span className="font-mono text-sm text-[#B04A29] mr-2">{number}.</span>
       {title}
     </h2>
     <div className="space-y-3 text-[15px] leading-relaxed text-[#1A1A1A]/80">{children}</div>

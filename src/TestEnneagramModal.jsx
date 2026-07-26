@@ -720,7 +720,7 @@ export default function TestEnneagramModal({
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[#1A1A1A]/90 backdrop-blur-md" onClick={handleClose}></div>
       <div className={`relative bg-[#F2F0E9] w-full ${modalWidthClass} rounded-[2.5rem] p-5 sm:p-8 md:p-12 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto`}>
-        <button onClick={handleClose} className="absolute top-6 right-6 text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors">
+        <button onClick={handleClose} aria-label="Cerrar" className="absolute top-6 right-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
           <X size={24} />
         </button>
 

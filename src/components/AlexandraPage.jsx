@@ -99,7 +99,7 @@ const TIMELINE = [
   {
     year: '2016',
     tag: 'El origen',
-    title: 'Inicio del liderazgo social y terapéutico',
+    title: 'Inicio del liderazgo social y comunitario',
     text: 'Comienza procesos de formación en inteligencia emocional y acompañamiento comunitario, con participación sostenida en el COLMYEG de Antonio Nariño y en presupuestos participativos del territorio.'
   },
   {
@@ -124,13 +124,13 @@ const TIMELINE = [
     year: '2025',
     tag: 'Hito global',
     title: 'Ponente en la Cumbre Global de Salud Mental',
-    text: 'Invitada como ponente por la metodología Gimnasio Emocional Mentes Brillantes, presentada como movimiento pedagógico y terapéutico para la alfabetización emocional y la prevención en salud mental.'
+    text: 'Invitada como ponente por la metodología Gimnasio Emocional Mentes Brillantes, presentada como movimiento pedagógico y de acompañamiento emocional para la alfabetización emocional y la prevención en salud mental.'
   },
   {
     year: '2026',
     tag: 'Incidencia distrital',
     title: 'Círculo de Estado Abierto de Bogotá',
-    text: 'La Fundación Social GEMB es invitada a participar en este espacio de articulación con organizaciones, postulando su modelo de prevención y fortalecimiento de la salud mental como herramienta de construcción de paz territorial.'
+    text: 'La Fundación Social Mentes Brillantes es invitada a participar en este espacio de articulación con organizaciones, postulando su modelo de prevención y fortalecimiento de la salud mental como herramienta de construcción de paz territorial.'
   }
 ];
 
@@ -147,7 +147,7 @@ const AREAS = [
   { icon: Star, title: 'Liderazgo y enfoque de género', text: 'Formación y empoderamiento de lideresas sociales con educación de enfoque de género.' },
   { icon: Mic, title: 'Comunicación asertiva', text: 'Oratoria, facilitación y conferencias de alto impacto social.' },
   { icon: Users, title: 'Empoderamiento femenino', text: 'Redes de mujeres y multiplicadoras de bienestar, derechos, paz, arte y cultura.' },
-  { icon: LifeBuoy, title: 'Manejo de adicciones', text: 'Acompañamiento terapéutico con la técnica de 12 pasos, avalada por la OMS.' },
+  { icon: LifeBuoy, title: 'Acompañamiento en adicciones', text: 'Acompañamiento grupal de apoyo mutuo basado en la metodología de 12 pasos. No es tratamiento clínico ni sustituye atención médica o psiquiátrica.' },
   { icon: Handshake, title: 'Resolución de conflictos', text: 'Mediación, conciliación y construcción de paz en comunidad.' },
   { icon: BarChart3, title: 'Proyectos sociales', text: 'Formulación y co-creación de iniciativas comunitarias y presupuestos participativos.' }
 ];
@@ -173,7 +173,7 @@ const SERVICES = [
 ];
 
 const MODEL = [
-  { title: 'Efectividad', text: 'Resultados medidos por participación, permanencia, testimonios de transformación y evidencias de cambio personal, familiar y social. Cuenta con una red viva de personas entrenadas para mitigar el ruido emocional y prevenir violencias.' },
+  { title: 'Seguimiento', text: 'El avance de cada proceso se acompaña con seguimiento de participación y permanencia, y con los testimonios de las personas que lo viven. Los soportes se comparten a solicitud de entidades aliadas.' },
   { title: 'Eficiencia', text: 'Planeación colaborativa con roles definidos en dirección metodológica, acompañamiento psicológico, coaching, logística, contenidos y atención comunitaria, con seguimiento financiero, operativo y administrativo.' },
   { title: 'Relevancia', text: 'Nace de procesos de apoyo mutuo y lectura emocional y evoluciona hacia una metodología territorial propia. A través de "Formar Formadoras", capacita mujeres como multiplicadoras de bienestar, derechos, paz, arte y cultura.' },
   { title: 'Enfoque diferencial', text: 'Contempla a mujeres cuidadoras, madres cabeza de hogar, jóvenes, personas mayores, personas con discapacidad y comunidad LGTBQ+, atendiendo duelos, dependencia emocional, violencias y barreras frente a la salud mental.' },
@@ -457,7 +457,7 @@ const AlexandraPage = (props) => {
               </div>
 
               <div className="ax-reveal mt-9 flex flex-wrap gap-2">
-                {['Fundación Social GEMB', 'Bogotá · Colombia', 'Escritora de tres libros'].map((chip) => (
+                {['Fundación Social Mentes Brillantes', 'Bogotá · Colombia', 'Escritora de tres libros'].map((chip) => (
                   <span key={chip} className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1.5 text-[11px] font-medium text-[#F2F0E9]/[0.78]">
                     {chip}
                   </span>
@@ -602,7 +602,7 @@ const AlexandraPage = (props) => {
               La salud mental como <em className="font-serif font-normal italic text-[#E2C17D]">lenguaje universal</em>
             </h2>
             <p className="ax-reveal mt-7 max-w-4xl text-lg leading-relaxed text-[#F2F0E9]/[0.85]">
-              Alexandra Ortega fue invitada como ponente a la Cumbre Global de Salud Mental 2025 por la metodología <strong>Gimnasio Emocional Mentes Brillantes</strong>: un movimiento pedagógico y terapéutico que promueve la alfabetización emocional, el entrenamiento interior y la prevención en salud mental a través del diálogo horizontal, el acompañamiento grupal, la mentoría, la meditación, la educación emocional, el enfoque de género y la transformación comunitaria.
+              Alexandra Ortega fue invitada como ponente a la Cumbre Global de Salud Mental 2025 por la metodología <strong>Gimnasio Emocional Mentes Brillantes</strong>: un movimiento pedagógico y de acompañamiento emocional que promueve la alfabetización emocional, el entrenamiento interior y la prevención en salud mental a través del diálogo horizontal, el acompañamiento grupal, la mentoría, la meditación, la educación emocional, el enfoque de género y la transformación comunitaria.
             </p>
 
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -739,9 +739,9 @@ const AlexandraPage = (props) => {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="lg:sticky lg:top-32 lg:self-start">
-              <SectionEyebrow>Modelo comunitario validado en territorio · Caracterización técnica 2026</SectionEyebrow>
+              <SectionEyebrow>Modelo comunitario en territorio · Caracterización técnica 2026</SectionEyebrow>
               <h2 className="ax-reveal mt-4 font-heading text-4xl font-bold leading-tight text-[#2E4036] md:text-5xl">
-                Una metodología con <em className="font-serif font-normal italic text-[#CC5833]">respaldo y resultados</em>
+                Una metodología construida <em className="font-serif font-normal italic text-[#CC5833]">en el territorio</em>
               </h2>
               <p className="ax-reveal mt-6 leading-relaxed text-[#1A1A1A]/70">
                 En 2026, GEMB fue presentado en el marco de la caracterización técnica de organizaciones locales dirigida a la Alcaldía Local de Antonio Nariño — Mesa Local Más Bienestar, con enfoque en prevención en salud mental comunitaria y articulación territorial.
@@ -760,7 +760,7 @@ const AlexandraPage = (props) => {
                       className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left md:px-8"
                     >
                       <span className="flex items-center gap-4">
-                        <span className={`font-mono text-xs font-bold ${isOpen ? 'text-[#B04A29]' : 'text-[#2E4036]/45'}`}>0{index + 1}</span>
+                        <span className={`font-mono text-xs font-bold ${isOpen ? 'text-[#B04A29]' : 'text-[#2E4036]/70'}`}>0{index + 1}</span>
                         <span className="font-heading text-lg font-bold text-[#1A1A1A] md:text-xl">{item.title}</span>
                       </span>
                       <ChevronDown size={20} className={`shrink-0 text-[#2E4036] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -863,7 +863,7 @@ const AlexandraPage = (props) => {
                 Círculo de Estado Abierto de Bogotá · 2026
               </p>
               <p className="mt-4 leading-relaxed text-[#1A1A1A]/75">
-                En 2026, la Fundación Social GEMB fue invitada a participar en el Círculo de Estado Abierto de Bogotá, un espacio de articulación con organizaciones para aportar a políticas, recomendaciones y acciones distritales. Allí postula la salud mental comunitaria —mujeres, familias y comunidades, prevención de violencias y resolución pacífica de conflictos— como base de la seguridad, la convivencia y la paz sostenible, en diálogo con Casas de Igualdad de Oportunidades para las Mujeres, Juntas de Acción Comunal y organizaciones locales.
+                En 2026, la Fundación Social Mentes Brillantes fue invitada a participar en el Círculo de Estado Abierto de Bogotá, un espacio de articulación con organizaciones para aportar a políticas, recomendaciones y acciones distritales. Allí postula la salud mental comunitaria —mujeres, familias y comunidades, prevención de violencias y resolución pacífica de conflictos— como base de la seguridad, la convivencia y la paz sostenible, en diálogo con Casas de Igualdad de Oportunidades para las Mujeres, Juntas de Acción Comunal y organizaciones locales.
               </p>
             </aside>
           </div>

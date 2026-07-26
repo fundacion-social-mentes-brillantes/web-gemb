@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Área privada de clientes: no debe indexarse (sirve el HTML del home).
+Disallow: /mi-proceso
+
 Sitemap: https://www.gimnasioemocionalmb.com/sitemap.xml
