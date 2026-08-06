@@ -192,7 +192,7 @@ const INSTITUTIONS = [
 
 const HONORS = [
   { title: 'Lideresa incidente', text: 'Reconocida por la Alcaldía Local de Antonio Nariño por su liderazgo social y su participación en los derechos de las mujeres.' },
-  { title: 'Defensoras de Nuestra Colombia', text: 'Preseleccionada en 2026 por el Ministerio del Interior para la revista nacional "Defensoras de Nuestra Colombia".' },
+  { title: 'Defensoras de Nuestra Colombia', text: 'El Ministerio del Interior dedicó un artículo de seis páginas a GEMB en la edición 4 de su revista nacional "Defensoras de Nuestra Colombia" (agosto de 2026), disponible en el PDF oficial de la entidad.' },
   { title: 'Gala de Control Social', text: 'Reconocimiento en la categoría Paz y Reconciliación, como hito de incidencia territorial.' },
   { title: 'COLMYEG · desde 2016', text: 'Participación sostenida en escenarios locales de mujer y equidad de género en Antonio Nariño.' },
   { title: 'Presupuestos participativos', text: 'Representante de proyectos comunitarios, entre ellos el 32766 "Huertas Urbanas con Enfoque de Género".' },

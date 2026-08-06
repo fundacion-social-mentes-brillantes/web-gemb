@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   HeartHandshake, Users, Sprout, Landmark, Award, Stethoscope,
-  MessageCircle, ArrowRight, GraduationCap, MapPin, Globe2, RefreshCcw
+  MessageCircle, ArrowRight, GraduationCap, MapPin, Globe2, RefreshCcw, Quote
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════
@@ -56,10 +56,10 @@ const SOCIAL_WORK = [
 
 const RECOGNITIONS = [
   {
-    year: '2023',
-    title: 'Defensoras de Nuestra Colombia',
-    text: 'Participación documentada de integrantes de GEMB en el lanzamiento de la revista del Ministerio del Interior, realizado en el Congreso de la República.',
-    href: 'https://www.mininterior.gov.co/noticias/defensoras-de-nuestra-colombia-la-revista-de-mininterior-que-reconoce-la-labor-de-las-lideresas-sociales/',
+    year: '2026',
+    title: 'Revista del Ministerio del Interior',
+    text: 'El Ministerio del Interior dedicó un artículo de seis páginas a GEMB en la edición 4 de su revista «Defensoras de Nuestra Colombia» (agosto de 2026), documentando la educación emocional como estrategia colectiva de prevención y protección de derechos. Puedes leerlo y verificarlo tú mismo.',
+    href: 'https://www.mininterior.gov.co/noticias/conozca-la-edicion-3-y-4-de-la-revista-defensoras/',
     image: '/impacto/congreso-republica.webp',
     imageAlt: 'Memoria visual de integrantes de GEMB en el Congreso de la República'
   },
@@ -126,9 +126,14 @@ const PUBLIC_SOURCES = [
     href: 'https://www.saludcapital.gov.co/Paginas2/Noticia_Portal_Detalle.aspx?IP=2622'
   },
   {
-    title: 'Revista Defensoras de Nuestra Colombia',
-    source: 'Ministerio del Interior',
-    href: 'https://www.mininterior.gov.co/noticias/defensoras-de-nuestra-colombia-la-revista-de-mininterior-que-reconoce-la-labor-de-las-lideresas-sociales/'
+    title: 'Revista «Defensoras de Nuestra Colombia», edición 4 — artículo sobre GEMB en las páginas 37 a 42',
+    source: 'Ministerio del Interior · agosto de 2026 (PDF oficial)',
+    href: 'https://www.mininterior.gov.co/wp-content/uploads/2026/08/edicion4_vf-1_compressed.pdf'
+  },
+  {
+    title: 'Lanzamiento de las ediciones 3 y 4 de la revista',
+    source: 'Ministerio del Interior · sala de prensa',
+    href: 'https://www.mininterior.gov.co/noticias/conozca-la-edicion-3-y-4-de-la-revista-defensoras/'
   },
   {
     title: 'Listado de organizaciones postuladas',
@@ -209,7 +214,7 @@ export default function FundacionPage(props) {
         {/* ── Labor social ─────────────────────────────────────── */}
         <section className="bg-white px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]10201">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
               Labor social gratuita
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-5xl">
@@ -280,7 +285,7 @@ export default function FundacionPage(props) {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-7xl items-start gap-12 lg:grid-cols-2 lg:gap-20">
             <div>
-              <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]13984">
+              <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
                 A quién servimos
               </span>
               <h2 className="font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">
@@ -349,7 +354,7 @@ export default function FundacionPage(props) {
         {/* ── Reconocimientos ──────────────────────────────────── */}
         <section className="bg-white px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]18436">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
               Participación institucional
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-5xl">
@@ -390,6 +395,28 @@ export default function FundacionPage(props) {
               ))}
             </div>
 
+            {/* Cita verificable de la publicación oficial */}
+            <figure className="mx-auto mt-14 max-w-4xl rounded-[2rem] border border-[#2E4036]/12 bg-[#F7F4ED] p-8 md:p-10">
+              <Quote size={26} className="mb-4 text-[#B04A29]" aria-hidden="true" />
+              <blockquote className="font-serif text-lg italic leading-relaxed text-[#1A1A1A]/85 md:text-xl">
+                «En Bogotá, el Gimnasio Emocional Mentes Brillantes ha convertido la educación emocional en una
+                estrategia colectiva de prevención, protección y autoprotección. Mujeres diversas se organizan para
+                transformar sus historias en herramientas de cuidado, participación y defensa de los derechos.»
+              </blockquote>
+              <figcaption className="mt-5 text-sm text-[#1A1A1A]/70">
+                Revista <cite className="not-italic font-bold">Defensoras de Nuestra Colombia</cite>, edición 4,
+                páginas 37 a 42 · <strong className="font-bold">Ministerio del Interior de Colombia</strong>, agosto de 2026.{' '}
+                <a
+                  href="https://www.mininterior.gov.co/wp-content/uploads/2026/08/edicion4_vf-1_compressed.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-bold text-[#2E4036] underline decoration-[#2E4036]/30 underline-offset-4"
+                >
+                  Ver el PDF oficial
+                </a>
+              </figcaption>
+            </figure>
+
             {/* Aliados */}
             <div className="mt-16 text-center">
               <p className="mb-6 font-mono text-xs font-bold uppercase tracking-widest text-[#1A1A1A]/70">
@@ -409,7 +436,7 @@ export default function FundacionPage(props) {
         {/* ── Transparencia ────────────────────────────────────── */}
         <section className="px-6 py-20 md:px-12 md:py-24">
           <div className="mx-auto max-w-5xl">
-            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]21332">
+            <span className="mb-4 block text-center font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
               Transparencia
             </span>
             <h2 className="mx-auto max-w-3xl text-center font-heading text-3xl font-bold text-[#1A1A1A] md:text-4xl">

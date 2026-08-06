@@ -1239,7 +1239,7 @@ const AlexandraFounderSection = () => (
 
       {/* Texto */}
       <div>
-        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]61463">
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
           La fundadora
         </span>
         <h2 className="font-heading text-4xl font-bold leading-tight tracking-tight text-[#1A1A1A] md:text-5xl lg:text-6xl">
@@ -1286,7 +1286,7 @@ const ParticipaSection = () => (
   <section id="participa" className="relative z-10 bg-white px-6 py-24 md:px-12 md:py-28">
     <div className="mx-auto max-w-7xl">
       <div className="mx-auto max-w-3xl text-center">
-        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]63945">
+        <span className="mb-4 block font-mono text-xs font-bold uppercase tracking-widest text-[#B04A29]">
           Acceso libre · Sin costo
         </span>
         <h2 className="font-heading text-3xl font-bold leading-tight text-[#1A1A1A] md:text-5xl">
@@ -1704,7 +1704,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.76fr_1.24fr]">
             <div className="lg:sticky lg:top-32 lg:self-start">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]85094">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]">
                 Lectura del proceso
               </span>
               <h2 className="mt-4 font-heading text-4xl font-bold leading-tight text-[#2E4036] md:text-5xl">
@@ -1790,7 +1790,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
         <section className="px-6 py-20 md:px-12 md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 max-w-3xl">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]89504">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]">
                 Preguntas frecuentes
               </span>
               <h2 className="mt-4 font-heading text-4xl font-bold text-[#2E4036]">
@@ -1817,7 +1817,7 @@ const ProcessPage = ({ page, onOpenTest }) => {
           <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#2E4036]/10 bg-white p-7 shadow-[0_18px_50px_rgba(46,64,54,0.08)] md:p-9">
             <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
               <div>
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]90788">
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#B04A29]">
                   Enlaces internos
                 </span>
                 <h2 className="mt-4 font-heading text-3xl font-bold text-[#2E4036]">
