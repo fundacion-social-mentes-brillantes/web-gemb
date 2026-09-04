@@ -427,7 +427,7 @@ const AlexandraPage = (props) => {
 
               <h1 className="ax-reveal leading-none">
                 <span className="ax-script block text-[4rem] text-[#E2C17D] sm:text-[5rem] md:text-[6rem]">Alexandra</span>
-                <span className="mt-1 block font-heading text-5xl font-bold uppercase tracking-[0.08em] text-white sm:text-6xl md:text-7xl">Ortega</span>
+                <span className="mt-1 block font-heading text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl">Ortega</span>
               </h1>
 
               <p className="ax-reveal mt-6 font-serif text-2xl italic text-[#F2F0E9] md:text-3xl">
