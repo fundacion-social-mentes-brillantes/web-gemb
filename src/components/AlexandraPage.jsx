@@ -470,7 +470,7 @@ const AlexandraPage = (props) => {
               <div ref={photoRef} className="relative transition-transform duration-300 ease-out">
                 <img
                   src="/alexandra-sq.jpg"
-                  alt="Alexandra Ortega sonriendo, señalando su mente: las emociones se entrenan"
+                  alt="Retrato de Alexandra Ortega, psicóloga y fundadora de Gimnasio Emocional Mentes Brillantes, sonriendo"
                   width="800"
                   height="800"
                   className="relative w-full rounded-[2.8rem] border border-white/15 object-cover shadow-2xl"
