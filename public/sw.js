@@ -1,5 +1,5 @@
 // Subir la versión invalida la caché anterior en el evento activate.
-const CACHE_NAME = 'gemb-pwa-v2';
+const CACHE_NAME = 'gemb-pwa-v3';
 
 // Solo assets estáticos: el HTML nunca se precachea, para que el contenido
 // institucional que ve una persona (o un revisor) sea siempre el publicado.
@@ -65,20 +65,44 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse;
+  // Assets con hash en el nombre (/assets/app-a1b2c3.js): una misma URL sirve
+  // siempre el mismo contenido, así que responder desde la caché sin preguntar
+  // a la red es correcto y no puede quedar obsoleto.
+  if (url.pathname.startsWith('/assets/')) {
+    event.respondWith(
+      caches.match(request).then(
+        (cached) =>
+          cached ||
+          fetch(request).then((networkResponse) => {
+            if (networkResponse && networkResponse.ok && networkResponse.type === 'basic') {
+              const clone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+            }
+            return networkResponse;
+          })
+      )
+    );
+    return;
+  }
 
-      return fetch(request).then((networkResponse) => {
-        // Solo cachea respuestas exitosas del mismo origen (evita guardar 404/errores).
-        if (networkResponse && networkResponse.ok && networkResponse.type === 'basic') {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseClone);
-          });
-        }
-        return networkResponse;
-      });
-    })
+  // Resto de estáticos (imágenes de la raíz, /kits, /impacto, iconos...): la URL
+  // es estable pero el archivo SÍ puede cambiar al publicar. Antes se respondía
+  // desde la caché sin revalidar nunca, así que al reemplazar una foto los
+  // visitantes recurrentes seguían viendo la anterior de forma indefinida.
+  // Ahora se responde con la copia guardada al instante y se refresca en
+  // segundo plano: el archivo nuevo aparece en la siguiente carga.
+  const revalidacion = fetch(request).then((networkResponse) => {
+    if (networkResponse && networkResponse.ok && networkResponse.type === 'basic') {
+      const clone = networkResponse.clone();
+      caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+    }
+    return networkResponse;
+  });
+
+  // Mantiene vivo el service worker hasta terminar de refrescar la copia.
+  event.waitUntil(revalidacion.catch(() => {}));
+
+  event.respondWith(
+    caches.match(request).then((cached) => cached || revalidacion)
   );
 });
